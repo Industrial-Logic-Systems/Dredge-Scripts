@@ -10,7 +10,7 @@ def write_file(path, filename, data):
         logging.debug("Making directory " + path)
 
     with open(Path(path, filename), "a") as f:
-        f.write(str(data) + "\n")
+        f.write(str(data).replace("'", '"') + "\n")
         logging.debug("Data written to " + filename)
 
 
@@ -20,8 +20,8 @@ def add_headers(path, header):
     for filename in filenames:
         logging.debug("Checking " + filename)
         with open(filename, "r") as f:
-            line = f.readline().strip('\n')
-            #logging.debug("The line is {}, the header is {}".format(line, header))
+            line = f.readline().strip("\n")
+            # logging.debug("The line is {}, the header is {}".format(line, header))
             if line == header:
                 continue
         logging.debug("Adding header to " + filename)
