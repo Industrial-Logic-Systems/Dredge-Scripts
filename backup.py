@@ -7,17 +7,40 @@ import logging
 
 def backup_files(filename):
     logging.debug("Sending files with the name " + filename)
-    send_ssh("C:\\Users\\luke3\\Desktop\\json", "json", filename + ".json")
-    send_ssh("C:\\Users\\luke3\\Desktop\\csv", "csv", filename + ".csv")
+
+    # Backing up JSON file
+    send_ssh(
+        config.remote_server_path + "\\" + config.json_path,
+        config.json_path,
+        filename + ".json",
+    )
+    # Backing up CSV file
+    send_ssh(
+        config.remote_server_path + "\\" + config.csv_path,
+        config.csv_path,
+        filename + ".csv",
+    )
+
+    # Email the files to list of receivers
+    files = [
+        config.json_path + "\\" + filename + ".json",
+        config.csv_path + "\\" + filename + ".csv",
+    ]
+    send_email(
+        config.email_list,
+        "Dredge Files for " + filename,
+        "Dredge Files for " + filename,
+        files,
+    )
 
 
-def send_email(receivers, subject, body, filename):
+def send_email(receivers, subject, body, files):
     yag = yagmail.SMTP("frazzercoding")
     yag.send(
         to=receivers,
         subject=subject,
         contents=body,
-        attachments=filename,
+        attachments=files,
     )
 
 

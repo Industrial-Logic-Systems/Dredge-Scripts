@@ -1,4 +1,4 @@
 pyserial
 dweepy
-yagmail
+yagmail[all]
 python-crontab
