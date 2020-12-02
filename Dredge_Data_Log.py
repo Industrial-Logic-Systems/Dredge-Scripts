@@ -17,6 +17,7 @@ import tests
 
 cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 
+
 def log():
     # Get the JSON object from the string sent over serial
     # json_obj = get_serial.json_from_data(get_serial.listen_on_serial())
@@ -48,10 +49,8 @@ def log():
     old_time = cur_time
     cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
     if old_time < cur_time:
-        logging.debug("Old time: {}, Cur time: {}".format(old_time, cur_time))
-        logging.debug("It's a new day!")
+        logging.debug("Backing up files for the day: {}".format(old_time))
         backup.backup_files(str(old_time))
-
 
 
 if __name__ == "__main__":
