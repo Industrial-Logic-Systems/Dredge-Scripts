@@ -15,8 +15,7 @@ import backup
 
 import tests
 
-
-
+cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 
 def log():
     # Get the JSON object from the string sent over serial
@@ -32,8 +31,10 @@ def log():
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
 
     # Write the JSON and CSV files
-    file_handeling.write_file(config.json_path, filename + ".json", str(json_obj)+',')
-    file_handeling.write_file(config.csv_path, filename + ".csv", str(csv_obj).strip("[]"))
+    file_handeling.write_file(config.json_path, filename + ".json", str(json_obj) + ",")
+    file_handeling.write_file(
+        config.csv_path, filename + ".csv", str(csv_obj).strip("[]")
+    )
 
     # Go through all CSV files and make sure they have a header
     csv_header = "msg_time, vert_correction, ch_latitude, ch_longitude, ch_depth, ch_heading, slurry_velocity, slurry_density, pump_rpm, vacuum, outlet_psi, comment, msg_start_time, msg_end_time, function_code, comment"
@@ -42,8 +43,16 @@ def log():
     # Update the freeboard with new information
     freeboard_updater.freeboard("ILS-Dredge", json_obj)
 
-    # Backup the files
-    backup.backup_files(filename)
+    # Backup the files once a day
+    global cur_time
+    old_time = cur_time
+    cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
+    if old_time < cur_time:
+        logging.debug("Old time: {}, Cur time: {}".format(old_time, cur_time))
+        logging.debug("It's a new day!")
+        backup.backup_files(str(old_time))
+
+
 
 if __name__ == "__main__":
     while True:
