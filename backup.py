@@ -6,15 +6,17 @@ import logging
 
 
 def backup_files(filename):
-    logging.debug("Sending files with the name " + filename)
+    logging.debug("Backing up files with name: " + filename)
 
     # Backing up JSON file
+    logging.debug("Sending JSON over SSH")
     send_ssh(
         config.remote_server_path + "\\" + config.json_path,
         config.json_path,
         filename + ".json",
     )
     # Backing up CSV file
+    logging.debug("Sending CSV over SSH")
     send_ssh(
         config.remote_server_path + "\\" + config.csv_path,
         config.csv_path,
@@ -26,6 +28,7 @@ def backup_files(filename):
         config.json_path + "\\" + filename + ".json",
         config.csv_path + "\\" + filename + ".csv",
     ]
+    logging.debug("Sending Email")
     send_email(
         config.email_list,
         "Dredge Files for " + filename,
@@ -46,7 +49,6 @@ def send_email(receivers, subject, body, files):
 
 def send_ssh(destination, path, filename):
     logging.debug("Making sure the path {} exists".format(destination))
-
     subprocess.Popen(
         ["ssh", config.remote_server, "mkdir", destination],
         stdout=subprocess.PIPE,
