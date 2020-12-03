@@ -3,6 +3,15 @@ import json
 
 
 def save_config():
+    logging.debug("Writing config.json")
+
+    config["port"] = port_name
+    config["json_path"] = json_path
+    config["csv_path"] = csv_path
+    config["remote_server"] = remote_server
+    config["remote_server_path"] = remote_server_path
+    config["email_list"] = email_list
+
     with open("config.json", "w") as f:
         json.dump(config, f, indent=4)
 
