@@ -56,5 +56,3 @@ def log():
 if __name__ == "__main__":
     while True:
         log()
-        logging.info("Sleeping for 5 seconds")
-        time.sleep(5)

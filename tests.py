@@ -1,12 +1,15 @@
 import json
 import random
 import datetime
+import time
+import logging
+
 
 def get_json():
     msg_time = str(datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S"))
     vert_correction = round(random.uniform(0, 100), 2)
-    ch_latitude = round(random.uniform(-90, 90), 6)
-    ch_longitude = round(random.uniform(-180, 80), 6)
+    ch_latitude = round(random.uniform(-85, 85), 6)
+    ch_longitude = round(random.uniform(-180, 180), 6)
     ch_depth = round(random.uniform(0, 100), 2)
     ch_heading = random.randint(0, 359)
     slurry_velocity = round(random.uniform(0, 100), 2)
@@ -40,4 +43,8 @@ def get_json():
     }
 
     j = json.dumps(json_dict)
+
+    logging.debug("Sleeping for 10 seconds to simulate getting serial input")
+    time.sleep(10)
+
     return j
