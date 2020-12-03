@@ -1,12 +1,24 @@
 import logging
+import json
 
-json_path = "json"
-csv_path = "csv"
 
-remote_server = "fieldops4@192.168.1.111"
-remote_server_path = "C:\\Users\\luke3\\Desktop"
+def save_config():
+    with open("config.json", "w") as f:
+        json.dump(config, f, indent=4)
 
-email_list = ["frazzercoding+1@gmail.com", "frazzercoding+2@gmail.com"]
+
+""" Read Config File """
+with open("config.json") as json_data_file:
+    config = json.load(json_data_file)
+
+""" Set Config File Values """
+port_name = config["port"]
+json_path = config["json_path"]
+csv_path = config["csv_path"]
+remote_server = config["remote_server"]
+remote_server_path = config["remote_server_path"]
+email_list = config["email_list"]
+
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"

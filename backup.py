@@ -28,7 +28,7 @@ def backup_files(filename):
         config.json_path + "\\" + filename + ".json",
         config.csv_path + "\\" + filename + ".csv",
     ]
-    logging.debug("Sending Email")
+    logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
     send_email(
         config.email_list,
         "Dredge Files for " + filename,

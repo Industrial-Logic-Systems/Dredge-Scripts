@@ -1,15 +1,20 @@
 import serial
 import json
 
+import config
+
+
 def listen_on_serial():
-    ser = serial.Serial( 'com19', 9600, timeout=20 )
-    data = ser.read_until( b'\r' ).strip( b'\n\r' )
-    data = data.decode( 'ASCII' )
+    ser = serial.Serial(config.port_name, 9600, timeout=20)
+    data = ser.read_until(b"\r").strip(b"\n\r")
+    data = data.decode("ASCII")
     return data
 
+
 def json_from_data(data):
-    json_obj = json.loads( data )
+    json_obj = json.loads(data)
     return json_obj
+
 
 def generate_csv(json_obj):
     csv_obj = []
@@ -29,14 +34,20 @@ def generate_csv(json_obj):
 
     # Non Effective Event
     if "non_eff_event" in json_obj["DQM_Data"]["messages"][0]:
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["function_code"])
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["function_code"]
+        )
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["comment"])
     else:
-        csv_obj.append('')
-        csv_obj.append('')
-        csv_obj.append('')
-        csv_obj.append('')
+        csv_obj.append("")
+        csv_obj.append("")
+        csv_obj.append("")
+        csv_obj.append("")
 
     return csv_obj
