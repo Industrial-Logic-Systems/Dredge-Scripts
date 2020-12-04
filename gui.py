@@ -1,4 +1,6 @@
-from tkinter import Tk, Label, Button, Toplevel, Entry, Listbox, END
+from tkinter import Toplevel, Listbox, END
+from tkinter.ttk import Label, Button, Entry
+from ttkthemes import ThemedTk
 import threading
 import logging
 import datetime
@@ -21,9 +23,10 @@ def manual_backup():
     backup.backup_files(filename)
 
 
-root = Tk()
+root = ThemedTk()
 root.title("ILS Dredge Data Logging")
 root.geometry("400x400")
+root.set_theme("black",toplevel=True,themebg=True)
 
 
 def change_config():
@@ -96,10 +99,10 @@ def change_config():
     for email in config.email_list:
         email_box.insert(END, email)
     email_box.grid(row=2, column=5, padx=10, pady=10, columnspan=2, rowspan=4)
-    new_email = Entry(config_win, width=50)
+    new_email = Entry(config_win, width=40) 
     new_email.grid(row=6, column=4, padx=10, pady=10, columnspan=2)
     Button(config_win, text="Add Email", command=add).grid(
-        row=6, column=6, padx=10, pady=10, sticky="w"
+        row=6, column=6, padx=10, pady=10, sticky="nesw"
     )
 
     # Save Button

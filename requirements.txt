@@ -2,3 +2,4 @@ pyserial
 dweepy
 yagmail[all]
 python-crontab
+ttkthemes

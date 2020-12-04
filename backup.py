@@ -10,18 +10,21 @@ def backup_files(filename):
 
     # Backing up JSON file
     logging.debug("Sending JSON over SSH")
-    send_ssh(
-        config.remote_server_path + "\\" + config.json_path,
-        config.json_path,
-        filename + ".json",
-    )
-    # Backing up CSV file
-    logging.debug("Sending CSV over SSH")
-    send_ssh(
-        config.remote_server_path + "\\" + config.csv_path,
-        config.csv_path,
-        filename + ".csv",
-    )
+    try:
+        send_ssh(
+            config.remote_server_path + "\\" + config.json_path,
+            config.json_path,
+            filename + ".json",
+        )
+        # Backing up CSV file
+        logging.debug("Sending CSV over SSH")
+        send_ssh(
+            config.remote_server_path + "\\" + config.csv_path,
+            config.csv_path,
+            filename + ".csv",
+        )
+    except subprocess.TimeoutExpired:
+        logging.error("SSH Timedout, File was not backed up to remote server")
 
     # Email the files to list of receivers
     files = [
@@ -53,7 +56,7 @@ def send_ssh(destination, path, filename):
         ["ssh", config.remote_server, "mkdir", destination],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    )
+    ).wait(5)
 
     logging.debug("Sending File {}".format(destination + "\\" + filename))
     subprocess.Popen(
@@ -64,4 +67,4 @@ def send_ssh(destination, path, filename):
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    )
+    ).wait(5)
