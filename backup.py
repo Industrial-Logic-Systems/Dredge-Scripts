@@ -23,7 +23,7 @@ def backup_files(filename):
             config.csv_path,
             filename + ".csv",
         )
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired: # Watch to Timeouts
         logging.error("SSH Timedout, File was not backed up to remote server")
 
     # Email the files to list of receivers
@@ -41,6 +41,7 @@ def backup_files(filename):
 
 
 def send_email(receivers, subject, body, files):
+    # Sends an email with the above parameters
     yag = yagmail.SMTP("frazzercoding")
     yag.send(
         to=receivers,
@@ -51,13 +52,15 @@ def send_email(receivers, subject, body, files):
 
 
 def send_ssh(destination, path, filename):
+    # Make the directory that the files will be going into
     logging.debug("Making sure the path {} exists".format(destination))
     subprocess.Popen(
         ["ssh", config.remote_server, "mkdir", destination],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).wait(5)
-
+    
+    # Send the files to the remote server
     logging.debug("Sending File {}".format(destination + "\\" + filename))
     subprocess.Popen(
         [

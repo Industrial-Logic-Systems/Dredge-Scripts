@@ -5,20 +5,24 @@ import config
 
 
 def listen_on_serial():
+    # Listen on the serial port for data string
     ser = serial.Serial(config.port_name, 9600, timeout=20)
     data = ser.read_until(b"\r").strip(b"\n\r")
+    # Decode the serial data
     data = data.decode("ASCII")
     return data
 
 
 def json_from_data(data):
+    # Takes a dict object and turn it into a json object
     json_obj = json.loads(data)
     return json_obj
 
 
 def generate_csv(json_obj):
+    # Uses the json object to make a list that is used for the csv
     csv_obj = []
-    # Main Json
+    # Work Event
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["msg_time"])
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"])
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_latitude"])

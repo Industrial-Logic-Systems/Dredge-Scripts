@@ -15,6 +15,7 @@ import backup
 
 import tests
 
+# Create the cur_time variable that is used to tell when to backup files
 cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 
 
@@ -46,9 +47,10 @@ def log():
 
     # Backup the files once a day
     global cur_time
-    old_time = cur_time
-    cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
+    old_time = cur_time  # Date when the loop last ran
+    cur_time = datetime.datetime.today().strftime("%Y-%m-%d")  # Current date
     if old_time < cur_time:
+        # If old date is different from the current date backup the files
         logging.debug("Backing up files for the day: {}".format(old_time))
         backup.backup_files(str(old_time))
 

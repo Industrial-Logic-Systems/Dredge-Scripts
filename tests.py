@@ -6,6 +6,7 @@ import logging
 
 
 def get_json():
+    # Generate random Values for all json objects
     msg_time = str(datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S"))
     vert_correction = round(random.uniform(0, 100), 2)
     ch_latitude = round(random.uniform(-85, 85), 6)
@@ -19,6 +20,7 @@ def get_json():
     outlet_psi = round(random.uniform(0, 100), 2)
     comment = "Comment"
 
+    # Create the dictionary from the variables
     json_dict = {
         "DQM_Data": {
             "messages": [
@@ -42,6 +44,7 @@ def get_json():
         }
     }
 
+    # Turn the dict into a json object
     j = json.dumps(json_dict)
 
     logging.debug("Sleeping for 10 seconds to simulate getting serial input")

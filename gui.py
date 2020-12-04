@@ -117,17 +117,22 @@ Label(root, text="ILS Dredge Data Logger").grid(
     row=0, column=1, columnspan=2, padx=10, pady=10, sticky="e"
 )
 
+# Label that tell's the use the loop is running
 my_label = Label(root, text="Hello!")
 my_label.grid(row=1, column=1, padx=10, pady=10, columnspan=2)
+# Button to start a manual backup
+Button(root, text="Manual Backup", command=manual_backup).grid(
+    row=2, column=1, padx=10, pady=10
+)
+# Button to access the config menu
+Button(root, text="Config", command=change_config).grid(
+    row=2, column=2, padx=10, pady=10
+)
 
-my_button = Button(root, text="Manual Backup", command=manual_backup)
-my_button.grid(row=2, column=1, padx=10, pady=10)
-
-my_button = Button(root, text="Config", command=change_config)
-my_button.grid(row=2, column=2, padx=10, pady=10)
-
+# Start the logging loop in its own thread
 logging.debug("Starting Thread")
 threading.Thread(target=log_loop).start()
 
+# Start the GUI
 logging.debug("Starting GUI main loop")
 root.mainloop()
