@@ -1,3 +1,5 @@
+import config
+
 from tkinter import Toplevel, Listbox, END, PhotoImage
 from tkinter.ttk import Label, Button, Entry
 from ttkthemes import ThemedTk
@@ -7,7 +9,6 @@ import datetime
 
 import Dredge_Data_Log
 import backup
-import config
 
 
 def log_loop():
@@ -19,13 +20,15 @@ def log_loop():
 
 
 def manual_backup():
+    logging.debug("Manual Backup Started")
     filename = datetime.datetime.today().strftime("%Y-%m-%d")
-    backup.backup_files(filename)
+    threading.Thread(target=backup.backup_files, args=(filename,)).start()
+    # backup.backup_files(filename)
 
 
 root = ThemedTk()
-root.title("ILS Dredge Data Logging")
-# root.geometry("400x400")
+root.title("ILS")
+# root.geometry("300x150")
 root.set_theme("black", toplevel=True, themebg=True)
 root.iconbitmap("resources/ILS-logo.ico")
 
@@ -112,7 +115,7 @@ def change_config():
 
 
 ils_logo = PhotoImage(file="resources/ILS-logo.png")
-Label(root, image=ils_logo).grid(row=0, column=1, sticky="w", padx=10, pady=10)
+Label(root, image=ils_logo).grid(row=0, column=1, padx=10, pady=10, sticky="w")
 Label(root, text="ILS Dredge Data Logger").grid(
     row=0, column=1, columnspan=2, padx=10, pady=10, sticky="e"
 )

@@ -4,6 +4,7 @@ ToDo:
 """
 import config
 
+import threading
 import logging
 import datetime
 import time
@@ -22,7 +23,7 @@ cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 def log():
     # Get the JSON object from the string sent over serial
     # json_obj = get_serial.json_from_data(get_serial.listen_on_serial())
-    json_obj = get_data.json_from_data(tests.get_json())
+    json_obj = get_data.json_from_data(tests.get_json_non_eff())
     logging.debug("Json Object saved to json_obj")
 
     # Create a list from the json object that will be saved as a CSV
@@ -52,7 +53,8 @@ def log():
     if old_time < cur_time:
         # If old date is different from the current date backup the files
         logging.debug("Backing up files for the day: {}".format(old_time))
-        backup.backup_files(str(old_time))
+        threading.Thread(target=backup.backup_files, args=(str(old_time),)).start()
+        # backup.backup_files(str(old_time))
 
 
 if __name__ == "__main__":

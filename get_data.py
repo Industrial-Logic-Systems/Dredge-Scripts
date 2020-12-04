@@ -42,7 +42,7 @@ def generate_csv(json_obj):
             json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"]
         )
         csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_start_time"]
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_end_time"]
         )
         csv_obj.append(
             json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["function_code"]

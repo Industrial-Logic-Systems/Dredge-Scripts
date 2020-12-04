@@ -58,7 +58,7 @@ def send_ssh(destination, path, filename):
         ["ssh", config.remote_server, "mkdir", destination],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    ).wait(5)
+    ).wait(10)
     
     # Send the files to the remote server
     logging.debug("Sending File {}".format(destination + "\\" + filename))
@@ -70,4 +70,4 @@ def send_ssh(destination, path, filename):
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-    ).wait(5)
+    ).wait(10)
