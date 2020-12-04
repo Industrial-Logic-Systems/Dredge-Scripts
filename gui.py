@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Listbox, END
+from tkinter import Toplevel, Listbox, END, PhotoImage
 from tkinter.ttk import Label, Button, Entry
 from ttkthemes import ThemedTk
 import threading
@@ -25,8 +25,9 @@ def manual_backup():
 
 root = ThemedTk()
 root.title("ILS Dredge Data Logging")
-root.geometry("400x400")
-root.set_theme("black",toplevel=True,themebg=True)
+# root.geometry("400x400")
+root.set_theme("black", toplevel=True, themebg=True)
+root.iconbitmap("resources/ILS-logo.ico")
 
 
 def change_config():
@@ -99,10 +100,10 @@ def change_config():
     for email in config.email_list:
         email_box.insert(END, email)
     email_box.grid(row=2, column=5, padx=10, pady=10, columnspan=2, rowspan=4)
-    new_email = Entry(config_win, width=40) 
+    new_email = Entry(config_win, width=40)
     new_email.grid(row=6, column=4, padx=10, pady=10, columnspan=2)
     Button(config_win, text="Add Email", command=add).grid(
-        row=6, column=6, padx=10, pady=10, sticky="nesw"
+        row=6, column=6, padx=10, pady=10
     )
 
     # Save Button
@@ -110,14 +111,20 @@ def change_config():
     save.grid(row=7, column=6, padx=10, pady=10)
 
 
+ils_logo = PhotoImage(file="resources/ILS-logo.png")
+Label(root, image=ils_logo).grid(row=0, column=1, sticky="w", padx=10, pady=10)
+Label(root, text="ILS Dredge Data Logger").grid(
+    row=0, column=1, columnspan=2, padx=10, pady=10, sticky="e"
+)
+
 my_label = Label(root, text="Hello!")
-my_label.pack()
+my_label.grid(row=1, column=1, padx=10, pady=10, columnspan=2)
 
 my_button = Button(root, text="Manual Backup", command=manual_backup)
-my_button.pack()
+my_button.grid(row=2, column=1, padx=10, pady=10)
 
 my_button = Button(root, text="Config", command=change_config)
-my_button.pack()
+my_button.grid(row=2, column=2, padx=10, pady=10)
 
 logging.debug("Starting Thread")
 threading.Thread(target=log_loop).start()
