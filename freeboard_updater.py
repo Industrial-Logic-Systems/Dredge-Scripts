@@ -43,5 +43,3 @@ def freeboard(name, data):
         ]
         message = function_codes[function_code]
         dweepy.dweet_for(name + "_non_eff", {"message": message})
-    else:
-        dweepy.dweet_for(name + "_non_eff", {"message": ""})
