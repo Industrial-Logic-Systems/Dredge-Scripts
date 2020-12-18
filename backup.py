@@ -6,6 +6,8 @@ import logging
 
 
 def backup_files(filename):
+    """This function when called will use the filename of the file to first backup
+    the file to a remote computer with SCP, and then send the files to a list of emails"""
     logging.debug("Backing up files with name: " + filename)
 
     # Backing up JSON file
@@ -23,7 +25,7 @@ def backup_files(filename):
             config.csv_path,
             filename + ".csv",
         )
-    except subprocess.TimeoutExpired: # Watch to Timeouts
+    except subprocess.TimeoutExpired:  # Watch for Timeouts
         logging.error("SSH Timedout, File was not backed up to remote server")
 
     # Email the files to list of receivers
@@ -41,7 +43,7 @@ def backup_files(filename):
 
 
 def send_email(receivers, subject, body, files):
-    # Sends an email with the above parameters
+    """ Sends an email with the above parameters """
     yag = yagmail.SMTP("frazzercoding")
     yag.send(
         to=receivers,
@@ -59,7 +61,7 @@ def send_ssh(destination, path, filename):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).wait(10)
-    
+
     # Send the files to the remote server
     logging.debug("Sending File {}".format(destination + "\\" + filename))
     subprocess.Popen(

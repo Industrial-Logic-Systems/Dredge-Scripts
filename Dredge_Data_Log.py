@@ -21,10 +21,13 @@ cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 
 
 def log():
+    """The Main Loop of the program, this will read the data from serial
+    and then take all the required steps to handle the data"""
+
     # Get the JSON object from the string sent over serial
     # json_obj = get_serial.json_from_data(get_serial.listen_on_serial())
-    json_obj = get_data.json_from_data(tests.get_json_non_eff())
-    # json_obj = get_data.json_from_data(tests.get_json())
+    json_obj = get_data.json_from_data(tests.get_json_non_eff()) # Used for testing purposes
+    # json_obj = get_data.json_from_data(tests.get_json()) # Used for testing purposes
     logging.debug("Json Object saved to json_obj")
 
     # Create a list from the json object that will be saved as a CSV

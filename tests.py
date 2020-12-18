@@ -4,6 +4,7 @@ import datetime
 import time
 import logging
 
+# List of all function codes
 function_codes = [
     "AGV",
     "CCH",
@@ -38,6 +39,8 @@ function_codes = [
 
 
 def get_json():
+    """ Generates a json object that emulates the serial input """
+
     # Generate random Values for all json objects
     msg_time = str(datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S"))
     vert_correction = round(random.uniform(0, 100), 2)
@@ -86,6 +89,8 @@ def get_json():
 
 
 def get_json_non_eff():
+    """ Generates a json object that emulates the serial input """
+
     # Generate random Values for all json objects
     msg_time = str(datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S"))
     vert_correction = round(random.uniform(0, 100), 2)

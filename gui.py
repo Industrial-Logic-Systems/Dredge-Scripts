@@ -12,6 +12,7 @@ import backup
 
 
 def log_loop():
+    """ Will start a while loop that calls the log function """
     logging.debug("Loop Starting")
     my_label.config(text="Log Loop Running")
     while True:
@@ -20,19 +21,21 @@ def log_loop():
 
 
 def manual_backup():
+    """ Will start a manual backup """
     logging.debug("Manual Backup Started")
     filename = datetime.datetime.today().strftime("%Y-%m-%d")
     threading.Thread(target=backup.backup_files, args=(filename,)).start()
     # backup.backup_files(filename)
 
 
+# Creating the window
 root = ThemedTk()
 root.title("ILS")
 # root.geometry("300x150")
 root.set_theme("black", toplevel=True, themebg=True)
 root.iconbitmap("resources/ILS-logo.ico")
 
-
+# Create the config window
 def change_config():
     def save_config():
         config.port_name = port_config.get()

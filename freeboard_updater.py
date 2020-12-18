@@ -1,5 +1,6 @@
 import dweepy
 
+# Function codes and their meanings
 function_codes = {
     "AGV": "Assisting Grounded Vessels",
     "CCH": "Changing Cutterhead",

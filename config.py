@@ -3,6 +3,7 @@ import json
 
 
 def save_config():
+    """ Takes any changes to the config variables and writes them to the config file """
     logging.debug("Writing config.json")
     # Set all the values in the dictionary to match the current variables
     config["port"] = port_name
