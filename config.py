@@ -32,6 +32,6 @@ email_list = config["email_list"]
 
 # Define the Logging config
 logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logging.debug("Start of program")

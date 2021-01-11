@@ -41,6 +41,6 @@ def freeboard(name, data):
     if "non_eff_event" in data["DQM_Data"]["messages"][0]:
         function_code = data["DQM_Data"]["messages"][0]["non_eff_event"][
             "function_code"
-        ]
+        ].strip()
         message = function_codes[function_code]
         dweepy.dweet_for(name + "_non_eff", {"message": message})

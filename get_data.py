@@ -1,5 +1,6 @@
 import serial
 import json
+import logging
 
 import config
 
@@ -7,9 +8,12 @@ import config
 def listen_on_serial():
     """ Listen on the serial port for data string """
     ser = serial.Serial(config.port_name, 9600, timeout=20)
+    logging.debug("Serial port listening on port {}".format(config.port_name))
     data = ser.read_until(b"\r").strip(b"\n\r")
     # Decode the serial data
     data = data.decode("ASCII")
+    logging.debug(data)
+    logging.debug("Data Received")
     return data
 
 
@@ -49,6 +53,38 @@ def generate_csv(json_obj):
         )
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["comment"])
     else:
+        csv_obj.append("")
+        csv_obj.append("")
+        csv_obj.append("")
+        csv_obj.append("")
+
+    # Non Effective Event
+    if "outfall_position" in json_obj["DQM_Data"]["messages"][0]:
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["msg_time"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_location"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_latitude"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_longitude"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_heading"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_elevation"]
+        )
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["comment"]
+        )
+    else:
+        csv_obj.append("")
+        csv_obj.append("")
+        csv_obj.append("")
         csv_obj.append("")
         csv_obj.append("")
         csv_obj.append("")

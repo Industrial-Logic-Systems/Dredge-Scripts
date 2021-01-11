@@ -140,4 +140,5 @@ cython_debug/
 .vscode/
 csv/
 json/
+failed/
 JSON_Strings.txt

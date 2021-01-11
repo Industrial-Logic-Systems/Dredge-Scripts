@@ -1,5 +1,5 @@
 {
-    "port": "com19",
+    "port": "com3",
     "json_path": "json",
     "csv_path": "csv",
     "remote_server": "fieldops4@192.168.1.111",

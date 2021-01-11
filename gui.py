@@ -13,7 +13,7 @@ import backup
 
 def log_loop():
     """ Will start a while loop that calls the log function """
-    logging.debug("Loop Starting")
+    logging.info("Starting Log")
     my_label.config(text="Log Loop Running")
     while True:
         Dredge_Data_Log.log()
@@ -38,6 +38,7 @@ root.iconbitmap("resources/ILS-logo.ico")
 # Create the config window
 def change_config():
     def save_config():
+        logging.info("Saving Config")
         config.port_name = port_config.get()
         config.json_path = json_config.get()
         config.csv_path = csv_config.get()
@@ -50,6 +51,7 @@ def change_config():
             config.email_list.append(item)
 
         config.save_config()
+        logging.info("Config Saved")
 
     def rm_sel():
         email_box.delete(email_box.curselection())
@@ -140,5 +142,5 @@ logging.debug("Starting Thread")
 threading.Thread(target=log_loop).start()
 
 # Start the GUI
-logging.debug("Starting GUI main loop")
+logging.info("Starting GUI")
 root.mainloop()
