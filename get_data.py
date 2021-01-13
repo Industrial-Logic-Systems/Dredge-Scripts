@@ -38,7 +38,7 @@ def generate_csv(json_obj):
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["pump_rpm"])
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vacuum"])
     csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["outlet_psi"])
-    csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"])
+    csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip())
 
     # Non Effective Event
     if "non_eff_event" in json_obj["DQM_Data"]["messages"][0]:
@@ -49,9 +49,11 @@ def generate_csv(json_obj):
             json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["msg_end_time"]
         )
         csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["function_code"]
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["function_code"].strip()
         )
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["comment"])
+        csv_obj.append(
+            json_obj["DQM_Data"]["messages"][0]["non_eff_event"]["comment"].strip()
+        )
     else:
         csv_obj.append("")
         csv_obj.append("")
@@ -64,7 +66,9 @@ def generate_csv(json_obj):
             json_obj["DQM_Data"]["messages"][0]["outfall_position"]["msg_time"]
         )
         csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_location"]
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"][
+                "outfall_location"
+            ].strip()
         )
         csv_obj.append(
             json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_latitude"]
@@ -79,7 +83,7 @@ def generate_csv(json_obj):
             json_obj["DQM_Data"]["messages"][0]["outfall_position"]["outfall_elevation"]
         )
         csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["comment"]
+            json_obj["DQM_Data"]["messages"][0]["outfall_position"]["comment"].strip()
         )
     else:
         csv_obj.append("")
