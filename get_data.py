@@ -7,7 +7,7 @@ import config
 
 def listen_on_serial():
     """ Listen on the serial port for data string """
-    ser = serial.Serial(config.port_name, 9600, timeout=20)
+    ser = serial.Serial(config.port_name, 9600, timeout=20, parity=serial.PARITY_ODD)
     logging.debug("Serial port listening on port {}".format(config.port_name))
     data = ser.read_until(b"\r").strip(b"\n\r")
     # Decode the serial data

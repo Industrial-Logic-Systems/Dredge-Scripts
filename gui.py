@@ -33,7 +33,7 @@ root = ThemedTk()
 root.title("ILS")
 # root.geometry("300x150")
 root.set_theme("black", toplevel=True, themebg=True)
-root.iconbitmap("resources/ILS-logo.ico")
+root.iconbitmap("C:/Users/ILS_Data/Documents/Software/Dredge-Scripts/resources/ILS-logo.ico")
 
 # Create the config window
 def change_config():
@@ -119,7 +119,7 @@ def change_config():
     save.grid(row=7, column=6, padx=10, pady=10)
 
 
-ils_logo = PhotoImage(file="resources/ILS-logo.png")
+ils_logo = PhotoImage(file="C:/Users/ILS_Data/Documents/Software/Dredge-Scripts/resources/ILS-logo.png")
 Label(root, image=ils_logo).grid(row=0, column=1, padx=10, pady=10, sticky="w")
 Label(root, text="ILS Dredge Data Logger").grid(
     row=0, column=1, columnspan=2, padx=10, pady=10, sticky="e"

@@ -14,12 +14,12 @@ def save_config():
     config["email_list"] = email_list
 
     # Open the config file and save the variables
-    with open("config.json", "w") as f:
+    with open("C:\\Users\\ILS_Data\\Documents\\Software\\Dredge-Scripts\\config.json", "w") as f:
         json.dump(config, f, indent=4)
 
 
 # Open the config file and read the settings
-with open("config.json") as json_data_file:
+with open("C:\\Users\\ILS_Data\\Documents\\Software\\Dredge-Scripts\\config.json") as json_data_file:
     config = json.load(json_data_file)
 
 # Set all the variables from the dictionary
