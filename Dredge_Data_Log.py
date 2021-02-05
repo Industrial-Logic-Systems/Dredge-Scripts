@@ -34,7 +34,7 @@ def log():
         logging.debug("Json Object saved to json_obj")
     except:
         try:
-            file_handeling.write_file("C:/Users/ILS_Data/Desktop/failed", "failed.txt", str(json_string))
+            file_handeling.write_file("C:/Users/Dredge_Logger/Desktop/failed", "failed.txt", str(json_string))
         except:
             logging.error("Couldn't save failed string!")
         logging.error("There was a problem gettings the Serial String, Trying Again")
