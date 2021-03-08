@@ -1,6 +1,10 @@
 import logging
 import json
 
+proj_dir = "C:/Users/luke3/Documents/Luke/Python/Dredge-Scripts"
+enable_email = True
+enable_ssh = False
+email = "frazzercoding@gmail.com"
 
 def save_config():
     """ Takes any changes to the config variables and writes them to the config file """
@@ -14,12 +18,12 @@ def save_config():
     config["email_list"] = email_list
 
     # Open the config file and save the variables
-    with open("C:\\Users\\Dredge_Logger\\Documents\\Software\\Dredge-Scripts\\config.json", "w") as f:
+    with open(proj_dir+"/config.json", "w") as f:
         json.dump(config, f, indent=4)
 
 
 # Open the config file and read the settings
-with open("C:\\Users\\Dredge_Logger\\Documents\\Software\\Dredge-Scripts\\config.json") as json_data_file:
+with open(proj_dir+"/config.json") as json_data_file:
     config = json.load(json_data_file)
 
 # Set all the variables from the dictionary

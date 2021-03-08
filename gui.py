@@ -33,9 +33,11 @@ root = ThemedTk()
 root.title("ILS")
 # root.geometry("300x150")
 root.set_theme("black", toplevel=True, themebg=True)
-root.iconbitmap("C:/Users/Dredge_Logger/Documents/Software/Dredge-Scripts/resources/ILS-logo.ico")
+root.iconbitmap(config.proj_dir+"/resources/ILS-logo.ico")
 
 # Create the config window
+
+
 def change_config():
     def save_config():
         logging.info("Saving Config")
@@ -68,31 +70,36 @@ def change_config():
     )
 
     # Port
-    Label(config_win, text="Serial Port Name:").grid(row=2, column=1, padx=10, pady=10)
+    Label(config_win, text="Serial Port Name:").grid(
+        row=2, column=1, padx=10, pady=10)
     port_config = Entry(config_win, width=40)
     port_config.insert(0, config.port_name)
     port_config.grid(row=2, column=2, padx=10, pady=10, columnspan=2)
 
     # JSON
-    Label(config_win, text="JSON Folder Name:").grid(row=3, column=1, padx=10, pady=10)
+    Label(config_win, text="JSON Folder Name:").grid(
+        row=3, column=1, padx=10, pady=10)
     json_config = Entry(config_win, width=40)
     json_config.insert(0, config.json_path)
     json_config.grid(row=3, column=2, padx=10, pady=10, columnspan=2)
 
     # CSV
-    Label(config_win, text="CSV Folder Name:").grid(row=4, column=1, padx=10, pady=10)
+    Label(config_win, text="CSV Folder Name:").grid(
+        row=4, column=1, padx=10, pady=10)
     csv_config = Entry(config_win, width=40)
     csv_config.insert(0, config.csv_path)
     csv_config.grid(row=4, column=2, padx=10, pady=10, columnspan=2)
 
     # Remote IP
-    Label(config_win, text="Remote IP:").grid(row=5, column=1, padx=10, pady=10)
+    Label(config_win, text="Remote IP:").grid(
+        row=5, column=1, padx=10, pady=10)
     remote_config = Entry(config_win, width=40)
     remote_config.insert(0, config.remote_server)
     remote_config.grid(row=5, column=2, padx=10, pady=10, columnspan=2)
 
     # Remote DIR
-    Label(config_win, text="Remote Dir:").grid(row=6, column=1, padx=10, pady=10)
+    Label(config_win, text="Remote Dir:").grid(
+        row=6, column=1, padx=10, pady=10)
     dir_config = Entry(config_win, width=40)
     dir_config.insert(0, config.remote_server_path)
     dir_config.grid(row=6, column=2, padx=10, pady=10, columnspan=2)
@@ -119,7 +126,7 @@ def change_config():
     save.grid(row=7, column=6, padx=10, pady=10)
 
 
-ils_logo = PhotoImage(file="C:/Users/Dredge_Logger/Documents/Software/Dredge-Scripts/resources/ILS-logo.png")
+ils_logo = PhotoImage(file=config.proj_dir+"/resources/ILS-logo.png")
 Label(root, image=ils_logo).grid(row=0, column=1, padx=10, pady=10, sticky="w")
 Label(root, text="ILS Dredge Data Logger").grid(
     row=0, column=1, columnspan=2, padx=10, pady=10, sticky="e"
@@ -137,10 +144,18 @@ Button(root, text="Config", command=change_config).grid(
     row=2, column=2, padx=10, pady=10
 )
 
+
 # Start the logging loop in its own thread
 logging.debug("Starting Thread")
-threading.Thread(target=log_loop).start()
+stop_threads = False
+threading.Thread(target=log_loop, daemon=True).start()
+
+
+def on_closing():
+    quit()
+
 
 # Start the GUI
 logging.info("Starting GUI")
+root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()

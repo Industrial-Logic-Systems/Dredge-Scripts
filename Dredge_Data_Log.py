@@ -1,7 +1,3 @@
-"""
-ToDo:
-    Send Files to email and remote server
-"""
 import config
 
 import threading
@@ -14,7 +10,7 @@ import get_data
 import file_handeling
 import backup
 
-import tests
+#import tests
 
 # Create the cur_time variable that is used to tell when to backup files
 cur_time = datetime.datetime.today().strftime("%Y-%m-%d")

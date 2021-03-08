@@ -10,41 +10,45 @@ def backup_files(filename):
     the file to a remote computer with SCP, and then send the files to a list of emails"""
     logging.debug("Backing up files with name: " + filename)
 
-    # Backing up JSON file
-    logging.debug("Sending JSON over SSH")
-    try:
-        send_ssh(
-            config.remote_server_path + "\\" + config.json_path,
-            config.json_path,
-            filename + ".json",
-        )
-        # Backing up CSV file
-        logging.debug("Sending CSV over SSH")
-        send_ssh(
-            config.remote_server_path + "\\" + config.csv_path,
-            config.csv_path,
-            filename + ".csv",
-        )
-    except subprocess.TimeoutExpired:  # Watch for Timeouts
-        logging.error("SSH Timedout, File was not backed up to remote server")
+    if config.enable_ssh:
+        # Backing up JSON file
+        try:
+            logging.debug("Sending JSON over SSH")
+            send_ssh(
+                config.remote_server_path + "\\" + config.json_path,
+                config.json_path,
+                filename + ".json",
+            )
+            # Backing up CSV file
+            logging.debug("Sending CSV over SSH")
+            send_ssh(
+                config.remote_server_path + "\\" + config.csv_path,
+                config.csv_path,
+                filename + ".csv",
+            )
+        except subprocess.TimeoutExpired:  # Watch for Timeouts
+            logging.error(
+                "SSH Timedout, File was not backed up to remote server")
 
-    # Email the files to list of receivers
-    files = [
-        config.json_path + "\\" + filename + ".json",
-        config.csv_path + "\\" + filename + ".csv",
-    ]
-    logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
-    send_email(
-        config.email_list,
-        "Dredge Files for " + filename,
-        "Dredge Files for " + filename,
-        files,
-    )
+    if config.enable_email:
+        # Email the files to list of receivers
+        files = [
+            config.json_path + "\\" + filename + ".json",
+            config.csv_path + "\\" + filename + ".csv",
+        ]
+        logging.debug("Sending Email(s) to " +
+                      str(config.email_list).strip("[]"))
+        send_email(
+            config.email_list,
+            "Dredge Files for " + filename,
+            "Dredge Files for " + filename,
+            files,
+        )
 
 
 def send_email(receivers, subject, body, files):
     """ Sends an email with the above parameters """
-    yag = yagmail.SMTP("frazzercoding")
+    yag = yagmail.SMTP(config.email)
     yag.send(
         to=receivers,
         subject=subject,
