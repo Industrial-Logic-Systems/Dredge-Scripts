@@ -1,0 +1,13 @@
+{
+    "port": "COM19",
+    "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
+    "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
+    "remote_server": "",
+    "remote_server_path": "",
+    "email_list": [
+        "example.email@gmail.com"
+    ],
+    "enable_email": true,
+    "enable_ssh": false,
+    "plc_ip": "192.168.1.10"
+}

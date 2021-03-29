@@ -1,13 +1,11 @@
 {
     "port": "COM19",
-    "json_path": "C:\\Users\\CAD Station 2\\Desktop\\json",
-    "csv_path": "C:\\Users\\CAD Station 2\\Desktop\\csv",
-    "remote_server": "fieldops4@192.168.1.111",
-    "remote_server_path": "C:\\Users\\luke3\\Desktop",
+    "json_path": "C:\\Users\\luke3\\Desktop\\json",
+    "csv_path": "C:\\Users\\luke3\\Desktop\\csv",
+    "remote_server": "",
+    "remote_server_path": "",
     "email_list": [
-        "frazzercoding+1@gmail.com",
-        "frazzercoding+2@gmail.com",
-        "frazzercoding+3@gmail.com"
+        "frazzercoding@gmail.com"
     ],
     "enable_email": true,
     "enable_ssh": false,

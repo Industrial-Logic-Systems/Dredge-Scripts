@@ -2,6 +2,7 @@ import logging
 import logging.handlers
 import json
 import os
+import shutil
 
 # Define basic variables
 proj_dir = os.path.dirname(__file__)
@@ -11,19 +12,28 @@ email = "frazzercoding@gmail.com"
 if not os.path.isdir(proj_dir + "/logs"):
     os.makedirs(proj_dir + "/logs")
 
+stream = logging.StreamHandler()
+stream.setLevel(logging.INFO)
+
 # Define the Logging config
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.DEBUG,
     handlers=[
         logging.handlers.RotatingFileHandler(
-            proj_dir + "/logs/debug.log", maxBytes=(1048576 * 5), backupCount=7
+            proj_dir + "/logs/debug.log", maxBytes=(1048576 * 2), backupCount=7
         ),
-        logging.StreamHandler(),
+        stream
     ],
 )
 
 logging.debug("Start of program")
+
+# Make sure config file exists
+if not os.path.isfile(proj_dir+"/config.json"):
+    logging.warning(
+        "config.json not found, using example_config.json. Please set correct config settings")
+    shutil.copy(proj_dir+"/example_config.json", proj_dir+"/config.json")
 
 
 def save_config():
