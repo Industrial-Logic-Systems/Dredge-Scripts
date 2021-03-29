@@ -1,3 +1,5 @@
+import config
+
 from pyModbusTCP.client import ModbusClient
 from pyModbusTCP import utils
 import time
@@ -5,7 +7,7 @@ import logging
 
 
 def getModbus():
-    SERVER_HOST = "192.168.1.18"
+    SERVER_HOST = config.plc_ip
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
@@ -21,8 +23,9 @@ def getModbus():
 
     if not c.is_open():
         if not c.open():
-            logging.debug("unable to connect to " +
-                          SERVER_HOST+":"+str(SERVER_PORT))
+            logging.debug(
+                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
+            )
             return 0, 0
 
     offset = c.read_holding_registers(0)
@@ -31,13 +34,13 @@ def getModbus():
     offset = utils.get_2comp(offset[0], 16) / 100
     rot = utils.get_2comp(rot[0], 16) / 100
 
-    logging.debug('Offset: ' + str(offset))
-    logging.debug('ROT: ' + str(rot))
+    logging.debug("Offset: " + str(offset))
+    logging.debug("ROT: " + str(rot))
 
     return offset, rot
 
 
 if __name__ == "__main__":
     offset, rot = getModbus()
-    print('Offset:', offset)
-    print('ROT:', rot)
+    print("Offset:", offset)
+    print("ROT:", rot)

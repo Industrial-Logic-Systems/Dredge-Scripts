@@ -28,13 +28,13 @@ def log():
         # json_obj = get_data.json_from_data(tests.get_json_non_eff()) # Used for testing purposes
         # json_obj = get_data.json_from_data(tests.get_json()) # Used for testing purposes
         logging.debug("Json Object saved to json_obj")
-    except:
+    except Exception:
         try:
             file_handeling.write_file("C:/Users/Dredge_Logger/Desktop/failed", "failed.txt", str(json_string))
         except:
             logging.error("Couldn't save failed string!")
         logging.error("There was a problem gettings the Serial String, Trying Again")
-        return
+        return False
     else:
         # Create a list from the json object that will be saved as a CSV
         csv_obj = get_data.generate_csv(json_obj)
@@ -68,6 +68,7 @@ def log():
             logging.debug("Backing up files for the day: {}".format(old_time))
             threading.Thread(target=backup.backup_files, args=(str(old_time),)).start()
             # backup.backup_files(str(old_time))
+        return True
 
 
 if __name__ == "__main__":

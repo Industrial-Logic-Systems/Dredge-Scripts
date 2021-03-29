@@ -27,8 +27,7 @@ def backup_files(filename):
                 filename + ".csv",
             )
         except subprocess.TimeoutExpired:  # Watch for Timeouts
-            logging.error(
-                "SSH Timedout, File was not backed up to remote server")
+            logging.error("SSH Timeout, File was not backed up to remote server")
 
     if config.enable_email:
         # Email the files to list of receivers
@@ -36,8 +35,7 @@ def backup_files(filename):
             config.json_path + "\\" + filename + ".json",
             config.csv_path + "\\" + filename + ".csv",
         ]
-        logging.debug("Sending Email(s) to " +
-                      str(config.email_list).strip("[]"))
+        logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
         send_email(
             config.email_list,
             "Dredge Files for " + filename,
