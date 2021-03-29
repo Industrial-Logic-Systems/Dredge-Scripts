@@ -55,6 +55,7 @@ def change_config():
         config.remote_server_path = dir_config.get()
         config.enable_email = email_checkbox.instate(["selected"])
         config.enable_ssh = ssh_checkbox.instate(["selected"])
+        config.plc_ip = plc_config.get()
 
         config.email_list = []
         email_box_ls = email_box.get(0, email_box.size())
@@ -83,7 +84,7 @@ def change_config():
 
     # Port
     ttk.Label(config_win, text="Serial Port Name:").grid(
-        row=2, column=1, padx=10, pady=10
+        row=2, column=1, padx=10, pady=10,sticky='w'
     )
     port_config = ttk.Entry(config_win, width=40)
     port_config.insert(0, config.port_name)
@@ -91,7 +92,7 @@ def change_config():
 
     # JSON
     ttk.Label(config_win, text="JSON Folder Name:").grid(
-        row=3, column=1, padx=10, pady=10
+        row=3, column=1, padx=10, pady=10,sticky='w'
     )
     json_config = ttk.Entry(config_win, width=40)
     json_config.insert(0, config.json_path)
@@ -99,44 +100,50 @@ def change_config():
 
     # CSV
     ttk.Label(config_win, text="CSV Folder Name:").grid(
-        row=4, column=1, padx=10, pady=10
+        row=4, column=1, padx=10, pady=10,sticky='w'
     )
     csv_config = ttk.Entry(config_win, width=40)
     csv_config.insert(0, config.csv_path)
     csv_config.grid(row=4, column=2, padx=10, pady=10, columnspan=2)
 
     # Remote IP
-    ttk.Label(config_win, text="Remote IP:").grid(row=5, column=1, padx=10, pady=10)
+    ttk.Label(config_win, text="Remote IP:").grid(row=5, column=1, padx=10, pady=10,sticky='w')
     remote_config = ttk.Entry(config_win, width=40)
     remote_config.insert(0, config.remote_server)
     remote_config.grid(row=5, column=2, padx=10, pady=10, columnspan=2)
 
     # Remote DIR
-    ttk.Label(config_win, text="Remote Dir:").grid(row=6, column=1, padx=10, pady=10)
+    ttk.Label(config_win, text="Remote Dir:").grid(row=6, column=1, padx=10, pady=10,sticky='w')
     dir_config = ttk.Entry(config_win, width=40)
     dir_config.insert(0, config.remote_server_path)
     dir_config.grid(row=6, column=2, padx=10, pady=10, columnspan=2)
+
+    # PLC IP
+    ttk.Label(config_win, text="PLC IP:").grid(row=7, column=1, padx=10, pady=10,sticky='w')
+    plc_config = ttk.Entry(config_win, width=40)
+    plc_config.insert(0, config.plc_ip)
+    plc_config.grid(row=7, column=2, padx=10, pady=10, columnspan=2)
 
     # Emails
     ttk.Label(config_win, text="Email List:").grid(
         row=2, column=4, padx=10, pady=10, sticky="nw"
     )
     ttk.Button(config_win, text="Remove Selected", command=rm_sel).grid(
-        row=3, column=4, padx=10, pady=10, sticky="nw"
+        row=6, column=4, padx=10, pady=10,sticky='sw'
     )
     email_box = tk.Listbox(config_win, width=40)
     for email in config.email_list:
         email_box.insert(tk.END, email)
-    email_box.grid(row=2, column=5, padx=10, pady=10, columnspan=2, rowspan=4)
-    new_email = ttk.Entry(config_win, width=40)
-    new_email.grid(row=6, column=4, padx=10, pady=10, columnspan=2)
+    email_box.grid(row=2, column=5, padx=10, pady=10, columnspan=2, rowspan=5)
+    new_email = ttk.Entry(config_win, width=45)
+    new_email.grid(row=7, column=4, padx=10, pady=10, columnspan=3,sticky="w")
     ttk.Button(config_win, text="Add Email", command=add).grid(
-        row=6, column=6, padx=10, pady=10
+        row=7, column=6, padx=10, pady=10,sticky='e'
     )
 
     # Enable Email
     email_checkbox = ttk.Checkbutton(config_win, text="Enable Email Backup")
-    email_checkbox.grid(row=7, column=1, padx=10, pady=10)
+    email_checkbox.grid(row=8, column=1, padx=10, pady=10)
     if config.enable_email:
         email_checkbox.state(["selected"])
     else:
@@ -144,7 +151,7 @@ def change_config():
 
     # Enable SSH
     ssh_checkbox = ttk.Checkbutton(config_win, text="Enable SSH Backup")
-    ssh_checkbox.grid(row=7, column=2, padx=10, pady=10)
+    ssh_checkbox.grid(row=8, column=2, padx=10, pady=10)
     if config.enable_ssh:
         ssh_checkbox.state(["selected"])
     else:
@@ -152,7 +159,7 @@ def change_config():
 
     # Save Button
     save = ttk.Button(config_win, text="Save Config", command=save_config)
-    save.grid(row=7, column=6, padx=10, pady=10)
+    save.grid(row=8, column=6, padx=10, pady=10)
 
 
 ils_logo = tk.PhotoImage(file=config.proj_dir + "/resources/ILS-logo.png")
