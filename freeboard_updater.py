@@ -23,7 +23,7 @@ function_codes = {
     "OC": "Out of Commission",
     "OR": "Operating Repairs",
     "P": "Preperation",
-    "PREP": "Preparation  & Making Up Tow",
+    "PREP": "Preparation & Making Up Tow",
     "RPL": "Repair Pipeline",
     "SB": "Sounding & Buoying",
     "SBT": "Stand-By Time as Directed",
