@@ -6,7 +6,7 @@ import shutil
 
 # Define basic variables
 proj_dir = os.path.dirname(__file__)
-email = "frazzercoding@gmail.com"
+email = "ilsdqmsystem+integrity@gmail.com"
 
 # Create the log folder if it does not exist
 if not os.path.isdir(proj_dir + "/logs"):
