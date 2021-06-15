@@ -36,10 +36,14 @@ def backup_files(filename):
             config.csv_path + "\\" + filename + ".csv",
         ]
         logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
+
+        subject = f"{config.dredge_name} - {filename} - Log Files"
+        body = f"The files with the logged information from {config.dredge_name} on {filename}"
+
         send_email(
             config.email_list,
-            "Dredge Files for " + filename,
-            "Dredge Files for " + filename,
+            subject,
+            body,
             files,
         )
 
