@@ -3,17 +3,11 @@ import config
 import threading
 import logging
 import datetime
-import time
 
 import freeboard_updater
 import get_data
 import file_handeling
 import backup
-
-#import tests
-
-# Create the cur_time variable that is used to tell when to backup files
-cur_time = datetime.datetime.today().strftime("%Y-%m-%d")
 
 
 def log():
@@ -30,7 +24,9 @@ def log():
         logging.debug("Json Object saved to json_obj")
     except Exception:
         try:
-            file_handeling.write_file("C:/Users/Dredge_Logger/Desktop/failed", "failed.txt", str(json_string))
+            file_handeling.write_file(
+                "C:/Users/Dredge_Logger/Desktop/failed", "failed.txt", str(json_string)
+            )
         except:
             logging.error("Couldn't save failed string!")
         logging.error("There was a problem gettings the Serial String, Trying Again")
@@ -60,14 +56,14 @@ def log():
             logging.error("Failed to updated freeboard!")
 
         # Backup the files once a day
-        global cur_time
-        old_time = cur_time  # Date when the loop last ran
-        cur_time = datetime.datetime.today().strftime("%Y-%m-%d")  # Current date
+        old_time = config.last_save_date  # Date when the loop last ran
+        cur_time = datetime.date.today()  # Current date
         if old_time < cur_time:
             # If old date is different from the current date backup the files
             logging.debug("Backing up files for the day: {}".format(old_time))
             threading.Thread(target=backup.backup_files, args=(str(old_time),)).start()
-            # backup.backup_files(str(old_time))
+            config.last_save_date = cur_time
+            config.save_config()
         return True
 
 

@@ -97,7 +97,7 @@ remote_server_path = config["remote_server_path"]
 if "last_save_date" not in config:
     last_save_date = datetime.date.today()
 else:
-    last_save_date = datetime.datetime.strptime(config["last_save_date"], "%Y-%m-%d")
+    last_save_date = datetime.date.fromisoformat(config["last_save_date"])
 
 # Make sure the JSON and CSV paths are valid
 json_path = checkPath(json_path)
