@@ -21,7 +21,7 @@ def getJson():
         logging.debug(data)
         logging.debug("Data Received")
     except Exception as e:
-        logging.error("JSON Exception")
+        logging.error("Serial Exception")
         logging.error(e, exc_info=True)
         logging.error("Failed to Receive JSON Serial Data")
         return None
@@ -36,7 +36,7 @@ def getJson():
                 config.json_path + "\\..\\failed", "failed.txt", str(data)
             )
         except Exception as e:
-            logging.error("JSON Exception")
+            logging.error("Save Exception")
             logging.error(e, exc_info=True)
             logging.error("Couldn't save failed string!")
         logging.error("Could not convert received serial data to JSON")
