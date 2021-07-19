@@ -5,6 +5,18 @@ import logging.handlers
 import os
 import shutil
 
+"""
+config.json has the following information:
+    Com Port
+    Json Path
+    CSV Path
+    Email List
+    PLC IP
+    Email To Send With
+    Dredge Name
+    List of Modbus Addresses with Name and type
+"""
+
 # Get the directory where the script is located
 proj_dir = os.path.dirname(__file__)
 
@@ -14,39 +26,45 @@ def checkPath(path):
     If the path exists, then it returns the original path. If it doesn't, it defaults the path the the desktop"""
 
     split = path.rsplit("\\", 1)
-    dir = split[0]
+    directory = split[0]
     foldername = split[1]
 
-    if os.path.isdir(dir):
+    if os.path.isdir(directory):
         return path
-    else:
-        logging.error(
-            f'Directory "{dir}" does not exist for folder {foldername}, defaulting path to desktop'
-        )
-        return f"{os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')}\\{foldername}"
+
+    logging.error(
+        f'Directory "{directory}" does not exist for folder {foldername}, defaulting path to desktop'
+    )
+    return f"{os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')}\\{foldername}"
 
 
 def save_config():
-    """ Takes any changes to the config variables and writes them to the config file """
+    """Takes any changes to the config variables and writes them to the config file"""
     logging.debug("Writing config.json")
 
     # Set all the values in the dictionary to match the current variables
-    config["csv_path"] = csv_path
-    config["dredge_name"] = dredge_name
-    config["email_list"] = email_list
-    config["email"] = email
-    config["enable_email"] = enable_email
-    config["enable_ssh"] = enable_ssh
+    config["port"] = port
     config["json_path"] = json_path
-    config["last_save_date"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
+    config["csv_path"] = csv_path
+    config["email_list"] = email_list
     config["plc_ip"] = plc_ip
-    config["port"] = port_name
-    config["remote_server_path"] = remote_server_path
-    config["remote_server"] = remote_server
+    config["email"] = email
+    config["dredge_name"] = dredge_name
+    config["freeboard_name"] = freeboard_name
+    config["modbus"] = modbus
+    config["last_save_date"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
 
     # Open the config file and save the variables
     with open(proj_dir + "/config.json", "w") as f:
         json.dump(config, f, indent=4)
+
+
+def genHeader():
+    csv_header = "msg_time, vert_correction, ch_latitude, ch_longitude, ch_depth, ch_heading, slurry_velocity, slurry_density, pump_rpm, vacuum, outlet_psi, comment, "
+    for name in modbus:
+        csv_header += f"{name}, "
+    csv_header += "msg_start_time, msg_end_time, function_code, comment, msg_time, outfall_location, outfall_latitude, outfall_longitude, outfall_heading, outfall_elevation, comment"
+    return csv_header
 
 
 # Create the log folder if it does not exist
@@ -82,17 +100,16 @@ with open(proj_dir + "/config.json") as json_data_file:
     config = json.load(json_data_file)
 
 # Set all the variables from the dictionary
-csv_path = config["csv_path"]
-dredge_name = config["dredge_name"]
-email = config["email"]
-email_list = config["email_list"]
-enable_email = config["enable_email"]
-enable_ssh = config["enable_ssh"]
+port = config["port"]
 json_path = config["json_path"]
+csv_path = config["csv_path"]
+email_list = config["email_list"]
 plc_ip = config["plc_ip"]
-port_name = config["port"]
-remote_server = config["remote_server"]
-remote_server_path = config["remote_server_path"]
+email = config["email"]
+dredge_name = config["dredge_name"]
+freeboard_name = config["freeboard_name"]
+modbus = config["modbus"]
+header = genHeader()
 
 if "last_save_date" not in config:
     last_save_date = datetime.date.today()

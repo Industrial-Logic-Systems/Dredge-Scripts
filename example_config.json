@@ -1,13 +1,24 @@
 {
-  "port": "COM1",
-  "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
-  "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
-  "remote_server": "",
-  "remote_server_path": "",
-  "email_list": ["example.email@gmail.com"],
-  "enable_email": true,
-  "enable_ssh": false,
-  "plc_ip": "192.168.1.10",
-  "email": "ilsdqmsystem@gmail.com",
-  "dredge_name": "Dredge ILS"
+    "port": "COM1",
+    "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
+    "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
+    "email_list": [
+        "example.email@gmail.com"
+    ],
+    "plc_ip": "192.168.1.10",
+    "email": "ilsdqmsystem@gmail.com",
+    "dredge_name": "Dredge ILS",
+    "freeboard_name": "ILS-Dredge",
+    "modbus": {
+        "offset": {
+            "name": "offset",
+            "address": "0",
+            "float": true
+        },
+        "rot": {
+            "name": "rot",
+            "address": "1",
+            "float": true
+        }
+    }
 }

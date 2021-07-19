@@ -1,4 +1,5 @@
 import dweepy
+import logging
 
 # Function codes and their meanings
 function_codes = {
@@ -38,9 +39,13 @@ def freeboard(name, data):
     # Sends out a dweet for freeboard
     dweepy.dweet_for(name, data)
 
-    if "non_eff_event" in data["DQM_Data"]["messages"][0]:
-        function_code = data["DQM_Data"]["messages"][0]["non_eff_event"][
-            "function_code"
-        ].strip()
-        message = function_codes[function_code]
-        dweepy.dweet_for(name + "_non_eff", {"message": message})
+    events = data["DQM_Data"]["messages"]
+    for event in events:
+        if "non_eff_event" in event:
+            logging.debug("Non-Eff Freeboard")
+            function_code = event["non_eff_event"]["function_code"].strip()
+            message = function_codes[function_code]
+            logging.debug(
+                f'{name + "_non_eff"}, code: {function_code}, message, {message}'
+            )
+            dweepy.dweet_for(name + "_non_eff", {"message": message})
