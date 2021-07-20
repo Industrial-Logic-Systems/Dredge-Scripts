@@ -24,7 +24,7 @@ def log():
     json_data = dataHandler.getJson()
 
     if not json_data:
-        logging.warning("Failed to Retrieve JSON String")
+        logging.error("Failed to Retrieve JSON String")
         return [False, None]
 
     # Get CSV Data

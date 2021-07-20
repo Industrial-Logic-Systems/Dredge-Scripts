@@ -22,22 +22,22 @@ def getJson():
         logging.debug("Data Received")
     except Exception as e:
         logging.error("Serial Exception")
-        logging.error(e, exc_info=True)
-        logging.error("Failed to Receive JSON Serial Data")
+        logging.debug(e, exc_info=True)
+        # logging.error("Failed to Receive JSON Serial Data")
         return None
 
     try:
         json_obj = json.loads(data)
     except Exception as e:
         logging.error("JSON Exception")
-        logging.error(e, exc_info=True)
+        logging.debug(e, exc_info=True)
         try:
             fileHandler.write_file(
                 config.json_path + "\\..\\failed", "failed.txt", str(data)
             )
         except Exception as e:
             logging.error("Save Exception")
-            logging.error(e, exc_info=True)
+            logging.debug(e, exc_info=True)
             logging.error("Couldn't save failed string!")
         logging.error("Could not convert received serial data to JSON")
         return None
@@ -121,7 +121,7 @@ def getCSV(json_obj):
 
     except Exception as e:
         logging.error("CSV Exception")
-        logging.error(e, exc_info=True)
+        logging.debug(e, exc_info=True)
 
     return csv_obj
 
