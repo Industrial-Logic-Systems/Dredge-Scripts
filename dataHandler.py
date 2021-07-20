@@ -32,9 +32,10 @@ def getJson():
         logging.error("JSON Exception")
         logging.debug(e, exc_info=True)
         try:
-            fileHandler.write_file(
-                config.json_path + "\\..\\failed", "failed.txt", str(data)
-            )
+            if len(str(data)) != 0:
+                fileHandler.write_file(
+                    config.json_path + "\\..\\failed", "failed.txt", str(data)
+                )
         except Exception as e:
             logging.error("Save Exception")
             logging.debug(e, exc_info=True)
