@@ -37,15 +37,19 @@ function_codes = {
 
 def freeboard(name, data):
     # Sends out a dweet for freeboard
-    dweepy.dweet_for(name, data)
+    try:
+        dweepy.dweet_for(name, data)
 
-    events = data["DQM_Data"]["messages"]
-    for event in events:
-        if "non_eff_event" in event:
-            logging.debug("Non-Eff Freeboard")
-            function_code = event["non_eff_event"]["function_code"].strip()
-            message = function_codes[function_code]
-            logging.debug(
-                f'{name + "_non_eff"}, code: {function_code}, message, {message}'
-            )
-            dweepy.dweet_for(name + "_non_eff", {"message": message})
+        events = data["DQM_Data"]["messages"]
+        for event in events:
+            if "non_eff_event" in event:
+                logging.debug("Non-Eff Freeboard")
+                function_code = event["non_eff_event"]["function_code"].strip()
+                message = function_codes[function_code]
+                logging.debug(
+                    f'{name + "_non_eff"}, code: {function_code}, message, {message}'
+                )
+                dweepy.dweet_for(name + "_non_eff", {"message": message})
+    except Exception as e:
+        logging.error("Freeboard failed to update")
+        logging.debug(e, exc_info=True)
