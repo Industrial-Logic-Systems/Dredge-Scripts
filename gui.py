@@ -88,7 +88,7 @@ class StartPage(ttk.Frame):
         self.json_preview = ttk.Label(self.middle, text="JSON String Preview", width=70)
 
         self.log_status.pack(side="top", padx=5, pady=5, anchor="w")
-        self.json_preview.pack(side="bottom", padx=5, pady=5,anchor="w")
+        self.json_preview.pack(side="bottom", padx=5, pady=5, anchor="w")
 
         self.button1 = ttk.Button(
             self.bottom,
@@ -102,9 +102,9 @@ class StartPage(ttk.Frame):
         self.button1.pack(side="left", padx=5, pady=5)
         self.button2.pack(side="right", padx=5, pady=5)
 
-        self.top.pack(side="top",anchor="w")
-        self.middle.pack(anchor="w", fill='both')
-        self.bottom.pack(side="bottom",anchor="w", fill='both')
+        self.top.pack(side="top", anchor="w")
+        self.middle.pack(anchor="w", fill="both")
+        self.bottom.pack(side="bottom", anchor="w", fill="both")
 
 
 class Config(ttk.Frame):
@@ -333,7 +333,9 @@ class Config(ttk.Frame):
         for item in email_box_ls:
             config.email_list.append(item)
 
+        logging.info("Saving Config")
         config.save_config()
+        logging.info("Config Saved")
 
 
 if __name__ == "__main__":
