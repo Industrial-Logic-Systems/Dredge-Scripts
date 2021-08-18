@@ -16,7 +16,7 @@ def backup_files(filename):
     files = [
         config.json_path + "\\" + filename + ".json",
         config.csv_path + "\\" + filename + ".csv",
-        config.image_path + "\\" + "Smoke_Chart_" + filename + ".csv",
+        config.image_path + "\\" + "Smoke_Chart_" + filename + ".png",
     ]
     logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
 

@@ -8,6 +8,9 @@ import matplotlib.ticker as ticker
 import os
 import logging
 from PIL import Image
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 def generateGraph(filename, defaultPath=True):
@@ -183,7 +186,6 @@ def generateGraph(filename, defaultPath=True):
     combined.save(
         f"{config.image_path}/Smoke_Chart_{filename.strip('.csv')}.png", "PNG"
     )
-    combined.show()
 
 
 if __name__ == "__main__":
