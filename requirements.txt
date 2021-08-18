@@ -3,3 +3,4 @@ dweepy
 yagmail[all]
 ttkthemes
 pyModbusTCP
+Pillow

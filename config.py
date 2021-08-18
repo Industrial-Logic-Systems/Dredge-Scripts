@@ -46,6 +46,7 @@ def save_config():
     config["port"] = port
     config["json_path"] = json_path
     config["csv_path"] = csv_path
+    config["image_path"] = image_path
     config["email_list"] = email_list
     config["plc_ip"] = plc_ip
     config["email"] = email
@@ -103,6 +104,14 @@ with open(proj_dir + "/config.json") as json_data_file:
 port = config["port"]
 json_path = config["json_path"]
 csv_path = config["csv_path"]
+
+if "image_path" in config:
+    image_path = config["image_path"]
+else:
+    image_path = (
+        f"{os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')}\\images"
+    )
+
 email_list = config["email_list"]
 plc_ip = config["plc_ip"]
 email = config["email"]
@@ -119,4 +128,5 @@ else:
 # Make sure the JSON and CSV paths are valid
 json_path = checkPath(json_path)
 csv_path = checkPath(csv_path)
+image_path = checkPath(image_path)
 save_config()

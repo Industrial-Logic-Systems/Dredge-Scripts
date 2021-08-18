@@ -2,6 +2,7 @@
     "port": "COM1",
     "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
     "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
+    "image_path": "C:\\Users\\USERNAME\\Desktop\\images",
     "email_list": [
         "example.email@gmail.com"
     ],
