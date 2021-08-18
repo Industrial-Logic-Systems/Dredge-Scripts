@@ -1,8 +1,8 @@
 import config
 
 import yagmail
-import subprocess
 import logging
+import generateImages
 
 
 def backup_files(filename):
@@ -10,10 +10,13 @@ def backup_files(filename):
 
     logging.debug("Backing up files with name: " + filename)
 
+    generateImages.generateGraph(filename + ".csv")
+
     # Email the files to list of receivers
     files = [
         config.json_path + "\\" + filename + ".json",
         config.csv_path + "\\" + filename + ".csv",
+        config.image_path + "\\" + "Smoke_Chart_" + filename + ".csv",
     ]
     logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
 
