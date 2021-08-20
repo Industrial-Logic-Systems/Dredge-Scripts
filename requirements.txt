@@ -4,3 +4,5 @@ yagmail[all]
 ttkthemes
 pyModbusTCP
 Pillow
+pandas
+matplotlib
