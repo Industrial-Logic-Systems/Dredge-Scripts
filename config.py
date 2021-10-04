@@ -53,7 +53,9 @@ def save_config():
     config["dredge_name"] = dredge_name
     config["freeboard_name"] = freeboard_name
     config["modbus"] = modbus
-    config["last_save_date"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
+    config["date_1"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
+    config["date_2"] = datetime.datetime.strftime(last_run_update_date, "%Y-%m-%d")
+    config["date_3"] = datetime.datetime.strftime(run_until, "%Y-%m-%d")
 
     # Open the config file and save the variables
     with open(proj_dir + "/config.json", "w") as f:
@@ -120,10 +122,20 @@ freeboard_name = config["freeboard_name"]
 modbus = config["modbus"]
 header = genHeader()
 
-if "last_save_date" not in config:
+if "date_1" not in config:
     last_save_date = datetime.date.today()
 else:
-    last_save_date = datetime.date.fromisoformat(config["last_save_date"])
+    last_save_date = datetime.date.fromisoformat(config["date_1"])
+
+if "date_2" not in config:
+    last_run_update_date = datetime.date.today()
+else:
+    last_run_update_date = datetime.date.fromisoformat(config["date_2"])
+
+if "date_3" not in config:
+    run_until = datetime.date.today()
+else:
+    run_until = datetime.date.fromisoformat(config["date_3"])
 
 # Make sure the JSON and CSV paths are valid
 json_path = checkPath(json_path)

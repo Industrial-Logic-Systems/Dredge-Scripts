@@ -8,7 +8,7 @@ import dataHandler
 import fileHandler
 import freeboardUpdater
 import backup
-
+import dredgeStatus
 
 def saveFiles(json_data, csv_data):
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
@@ -17,8 +17,32 @@ def saveFiles(json_data, csv_data):
         config.csv_path, filename + ".csv", str(csv_data).strip("[]")
     )
 
+def updateRunUntil():
+    try:
+        status = dredgeStatus.checkStatus()
+        if status == True:
+            config.last_run_update_date = datetime.date.today()
+            config.save_config()
+    except Exception as e:
+        logging.error("Failed to update run until date")
+        logging.error(f"Error Exception: {e}")
 
 def log():
+    # Update Run Until once a day
+    old_date = config.last_run_update_date # Date when last successful update happened
+    cur_date = datetime.date.today()  # Current date
+    if old_date < cur_date:
+        # If old date is different from the current date backup the files
+        logging.debug("Attempting to update run until date")
+        threading.Thread(target=updateRunUntil).start()
+
+    if datetime.date.today() > config.run_until:
+        logging.warning("Runtime expired. Contact ILS Automation")
+        dataHandler.sendSerialBit(False)
+        return [False, None]
+
+    dataHandler.sendSerialBit(True)
+
     # Get JSON Data
     logging.debug("Getting JSON Data")
     json_data = dataHandler.getJson()

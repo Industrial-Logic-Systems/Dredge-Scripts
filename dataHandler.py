@@ -163,3 +163,35 @@ def getModbus():
         logging.debug(f"{name.title()}: {str(value)}")
 
     return values
+
+def sendSerialBit(send):
+    SERVER_HOST = config.plc_ip
+    SERVER_PORT = 502
+    SERVER_U_ID = 1
+
+    c = ModbusClient()
+
+    # uncomment this line to see debug message
+    # c.debug(True)
+
+    # define modbus server host, port and unit_id
+    c.host(SERVER_HOST)
+    c.port(SERVER_PORT)
+    c.unit_id(SERVER_U_ID)
+
+    if not c.is_open():
+        if not c.open():
+            logging.debug(
+                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
+            )
+            return
+
+    status = c.write_single_coil(0, send)
+
+    if(status):
+        logging.debug(f"Send Serial bit successfully set to {send}")
+    else:
+        logging.debug(f"Failed to set Send Serial bit to {send}")
+
+if __name__ == "__main__":
+    sendSerialBit(True)
