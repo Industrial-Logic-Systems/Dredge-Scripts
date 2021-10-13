@@ -31,26 +31,23 @@ def generateGraph(filename, defaultPath=True):
         csv_file,
         skipinitialspace=True,
         parse_dates=["msg_start_time", "msg_end_time"],
-        dtype={
-            "vert_correction": "float64",
-            "ch_latitude": "float64",
-            "ch_longitude": "float64",
-            "ch_depth": "float64",
-            "ch_heading": "int64",
-            "slurry_velocity": "float64",
-            "slurry_density": "float64",
-            "pump_rpm": "int64",
-            "vacuum": "float64",
-            "outlet_psi": "float64",
-            "comment": "string",
-            "offset": "float64",
-            "rot": "float64",
-            "ladder_depth": "float64",
-            "spud_position": "float64",
-            "function_code": "category",
-            "comment.1": "string",
-        },
     )
+
+    for col in [
+        "vert_correction",
+        "ch_latitude",
+        "ch_longitude",
+        "ch_depth",
+        "ch_heading",
+        "slurry_velocity",
+        "slurry_density",
+        "pump_rpm",
+        "vacuum",
+        "outlet_psi",
+        "offset",
+        "rot",
+    ]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
 
     time = [
         datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S") for time in df["msg_time"]
@@ -189,7 +186,5 @@ def generateGraph(filename, defaultPath=True):
 
 
 if __name__ == "__main__":
-    # 2021-06-11.csv
-    # 2021-08-17.csv
-    filename = "2021-08-17.csv"
-    generateGraph(filename, False)
+    filename = "2021-10-13.csv"
+    generateGraph(filename, True)
