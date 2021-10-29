@@ -147,6 +147,7 @@ def getModbus():
             logging.debug(
                 "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
             )
+            logging.error(f"Could not connect to PLC over IP at {config.plc_ip}")
             return 0, 0
 
     values = []
@@ -163,6 +164,7 @@ def getModbus():
         logging.debug(f"{name.title()}: {str(value)}")
 
     return values
+
 
 def sendSerialBit(send):
     SERVER_HOST = config.plc_ip
@@ -188,10 +190,11 @@ def sendSerialBit(send):
 
     status = c.write_single_coil(0, send)
 
-    if(status):
+    if status:
         logging.debug(f"Send Serial bit successfully set to {send}")
     else:
         logging.debug(f"Failed to set Send Serial bit to {send}")
+
 
 if __name__ == "__main__":
     sendSerialBit(True)
