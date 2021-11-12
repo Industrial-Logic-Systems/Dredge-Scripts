@@ -10,12 +10,14 @@ import freeboardUpdater
 import backup
 import dredgeStatus
 
+
 def saveFiles(json_data, csv_data):
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
     fileHandler.write_file(config.json_path, filename + ".json", str(json_data))
     fileHandler.write_file(
         config.csv_path, filename + ".csv", str(csv_data).strip("[]")
     )
+
 
 def updateRunUntil():
     try:
@@ -27,9 +29,10 @@ def updateRunUntil():
         logging.error("Failed to update run until date")
         logging.error(f"Error Exception: {e}")
 
+
 def log():
     # Update Run Until once a day
-    old_date = config.last_run_update_date # Date when last successful update happened
+    old_date = config.last_run_update_date  # Date when last successful update happened
     cur_date = datetime.date.today()  # Current date
     if old_date < cur_date:
         # If old date is different from the current date backup the files
@@ -39,6 +42,7 @@ def log():
     if datetime.date.today() > config.run_until:
         logging.warning("Runtime expired. Contact ILS Automation")
         dataHandler.sendSerialBit(False)
+        threading.Thread(target=updateRunUntil).start()
         return [False, None]
 
     dataHandler.sendSerialBit(True)
@@ -53,7 +57,7 @@ def log():
 
     # Get CSV Data
     logging.debug("Getting CSV Data")
-    csv_data = dataHandler.getCSV(json_data)
+    csv_data, modbusValues = dataHandler.getCSV(json_data)
 
     # Save JSON and CSV Files
     logging.debug("Saving Files")
@@ -62,7 +66,8 @@ def log():
     # Update Freeboard
     logging.debug("Updating Freeboard")
     threading.Thread(
-        target=freeboardUpdater.freeboard, args=(config.freeboard_name, json_data)
+        target=freeboardUpdater.freeboard,
+        args=(config.freeboard_name, json_data, modbusValues),
     ).start()
 
     # Backup Files Once a Day

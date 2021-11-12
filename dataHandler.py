@@ -78,7 +78,7 @@ def getCSV(json_obj):
         modbusValues = getModbus()
         # add them to csv
         for val in modbusValues:
-            csv_obj.append(val)
+            csv_obj.append(modbusValues[val])
 
         events = json_obj["DQM_Data"]["messages"]
 
@@ -124,7 +124,7 @@ def getCSV(json_obj):
         logging.error("CSV Exception")
         logging.debug(e, exc_info=True)
 
-    return csv_obj
+    return csv_obj, modbusValues
 
 
 def getModbus():
@@ -148,9 +148,9 @@ def getModbus():
                 "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
             )
             logging.error(f"Could not connect to PLC over IP at {config.plc_ip}")
-            return 0, 0
+            return dict()
 
-    values = []
+    values = dict()
 
     for name in config.modbus:
         address = config.modbus[name]["address"]
@@ -160,7 +160,7 @@ def getModbus():
             value = utils.get_2comp(value[0], 16) / 100
         else:
             value = value[0]
-        values.append(value)
+        values[name] = value
         logging.debug(f"{name.title()}: {str(value)}")
 
     return values
