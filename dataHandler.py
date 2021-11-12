@@ -155,11 +155,12 @@ def getModbus():
     for name in config.modbus:
         address = config.modbus[name]["address"]
         isFloat = config.modbus[name]["float"]
-        value = c.read_holding_registers(int(address))
+        value = c.read_holding_registers(int(address), 2)
+        value = value[1] << 16 | value[0]
         if isFloat:
-            value = utils.get_2comp(value[0], 16) / 100
+            value = utils.get_2comp(value, 32) / 100
         else:
-            value = value[0]
+            value = utils.get_2comp(value, 32)
         values[name] = value
         logging.debug(f"{name.title()}: {str(value)}")
 
@@ -197,4 +198,5 @@ def sendSerialBit(send):
 
 
 if __name__ == "__main__":
-    sendSerialBit(True)
+    # sendSerialBit(True)
+    getModbus()
