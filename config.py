@@ -53,6 +53,7 @@ def save_config():
     config["dredge_name"] = dredge_name
     config["freeboard_name"] = freeboard_name
     config["modbus"] = modbus
+    config["modbus_bits"] = modbus_bits
     config["date_1"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
     config["date_2"] = datetime.datetime.strftime(last_run_update_date, "%Y-%m-%d")
     config["date_3"] = datetime.datetime.strftime(run_until, "%Y-%m-%d")
@@ -65,6 +66,8 @@ def save_config():
 def genHeader():
     csv_header = "msg_time, vert_correction, ch_latitude, ch_longitude, ch_depth, ch_heading, slurry_velocity, slurry_density, pump_rpm, vacuum, outlet_psi, comment, "
     for name in modbus:
+        csv_header += f"{name}, "
+    for name in modbus_bits:
         csv_header += f"{name}, "
     csv_header += "msg_start_time, msg_end_time, function_code, comment, msg_time, outfall_location, outfall_latitude, outfall_longitude, outfall_heading, outfall_elevation, comment"
     return csv_header
@@ -120,6 +123,12 @@ email = config["email"]
 dredge_name = config["dredge_name"]
 freeboard_name = config["freeboard_name"]
 modbus = config["modbus"]
+
+if "modbus_bits" not in config:
+    modbus_bits = {}
+else:
+    modbus_bits = config["modbus_bits"]
+
 header = genHeader()
 
 if "date_1" not in config:

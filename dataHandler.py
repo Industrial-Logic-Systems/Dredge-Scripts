@@ -164,6 +164,12 @@ def getModbus():
         values[name] = value
         logging.debug(f"{name.title()}: {str(value)}")
 
+    for name in config.modbus_bits:
+        address = config.modbus_bits[name]["address"]
+        value = c.read_coils(int(address), 1)
+        values[name] = value[0]
+        logging.debug(f"{name.title()}: {str(value)}")
+
     return values
 
 
