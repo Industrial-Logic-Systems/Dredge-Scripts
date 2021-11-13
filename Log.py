@@ -32,20 +32,20 @@ def updateRunUntil():
 
 def log():
     # Update Run Until once a day
-    old_date = config.last_run_update_date  # Date when last successful update happened
-    cur_date = datetime.date.today()  # Current date
-    if old_date < cur_date:
-        # If old date is different from the current date backup the files
-        logging.debug("Attempting to update run until date")
-        threading.Thread(target=updateRunUntil).start()
+    # old_date = config.last_run_update_date  # Date when last successful update happened
+    # cur_date = datetime.date.today()  # Current date
+    # if old_date < cur_date:
+    #    # If old date is different from the current date backup the files
+    #    logging.debug("Attempting to update run until date")
+    #    threading.Thread(target=updateRunUntil).start()
 
-    if datetime.date.today() > config.run_until:
-        logging.warning("Runtime expired. Contact ILS Automation")
-        dataHandler.sendSerialBit(False)
-        threading.Thread(target=updateRunUntil).start()
-        return [False, None]
+    # if datetime.date.today() > config.run_until:
+    #    logging.warning("Runtime expired. Contact ILS Automation")
+    #    dataHandler.sendSerialBit(False)
+    #    threading.Thread(target=updateRunUntil).start()
+    #    return [False, None]
 
-    dataHandler.sendSerialBit(True)
+    # dataHandler.sendSerialBit(True)
 
     # Get JSON Data
     logging.debug("Getting JSON Data")
