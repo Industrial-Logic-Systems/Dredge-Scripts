@@ -10,31 +10,36 @@ def backup_files(filename):
 
     logging.debug("Backing up files with name: " + filename)
 
-    generateImages.generateGraph(filename + ".csv")
+    sendImage = True
+    try:
+        generateImages.generateGraph(filename + ".csv")
+    except Exception as e:
+        logging.error("Error generating graph: " + str(e))
+        sendImage = False
+    finally:
+        # Email the files to list of receivers
+        files = [
+            config.json_path + "\\" + filename + ".json",
+            config.csv_path + "\\" + filename + ".csv",
+        ]
+        if sendImage:
+            files.append(config.image_path + "\\" + "Smoke_Chart_" + filename + ".png")
 
-    # Email the files to list of receivers
-    files = [
-        config.json_path + "\\" + filename + ".json",
-        config.csv_path + "\\" + filename + ".csv",
-        config.image_path + "\\" + "Smoke_Chart_" + filename + ".png",
-    ]
-    logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
+        logging.debug("Sending Email(s) to " + str(config.email_list).strip("[]"))
 
-    subject = f"{config.dredge_name} - {filename} - Log Files"
-    body = (
-        f"The files with the logged information from {config.dredge_name} on {filename}"
-    )
+        subject = f"{config.dredge_name} - {filename} - Log Files"
+        body = f"The files with the logged information from {config.dredge_name} on {filename}"
 
-    send_email(
-        config.email_list,
-        subject,
-        body,
-        files,
-    )
+        send_email(
+            config.email_list,
+            subject,
+            body,
+            files,
+        )
 
 
 def send_email(receivers, subject, body, files):
-    """ Sends an email with the above parameters """
+    """Sends an email with the above parameters"""
     yag = yagmail.SMTP(config.email)
     yag.send(
         to=receivers,
