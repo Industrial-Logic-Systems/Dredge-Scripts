@@ -1,8 +1,9 @@
-pyserial
-dweepy
-yagmail[all]
-ttkthemes
-pyModbusTCP
-Pillow
-pandas
 matplotlib
+pandas
+Pillow
+pyModbusTCP
+pyserial
+python-dotenv
+requests
+ttkthemes
+yagmail[all]

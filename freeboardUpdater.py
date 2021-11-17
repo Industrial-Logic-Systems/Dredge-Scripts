@@ -1,5 +1,7 @@
-import dweepy
 import logging
+
+import dweet
+import config
 
 function_codes = {
     "CCSH": "Clearing Cutter/Suction Head",
@@ -47,7 +49,8 @@ function_codes_depreciated = {
 def freeboard(name, data, modbus=None):
     # Sends out a dweet for freeboard
     try:
-        dweepy.dweet_for(name, data)
+        dqm_data = {"name": config.dredge_name, "type": "dqm", "data": data}
+        dweet.send_dweet(name, dqm_data)
 
         events = data["DQM_Data"]["messages"]
         for event in events:
@@ -71,19 +74,22 @@ def freeboard(name, data, modbus=None):
                 logging.debug(
                     f'{name + "_non_eff"}, code: {function_code}, message, {message}'
                 )
-                dweepy.dweet_for(
-                    name + "_non_eff",
-                    {
+                non_eff_data = {
+                    "name": config.dredge_name,
+                    "type": "non_eff",
+                    "data": {
                         "msgStart": msgStart,
                         "msgEnd": msgEnd,
                         "function_code": function_code,
                         "comment": comment,
                         "message": message,
                     },
-                )
+                }
+                dweet.send_dweet(name + "_non_eff", non_eff_data)
 
         if modbus:
-            dweepy.dweet_for(name + "_Extra", modbus)
+            extra_data = {"name": config.dredge_name, "type": "extra", "data": modbus}
+            dweet.send_dweet(name + "_Extra", extra_data)
 
     except Exception as e:
         logging.error("Freeboard failed to update")

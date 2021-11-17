@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+from pathlib import Path
 import datetime
 import json
 import logging
@@ -19,6 +21,27 @@ config.json has the following information:
 
 # Get the directory where the script is located
 proj_dir = os.path.dirname(__file__)
+
+
+def save_env(env):
+    with open(proj_dir + "/.env", "w") as f:
+        if env["user"] is not None:
+            f.write("DWEET_USER=" + env["user"] + "\n")
+        if env["pass"] is not None:
+            f.write("DWEET_PASS=" + env["pass"] + "\n")
+        if env["key"] is not None:
+            f.write("MASTER_KEY=" + env["key"] + "\n")
+
+
+def load_env():
+    if os.path.exists(proj_dir + "/.env"):
+        dotenv_path = Path(proj_dir + "/.env")
+        load_dotenv(dotenv_path=dotenv_path)
+    env = {}
+    env["user"] = os.getenv("DWEET_USER", None)
+    env["pass"] = os.getenv("DWEET_PASS", None)
+    env["key"] = os.getenv("MASTER_KEY", None)
+    return env
 
 
 def checkPath(path):
@@ -57,6 +80,8 @@ def save_config():
     config["date_1"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
     config["date_2"] = datetime.datetime.strftime(last_run_update_date, "%Y-%m-%d")
     config["date_3"] = datetime.datetime.strftime(run_until, "%Y-%m-%d")
+
+    save_env(env)
 
     # Open the config file and save the variables
     with open(proj_dir + "/config.json", "w") as f:
@@ -106,6 +131,7 @@ with open(proj_dir + "/config.json") as json_data_file:
     config = json.load(json_data_file)
 
 # Set all the variables from the dictionary
+env = load_env()
 port = config["port"]
 json_path = config["json_path"]
 csv_path = config["csv_path"]
