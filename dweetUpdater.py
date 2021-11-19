@@ -46,8 +46,8 @@ function_codes_depreciated = {
 }
 
 
-def freeboard(name, data, modbus=None):
-    # Sends out a dweet for freeboard
+def dweet(name, data, extra=None):
+    # Sends out a dweet with the given name and data
     try:
         dqm_data = {"name": config.dredge_name, "type": "dqm", "data": data}
         dweet.send_dweet(name, dqm_data)
@@ -87,8 +87,11 @@ def freeboard(name, data, modbus=None):
                 }
                 dweet.send_dweet(name + "_non_eff", non_eff_data)
 
-        if modbus:
-            extra_data = {"name": config.dredge_name, "type": "extra", "data": modbus}
+        if extra:
+            extra["timestamp"] = data["DQM_Data"]["messages"][0]["work_event"][
+                "msg_time"
+            ]
+            extra_data = {"name": config.dredge_name, "type": "extra", "data": extra}
             dweet.send_dweet(name + "_Extra", extra_data)
 
     except Exception as e:

@@ -6,7 +6,7 @@ import datetime
 
 import dataHandler
 import fileHandler
-import freeboardUpdater
+import dweetUpdater
 import backup
 import dredgeStatus
 
@@ -66,7 +66,7 @@ def log():
     # Update Freeboard
     logging.debug("Updating Freeboard")
     threading.Thread(
-        target=freeboardUpdater.freeboard,
+        target=freeboardUpdater.dweet,
         args=(config.freeboard_name, json_data, modbusValues),
     ).start()
 
