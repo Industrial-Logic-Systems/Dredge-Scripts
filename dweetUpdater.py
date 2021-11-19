@@ -46,7 +46,7 @@ function_codes_depreciated = {
 }
 
 
-def dweet(name, data, extra=None):
+def send_dweet(name, data, extra=None):
     # Sends out a dweet with the given name and data
     try:
         dqm_data = {"name": config.dredge_name, "type": "dqm", "data": data}
@@ -95,5 +95,5 @@ def dweet(name, data, extra=None):
             dweet.send_dweet(name + "_Extra", extra_data)
 
     except Exception as e:
-        logging.error("Freeboard failed to update")
+        logging.error("Dweet Fail to Send")
         logging.debug(e, exc_info=True)

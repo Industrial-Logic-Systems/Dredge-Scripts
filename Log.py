@@ -64,9 +64,9 @@ def log():
     threading.Thread(target=saveFiles, args=(json_data, csv_data)).start()
 
     # Update Freeboard
-    logging.debug("Updating Freeboard")
+    logging.debug("Sending Dweets")
     threading.Thread(
-        target=freeboardUpdater.dweet,
+        target=dweetUpdater.send_dweet,
         args=(config.freeboard_name, json_data, modbusValues),
     ).start()
 
