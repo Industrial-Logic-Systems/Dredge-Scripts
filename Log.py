@@ -66,7 +66,7 @@ def log():
     # Update Freeboard
     logging.debug("Sending Dweets")
     threading.Thread(
-        target=dweetUpdater.send_dweet,
+        target=dweetUpdater.freeboard,
         args=(config.freeboard_name, json_data, modbusValues),
     ).start()
 

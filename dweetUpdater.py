@@ -1,4 +1,5 @@
 import logging
+import dweepy
 
 import dweet
 import config
@@ -44,6 +45,54 @@ function_codes_depreciated = {
     "SB": "Sounding & Buoying",
     "TOW": "Time on Tow",
 }
+
+
+def freeboard(name, data, modbus=None):
+    # Sends out a dweet for freeboard
+    try:
+        dweepy.dweet_for(name, data)
+
+        events = data["DQM_Data"]["messages"]
+        for event in events:
+            if "non_eff_event" in event:
+                logging.debug("Non-Eff Freeboard")
+
+                msgStart = event["non_eff_event"]["msg_start_time"]
+                msgEnd = event["non_eff_event"]["msg_end_time"]
+                function_code = event["non_eff_event"]["function_code"].strip()
+                comment = event["non_eff_event"]["comment"].strip()
+
+                if (
+                    function_code in function_codes_depreciated
+                    and function_code not in function_codes
+                ):
+                    logging.warning("Function code is Depreciated")
+                    message = function_codes_depreciated[function_code]
+                else:
+                    message = function_codes[function_code]
+
+                logging.debug(
+                    f'{name + "_non_eff"}, code: {function_code}, message, {message}'
+                )
+                dweepy.dweet_for(
+                    name + "_non_eff",
+                    {
+                        "msgStart": msgStart,
+                        "msgEnd": msgEnd,
+                        "function_code": function_code,
+                        "comment": comment,
+                        "message": message,
+                    },
+                )
+
+        if modbus:
+            dweepy.dweet_for(name + "_Extra", modbus)
+
+        send_dweet(name, data, modbus)
+
+    except Exception as e:
+        logging.error("Freeboard failed to update")
+        logging.debug(e, exc_info=True)
 
 
 def send_dweet(name, data, extra=None):
