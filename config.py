@@ -77,6 +77,8 @@ def save_config():
     config["freeboard_name"] = freeboard_name
     config["modbus"] = modbus
     config["modbus_bits"] = modbus_bits
+    config["csv0600"] = csv0600
+    config["csv0600_saved"] = csv0600_saved
     config["date_1"] = datetime.datetime.strftime(last_save_date, "%Y-%m-%d")
     config["date_2"] = datetime.datetime.strftime(last_run_update_date, "%Y-%m-%d")
     config["date_3"] = datetime.datetime.strftime(run_until, "%Y-%m-%d")
@@ -132,28 +134,21 @@ with open(proj_dir + "/config.json") as json_data_file:
 
 # Set all the variables from the dictionary
 env = load_env()
-port = config["port"]
-json_path = config["json_path"]
-csv_path = config["csv_path"]
-
-if "image_path" in config:
-    image_path = config["image_path"]
-else:
-    image_path = (
-        f"{os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')}\\images"
-    )
-
-email_list = config["email_list"]
-plc_ip = config["plc_ip"]
-email = config["email"]
-dredge_name = config["dredge_name"]
-freeboard_name = config["freeboard_name"]
-modbus = config["modbus"]
-
-if "modbus_bits" not in config:
-    modbus_bits = {}
-else:
-    modbus_bits = config["modbus_bits"]
+port = config.get("port", "COM1")
+json_path = config.get("json_path", "C:\\Users\\USERNAME\\Desktop\\json")
+csv_path = config.get("csv_path", "C:\\Users\\USERNAME\\Desktop\\csv")
+image_path = config.get("image_path", "C:\\Users\\USERNAME\\Desktop\\image")
+email_list = config.get("email_list", ["example@gmail.com"])
+plc_ip = config.get("plc_ip", "192.168.1.10")
+email = config.get("email", "ilsdqmsystem@gmail.com")
+dredge_name = config.get("dredge_name", "Dredge Name")
+freeboard_name = config.get("freeboard_name", "Freeboard Name")
+modbus = config.get(
+    "modbus", {"offset": {"name": "offset", "address": "0", "float": True}}
+)
+modbus_bits = config.get("modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}})
+csv0600 = config.get("csv0600", False)
+csv0600_saved = config.get("csv0600_saved", False)
 
 header = genHeader()
 
