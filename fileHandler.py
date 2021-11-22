@@ -15,12 +15,17 @@ def write_file(path, filename, data):
         logging.debug("Making directory " + path)
 
     # Write the file
+    if ".csv" in filename and not os.path.exists(Path(path, filename)):
+        with open(Path(path, filename), "a") as f:
+            f.write(config.header + "\n")
+
+    if ".csv" in filename:
+        verify_headers(Path(path, filename), config.header)
+
     with open(Path(path, filename), "a") as f:
         f.write(str(data).replace("'", '"') + "\n")
         logging.debug("Data written to " + filename)
 
-    if ".csv" in filename:
-        verify_headers(Path(path, filename), config.header)
 
 
 def verify_headers(file, header):

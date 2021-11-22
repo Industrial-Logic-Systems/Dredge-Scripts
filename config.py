@@ -96,7 +96,7 @@ def genHeader():
         csv_header += f"{name}, "
     for name in modbus_bits:
         csv_header += f"{name}, "
-    csv_header += "msg_start_time, msg_end_time, function_code, comment, msg_time, outfall_location, outfall_latitude, outfall_longitude, outfall_heading, outfall_elevation, comment"
+    csv_header += "msg_start_time, msg_end_time, function_code, comment_ne, msg_time_of, outfall_location, outfall_latitude, outfall_longitude, outfall_heading, outfall_elevation, comment_of"
     return csv_header
 
 
