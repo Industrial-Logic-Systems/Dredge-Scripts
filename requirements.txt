@@ -8,3 +8,4 @@ requests
 ttkthemes
 yagmail[all]
 dweepy
+pandas
