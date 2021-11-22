@@ -1,25 +1,26 @@
 {
-    "port": "COM1",
-    "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
-    "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
-    "image_path": "C:\\Users\\USERNAME\\Desktop\\images",
-    "email_list": [
-        "example.email@gmail.com"
-    ],
-    "plc_ip": "192.168.1.10",
-    "email": "ilsdqmsystem@gmail.com",
-    "dredge_name": "Dredge ILS",
-    "freeboard_name": "ILS-Dredge",
-    "modbus": {
-        "offset": {
-            "name": "offset",
-            "address": "0",
-            "float": true
-        },
-        "rot": {
-            "name": "rot",
-            "address": "1",
-            "float": true
-        }
+  "port": "COM1",
+  "json_path": "C:\\Users\\USERNAME\\Desktop\\json",
+  "csv_path": "C:\\Users\\USERNAME\\Desktop\\csv",
+  "image_path": "C:\\Users\\USERNAME\\Desktop\\images",
+  "email_list": ["example@gmail.com"],
+  "plc_ip": "192.168.1.10",
+  "email": "ilsdqmsystem@gmail.com",
+  "dredge_name": "Dredge Name",
+  "freeboard_name": "Freeboard Name",
+  "modbus": {
+    "offset": {
+      "name": "offset",
+      "address": "0",
+      "float": true
     }
+  },
+  "modbus_bits": {
+    "vacuum": {
+      "name": "vacuum",
+      "address": "1"
+    }
+  },
+  "csv0600": false,
+  "csv0600_saved": false
 }
