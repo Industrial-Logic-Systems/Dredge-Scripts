@@ -27,11 +27,7 @@ def generateGraph(filename, defaultPath=True):
     else:
         csv_file = filename
 
-    df = pd.read_csv(
-        csv_file,
-        skipinitialspace=True,
-        parse_dates=["msg_start_time", "msg_end_time"],
-    )
+    df = pd.read_csv(csv_file, skipinitialspace=True)
 
     for col in [
         "vert_correction",
@@ -50,7 +46,9 @@ def generateGraph(filename, defaultPath=True):
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
     time = [
-        datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S") for time in df["msg_time"]
+        datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+        for time in df["msg_time"]
+        if isinstance(time, str)
     ]
 
     plt.rcParams["figure.figsize"] = [23, 5]
