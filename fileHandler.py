@@ -4,43 +4,60 @@ import os
 import logging
 from pathlib import Path
 import pandas as pd
+import csv
+
+
+def check_path_exists(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+        logging.debug(f"Making directory {str(path)}")
+
+
+def csv_write(filepath, data):
+    """Write data to a csv file"""
+    filepath = Path(filepath)
+    check_path_exists(filepath.parent)
+    with open(filepath, "a", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(data)
 
 
 def write_file(path, filename, data):
     """Using the paramaters, this function will write a file containing the data"""
 
     # Check to see if we need to make the folder
-    if not os.path.exists(path):
-        os.makedirs(path)
-        logging.debug("Making directory " + path)
-
-    # Write the file
-    if ".csv" in filename and not os.path.exists(Path(path, filename)):
-        with open(Path(path, filename), "a") as f:
-            f.write(config.header + "\n")
+    check_path_exists(path)
+    fileExists = os.path.exists(Path(path, filename))
+    filepath = Path(path, filename)
 
     if ".csv" in filename:
-        verify_headers(Path(path, filename), config.header)
-
-    with open(Path(path, filename), "a") as f:
-        f.write(str(data).replace("'", '"') + "\n")
+        if not fileExists:
+            csv_write(filepath, config.header)
+        verify_headers(filepath, config.header)
+        csv_write(filepath, data)
         logging.debug("Data written to " + filename)
 
+    elif ".json" in filename:
+        with open(Path(path, filename), "a") as f:
+            f.write(str(data).replace("'", '"') + "\n")
+        logging.debug("Data written to " + filename)
+
+    else:
+        logging.error(f"Unknown File Type trying to save {filename}")
 
 
 def verify_headers(file, header):
     """Checked given file and adds header if one does not exist"""
     logging.debug("Checking " + str(file))
     csv_file = pd.read_csv(file, sep=",", skipinitialspace=True)
-    header = [x.strip() for x in header.split(",")]
     csv_headers = list(csv_file.columns)
     if csv_headers != header:
         logging.debug("Adding headers to " + str(file))
         new_cols = []
         i = 0
         j = 0
-        while i < len(header) and j < len(csv_headers):
-            if header[i] == csv_headers[j] or header[i] in csv_headers[j]:
+        while i < len(header) or j < len(csv_headers):
+            if i < len(header) and j < len(csv_headers) and (header[i] == csv_headers[j] or header[i] in csv_headers[j]):
                 i += 1
                 j += 1
             elif i < len(header):
