@@ -1,12 +1,28 @@
 import os
 import sys
 from pathlib import Path
+import subprocess
 
 p = os.path.abspath(".")
 sys.path.insert(1, p)
 
 import config
 import fileHandler
+
+
+def is_equal(expected, actual_file):
+    with open(expected) as f1:
+        with open(actual_file) as f2:
+            if f1.read() == f2.read():
+                return (True, "")
+    try:
+        result = subprocess.check_output(
+            f"diff {expected} {actual_file}", stderr=subprocess.STDOUT
+        )
+    except subprocess.CalledProcessError as e:
+        result = e.output
+    return (False, result.decode("utf-8"))
+    return (False, result.decode("utf-8"))
 
 
 def test_csv_write():
@@ -22,13 +38,8 @@ def test_csv_write():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    with open(filepath, "r") as f:
-        assert (
-            f.readline() == "Value 1,Value 2,Value 3\n"
-        ), "Header not written correctly"
-        assert (
-            f.readline() == "This is a string,10,3.14\n"
-        ), "Data not written correctly"
+    result = is_equal(Path("Tests/test_files/test_write_expected.csv"), filepath)
+    assert result[0], result[1]
 
     # Restore
     config.header = tmpHeader
@@ -50,16 +61,10 @@ def test_csv_header_change_1():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    with open(filepath, "r") as f:
-        assert (
-            f.readline() == "Value 1,Value 2,Value 3,Value 4\n"
-        ), "Header not written correctly"
-        assert (
-            f.readline() == "This is a string,10,3.14,\n"
-        ), "Data line 1 not written correctly"
-        assert (
-            f.readline() == "This is a string,10,3.14,123.456\n"
-        ), "Data line 2 not written correctly"
+    result = is_equal(
+        Path("Tests/test_files/test_header_change_1_expected.csv"), filepath
+    )
+    assert result[0], result[1]
 
     # Restore
     config.header = tmpHeader
@@ -81,20 +86,15 @@ def test_csv_header_change_2():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    with open(filepath, "r") as f:
-        assert (
-            f.readline() == "Value 1,Value 2,Value 4,Value 3\n"
-        ), "Header not written correctly"
-        assert (
-            f.readline() == "This is a string,10,,3.14\n"
-        ), "Data line 1 not written correctly"
-        assert (
-            f.readline() == "This is a string,10,123.456,3.14\n"
-        ), "Data line 2 not written correctly"
+    result = is_equal(
+        Path("Tests/test_files/test_header_change_2_expected.csv"), filepath
+    )
+    assert result[0], result[1]
 
     # Restore
     config.header = tmpHeader
 
 
 if __name__ == "__main__":
-    test_csv_header_change_1()
+    result = is_equal("Tests/Test_Files/test1.txt", "Tests/Test_Files/test2.txt")
+    print(result[0], result[1])
