@@ -7,10 +7,11 @@ def is_equal(expected, actual, isFile=False):
             expected = f.read()
         with open(actual, "r") as f:
             actual = f.read()
+    if expected == actual:
+        return (True, "")
     expected = expected.splitlines()
     actual = actual.splitlines()
     diff = difflib.unified_diff(expected, actual, fromfile="expected", tofile="actual")
-    diff = list(diff)
     diff = "\n".join(diff)
     if diff == "":
         return (True, "")

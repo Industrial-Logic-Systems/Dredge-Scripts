@@ -47,7 +47,7 @@ def getJson(data=None):
     return json_obj
 
 
-def getCSV(json_obj):
+def getCSV(json_obj, modbus=True):
     # Uses the json object to make a list that is used for the csv
     csv_obj = []
     # Work Event
@@ -75,11 +75,13 @@ def getCSV(json_obj):
             json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip()
         )
 
-        # Get Values from Modbus Addresses
-        modbusValues = getModbus()
-        # add them to csv
-        for val in modbusValues:
-            csv_obj.append(modbusValues[val])
+        modbusValues = dict()
+        if modbus:
+            # Get Values from Modbus Addresses
+            modbusValues = getModbus()
+            # add them to csv
+            for val in modbusValues:
+                csv_obj.append(modbusValues[val])
 
         events = json_obj["DQM_Data"]["messages"]
 
@@ -124,6 +126,7 @@ def getCSV(json_obj):
     except Exception as e:
         logging.error("CSV Exception")
         logging.debug(e, exc_info=True)
+        return None, None
 
     return csv_obj, modbusValues
 

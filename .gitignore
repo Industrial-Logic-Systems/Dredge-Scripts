@@ -145,3 +145,4 @@ JSON_Strings.txt
 config.json
 logs/
 Tests/csv_files/
+Tests/json_files/
