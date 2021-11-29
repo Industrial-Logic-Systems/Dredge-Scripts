@@ -1,10 +1,10 @@
 import config
 
-import os
-import logging
 from pathlib import Path
-import pandas as pd
 import csv
+import logging
+import os
+import pandas as pd
 
 
 def check_path_exists(path):

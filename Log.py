@@ -1,14 +1,14 @@
 import config
 
-import threading
-import logging
 import datetime
+import logging
+import threading
 
-import dataHandler
-import fileHandler
-import dweetUpdater
 import backup
+import dataHandler
 import dredgeStatus
+import dweetUpdater
+import fileHandler
 
 
 def saveFiles(json_data, csv_data):

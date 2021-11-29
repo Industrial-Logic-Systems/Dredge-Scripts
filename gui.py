@@ -1,12 +1,12 @@
 import config
 
-import tkinter as tk
-import tkinter.ttk as ttk
 from ttkthemes import ThemedTk
-import logging
 import datetime
+import logging
 import threading
 import time
+import tkinter as tk
+import tkinter.ttk as ttk
 
 import backup
 import Log

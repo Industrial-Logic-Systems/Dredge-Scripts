@@ -1,7 +1,8 @@
 import config
 
-import yagmail
 import logging
+import yagmail
+
 import generateImages
 
 

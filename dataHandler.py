@@ -1,36 +1,38 @@
 import config
 
-import serial
+from pyModbusTCP import utils
+from pyModbusTCP.client import ModbusClient
 import json
 import logging
-from pyModbusTCP.client import ModbusClient
-from pyModbusTCP import utils
+import serial
 
 import fileHandler
 
 
-def getJson():
+def getJson(data=None):
     """Listen on the serial port for data string and convert to JSON"""
-    try:
-        ser = serial.Serial(config.port, 9600, timeout=20, parity=serial.PARITY_ODD)
-        logging.debug("Serial port listening on port {}".format(config.port))
-        data = ser.read_until(b"\r").strip(b"\n\r")
+    if data is None:
+        try:
+            ser = serial.Serial(config.port, 9600, timeout=20, parity=serial.PARITY_ODD)
+            logging.debug("Serial port listening on port {}".format(config.port))
+            data = ser.read_until(b"\r").strip(b"\n\r")
 
-        # Decode the serial data
-        data = data.decode("ASCII")
-        logging.debug(data)
-        logging.debug("Data Received")
-    except Exception as e:
-        logging.error("Serial Exception")
-        logging.debug(e, exc_info=True)
-        # logging.error("Failed to Receive JSON Serial Data")
-        return None
+            # Decode the serial data
+            data = data.decode("ASCII")
+            logging.debug(data)
+            logging.debug("Data Received")
+        except Exception as e:
+            logging.error("Serial Exception")
+            logging.debug(e, exc_info=True)
+            # logging.error("Failed to Receive JSON Serial Data")
+            return None
 
     try:
         json_obj = json.loads(data)
     except Exception as e:
         logging.error("JSON Exception")
         logging.debug(e, exc_info=True)
+        logging.error("Could not convert received serial data to JSON")
         try:
             if len(str(data)) != 0:
                 fileHandler.write_file(
@@ -40,7 +42,6 @@ def getJson():
             logging.error("Save Exception")
             logging.debug(e, exc_info=True)
             logging.error("Couldn't save failed string!")
-        logging.error("Could not convert received serial data to JSON")
         return None
 
     return json_obj

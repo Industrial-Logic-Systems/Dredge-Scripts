@@ -1,3 +1,4 @@
+dweepy
 matplotlib
 pandas
 Pillow
@@ -7,5 +8,3 @@ python-dotenv
 requests
 ttkthemes
 yagmail[all]
-dweepy
-pandas
