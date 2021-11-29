@@ -9,12 +9,6 @@ sys.path.insert(1, p)
 import config
 import dataHandler
 
-"""
-{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:17","vert_correction": 1.8,"ch_latitude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 52.7,"ch_heading": 130,"slurry_velocity": 13.36,"slurry_density": 1.8,"pump_rpm": 546,"vacuum": -14.17,"outlet_psi": 70.5,"comment": "comment             "}},{"non_eff_event": {"msg_start_time": "2021-11-28 07:28:05","msg_end_time": "2021-11-28 07:46:09","function_code": "HSL ","comment": "comment             "}}]}}
-
-{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density": 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}]}}
-"""
-
 
 def test_json_parse():
     # Arrange
