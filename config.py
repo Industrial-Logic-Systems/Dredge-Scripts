@@ -91,12 +91,37 @@ def save_config():
 
 
 def genHeader():
-    csv_header = "msg_time, vert_correction, ch_latitude, ch_longitude, ch_depth, ch_heading, slurry_velocity, slurry_density, pump_rpm, vacuum, outlet_psi, comment, "
+    csv_header = [
+        "msg_time",
+        "vert_correction",
+        "ch_latitude",
+        "ch_longitude",
+        "ch_depth",
+        "ch_heading",
+        "slurry_velocity",
+        "slurry_density",
+        "pump_rpm",
+        "vacuum",
+        "outlet_psi",
+        "comment",
+    ]
     for name in modbus:
-        csv_header += f"{name}, "
+        csv_header.append(name)
     for name in modbus_bits:
-        csv_header += f"{name}, "
-    csv_header += "msg_start_time, msg_end_time, function_code, comment_ne, msg_time_of, outfall_location, outfall_latitude, outfall_longitude, outfall_heading, outfall_elevation, comment_of"
+        csv_header.append(name)
+    csv_header += [
+        "msg_start_time",
+        "msg_end_time",
+        "function_code",
+        "comment_ne",
+        "msg_time_of",
+        "outfall_location",
+        "outfall_latitude",
+        "outfall_longitude",
+        "outfall_heading",
+        "outfall_elevation",
+        "comment_of",
+    ]
     return csv_header
 
 

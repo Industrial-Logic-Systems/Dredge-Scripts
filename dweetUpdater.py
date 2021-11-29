@@ -1,8 +1,9 @@
-import logging
+import config
+
 import dweepy
+import logging
 
 import dweet
-import config
 
 function_codes = {
     "CCSH": "Clearing Cutter/Suction Head",
