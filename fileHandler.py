@@ -42,6 +42,11 @@ def write_file(path, filename, data):
             f.write(str(data).replace("'", '"') + "\n")
         logging.debug("Data written to " + filename)
 
+    elif ".txt" in filename:
+        with open(Path(path, filename), "a") as f:
+            f.write(str(data))
+        logging.debug("Data written to " + filename)
+
     else:
         logging.error(f"Unknown File Type trying to save {filename}")
 
@@ -57,7 +62,11 @@ def verify_headers(file, header):
         i = 0
         j = 0
         while i < len(header) or j < len(csv_headers):
-            if i < len(header) and j < len(csv_headers) and (header[i] == csv_headers[j] or header[i] in csv_headers[j]):
+            if (
+                i < len(header)
+                and j < len(csv_headers)
+                and (header[i] == csv_headers[j] or header[i] in csv_headers[j])
+            ):
                 i += 1
                 j += 1
             elif i < len(header):

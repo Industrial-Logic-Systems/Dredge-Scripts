@@ -1,28 +1,13 @@
 import os
 import sys
 from pathlib import Path
-import subprocess
+from testUtils import is_equal
 
 p = os.path.abspath(".")
 sys.path.insert(1, p)
 
 import config
 import fileHandler
-
-
-def is_equal(expected, actual_file):
-    with open(expected) as f1:
-        with open(actual_file) as f2:
-            if f1.read() == f2.read():
-                return (True, "")
-    try:
-        result = subprocess.check_output(
-            f"diff {expected} {actual_file}", stderr=subprocess.STDOUT
-        )
-    except subprocess.CalledProcessError as e:
-        result = e.output
-    return (False, result.decode("utf-8"))
-    return (False, result.decode("utf-8"))
 
 
 def test_csv_write():
@@ -38,7 +23,7 @@ def test_csv_write():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    result = is_equal(Path("Tests/test_files/test_write_expected.csv"), filepath)
+    result = is_equal(Path("Tests/test_files/test_write_expected.csv"), filepath, True)
     assert result[0], result[1]
 
     # Restore
@@ -62,7 +47,7 @@ def test_csv_header_change_1():
 
     # Assert
     result = is_equal(
-        Path("Tests/test_files/test_header_change_1_expected.csv"), filepath
+        Path("Tests/test_files/test_header_change_1_expected.csv"), filepath, True
     )
     assert result[0], result[1]
 
@@ -87,7 +72,154 @@ def test_csv_header_change_2():
 
     # Assert
     result = is_equal(
-        Path("Tests/test_files/test_header_change_2_expected.csv"), filepath
+        Path("Tests/test_files/test_header_change_2_expected.csv"), filepath, True
+    )
+    assert result[0], result[1]
+
+    # Restore
+    config.header = tmpHeader
+
+
+def test_csv_header_change_3():
+    # Arrange
+    tmpHeader = config.header
+    config.header = [
+        "msg_time",
+        "vert_correction",
+        "ch_latitude",
+        "ch_longitude",
+        "ch_depth",
+        "ch_heading",
+        "slurry_velocity",
+        "slurry_density",
+        "pump_rpm",
+        "vacuum",
+        "outlet_psi",
+        "comment",
+        "offset",
+        "rot",
+        "stack_temp",
+        "swing_pressure",
+        "cutter_pressure",
+        "vacuum_break",
+        "msg_start_time",
+        "msg_end_time",
+        "function_code",
+        "comment_ne",
+        "msg_time_of",
+        "outfall_location",
+        "outfall_latitude",
+        "outfall_longitude",
+        "outfall_heading",
+        "outfall_elevation",
+        "comment_of",
+    ]
+    filepath = Path("Tests/csv_files/test_header_change_3.csv")
+    if os.path.exists(filepath):
+        os.remove(filepath)
+    data = [
+        "2021-11-28 05:58:53",
+        1.4,
+        29.614471,
+        -94.963593,
+        50.79,
+        111,
+        12.77,
+        1.8,
+        546,
+        -12.62,
+        72.8,
+        "comment",
+        505.05,
+        0.0,
+        278.38,
+        811.34,
+        3000.0,
+        False,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+    ]
+
+    # Act
+    fileHandler.write_file(filepath.parent, filepath.name, data)
+    config.header = [
+        "msg_time",
+        "vert_correction",
+        "ch_latitude",
+        "ch_longitude",
+        "ch_depth",
+        "ch_heading",
+        "slurry_velocity",
+        "slurry_density",
+        "pump_rpm",
+        "vacuum",
+        "outlet_psi",
+        "comment",
+        "offset",
+        "rot",
+        "stack_temp",
+        "swing_pressure",
+        "cutter_pressure",
+        "new_value",
+        "vacuum_break",
+        "msg_start_time",
+        "msg_end_time",
+        "function_code",
+        "comment_ne",
+        "msg_time_of",
+        "outfall_location",
+        "outfall_latitude",
+        "outfall_longitude",
+        "outfall_heading",
+        "outfall_elevation",
+        "comment_of",
+    ]
+    data = [
+        "2021-11-28 05:59:03",
+        1.4,
+        29.614479,
+        -94.963593,
+        50.77,
+        109,
+        12.87,
+        1.8,
+        546,
+        -12.69,
+        72.95,
+        "comment",
+        506.7,
+        0.0,
+        278.38,
+        798.75,
+        3000.0,
+        100,
+        False,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+    ]
+    fileHandler.write_file(filepath.parent, filepath.name, data)
+
+    # Assert
+    result = is_equal(
+        Path("Tests/test_files/test_header_change_3_expected.csv"), filepath, True
     )
     assert result[0], result[1]
 
@@ -96,5 +228,4 @@ def test_csv_header_change_2():
 
 
 if __name__ == "__main__":
-    result = is_equal("Tests/Test_Files/test1.txt", "Tests/Test_Files/test2.txt")
-    print(result[0], result[1])
+    test_csv_write()
