@@ -14,9 +14,7 @@ import fileHandler
 def saveFiles(json_data, csv_data):
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
     fileHandler.write_file(config.json_path, filename + ".json", str(json_data))
-    fileHandler.write_file(
-        config.csv_path, filename + ".csv", str(csv_data).strip("[]")
-    )
+    fileHandler.write_file(config.csv_path, filename + ".csv", csv_data)
     if config.csv0600:
         n = datetime.datetime.now().time()
         if n < datetime.time(6, 0):
@@ -25,9 +23,7 @@ def saveFiles(json_data, csv_data):
                     "%Y-%m-%d"
                 )
             )
-        fileHandler.write_file(
-            config.csv_path, filename + "_0600.csv", str(csv_data).strip("[]")
-        )
+        fileHandler.write_file(config.csv_path, filename + "_0600.csv", csv_data)
 
 
 def updateRunUntil():
