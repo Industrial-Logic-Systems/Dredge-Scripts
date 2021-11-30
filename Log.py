@@ -75,11 +75,12 @@ def log():
     threading.Thread(target=saveFiles, args=(json_data, csv_data)).start()
 
     # Update Freeboard
-    logging.debug("Sending Dweets")
-    threading.Thread(
-        target=dweetUpdater.freeboard,
-        args=(config.freeboard_name, json_data, modbusValues),
-    ).start()
+    if csv_data:
+        logging.debug("Sending Dweets")
+        threading.Thread(
+            target=dweetUpdater.freeboard,
+            args=(config.freeboard_name, json_data, modbusValues),
+        ).start()
 
     # Check if the 0600 file needs to be emailed
     if config.csv0600:

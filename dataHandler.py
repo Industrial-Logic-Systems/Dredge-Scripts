@@ -74,7 +74,12 @@ def getCSV(json_obj, modbus=True):
         csv_obj.append(
             json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip()
         )
+    except Exception as e:
+        logging.error("CSV Exception Parsing Work Event")
+        logging.debug(e, exc_info=True)
+        return None, None
 
+    try:
         modbusValues = dict()
         if modbus:
             # Get Values from Modbus Addresses
@@ -84,7 +89,12 @@ def getCSV(json_obj, modbus=True):
                 csv_obj.append(modbusValues[val])
 
         events = json_obj["DQM_Data"]["messages"]
+    except Exception as e:
+        logging.error("CSV Exception Parsing Modbus Values")
+        logging.debug(e, exc_info=True)
+        return None, None
 
+    try:
         # Non Effective Event
         non_eff = False
         for event in events:
@@ -124,7 +134,7 @@ def getCSV(json_obj, modbus=True):
             csv_obj.append("")
 
     except Exception as e:
-        logging.error("CSV Exception")
+        logging.error("CSV Exception parsing NE and OF Events")
         logging.debug(e, exc_info=True)
         return None, None
 
