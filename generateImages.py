@@ -45,6 +45,25 @@ def generateGraph(filename, defaultPath=True):
     ]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
+    df.dropna(
+        subset=[
+            "msg_time",
+            "vert_correction",
+            "ch_latitude",
+            "ch_longitude",
+            "ch_depth",
+            "ch_heading",
+            "slurry_velocity",
+            "slurry_density",
+            "pump_rpm",
+            "vacuum",
+            "outlet_psi",
+            "offset",
+            "rot",
+        ],
+        inplace=True,
+    )
+
     time = [
         datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
         for time in df["msg_time"]
