@@ -13,9 +13,7 @@ def getJson(data=None):
     """Listen on the serial port for data string and convert to JSON"""
     if data is None:
         try:
-            ser = serial.Serial(
-                config.port, 9600, timeout=20, parity=serial.PARITY_NONE
-            )
+            ser = serial.Serial(config.port, 9600, timeout=20, parity=serial.PARITY_ODD)
             logging.debug("Serial port listening on port {}".format(config.port))
             data = ser.read_until(b"\r").strip(b"\n\r")
 
