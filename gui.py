@@ -286,8 +286,9 @@ class Config(ttk.Frame):
         self.mNew = ttk.Entry(self.right_mb, width=20)
         self.mAdd = ttk.Button(self.right_mb, text="Add", command=mAdd)
 
-        self.mModbusList.current(0)
-        mSel()
+        if config.modbus:
+            self.mModbusList.current(0)
+            mSel()
 
         self.mTitle.grid(row=0, column=0, columnspan=3)
         self.mModbusList.grid(row=1, column=0, sticky="w")
