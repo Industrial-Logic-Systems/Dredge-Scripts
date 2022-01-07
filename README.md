@@ -7,6 +7,10 @@ Add a short description here!
 
 A longer description of your project goes here...
 
+## ToDo
+
+Grab Workflows from here. https://github.com/TezRomacH/python-package-template
+Setup Auto Versioning once done with refactor
 
 <!-- pyscaffold-notes -->
 
