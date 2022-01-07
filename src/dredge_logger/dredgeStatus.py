@@ -30,9 +30,7 @@ def checkStatus():
             name_found = True
 
     if not name_found:
-        logging.warning(
-            f"Dredge name '{config.dredge_name}' not in the system"
-        )
+        logging.warning(f"Dredge name '{config.dredge_name}' not in the system")
         return False
     return True
 
