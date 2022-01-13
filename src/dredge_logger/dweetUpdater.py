@@ -1,9 +1,9 @@
-import config
+from dredge_logger.config import config
 
 import dweepy
 import logging
 
-import dweet
+from dredge_logger import dweet
 
 function_codes = {
     "CCSH": "Clearing Cutter/Suction Head",
@@ -99,7 +99,7 @@ def freeboard(name, data, modbus=None):
 def send_dweet(name, data, extra=None):
     # Sends out a dweet with the given name and data
     try:
-        dqm_data = {"name": config.dredge_name, "type": "dqm", "data": data}
+        dqm_data = {"name": config.vars["dredge_name"], "type": "dqm", "data": data}
         dweet.send_dweet(name, dqm_data)
 
         events = data["DQM_Data"]["messages"]
@@ -125,7 +125,7 @@ def send_dweet(name, data, extra=None):
                     f'{name + "_non_eff"}, code: {function_code}, message, {message}'
                 )
                 non_eff_data = {
-                    "name": config.dredge_name,
+                    "name": config.vars["dredge_name"],
                     "type": "non_eff",
                     "data": {
                         "msgStart": msgStart,
@@ -141,7 +141,11 @@ def send_dweet(name, data, extra=None):
             extra["timestamp"] = data["DQM_Data"]["messages"][0]["work_event"][
                 "msg_time"
             ]
-            extra_data = {"name": config.dredge_name, "type": "extra", "data": extra}
+            extra_data = {
+                "name": config.vars["dredge_name"],
+                "type": "extra",
+                "data": extra,
+            }
             dweet.send_dweet(name + "_Extra", extra_data)
 
     except Exception as e:

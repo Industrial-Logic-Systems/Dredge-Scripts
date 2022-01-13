@@ -1,4 +1,4 @@
-import config
+from dredge_logger.config import config
 
 from ttkthemes import ThemedTk
 import datetime
@@ -8,8 +8,8 @@ import time
 import tkinter as tk
 import tkinter.ttk as ttk
 
-import backup
-import Log
+from dredge_logger import backup
+from dredge_logger import Log
 
 
 class LogGUI(ThemedTk):
@@ -18,7 +18,7 @@ class LogGUI(ThemedTk):
 
         # Set Window properties
         self.winfo_toplevel().title("ILS Logger")
-        self.iconbitmap(config.proj_dir + "/resources/ILS-logo.ico")
+        self.iconbitmap(config._proj_dir + "/resources/ILS-logo.ico")
         self.set_theme("black", toplevel=True, themebg=True)
 
         # Create Container that holds all frames
@@ -76,7 +76,7 @@ class StartPage(ttk.Frame):
 
         # Create widgets for frame
         self.ils_logo = tk.PhotoImage(
-            file=config.proj_dir + "\\resources\\ILS-logo.png"
+            file=config._proj_dir + "\\resources\\ILS-logo.png"
         )
         self.image1 = ttk.Label(self.top, image=self.ils_logo)
         self.label1 = ttk.Label(self.top, text="ILS Dredge Data Logger")
@@ -158,49 +158,49 @@ class Config(ttk.Frame):
         # Port
         self.gPortTitle = ttk.Label(self.right_gen, text="Port: ")
         self.gPort = ttk.Entry(self.right_gen, width=40)
-        self.gPort.insert(0, config.port)
+        self.gPort.insert(0, config.vars["port"])
         self.gPortTitle.grid(row=1, column=0, sticky="w")
         self.gPort.grid(row=1, column=1, sticky="w")
 
         # Json Path
         self.gJSONTitle = ttk.Label(self.right_gen, text="JSON Path: ")
         self.gJSON = ttk.Entry(self.right_gen, width=40)
-        self.gJSON.insert(0, config.json_path)
+        self.gJSON.insert(0, config.vars["json_path"])
         self.gJSONTitle.grid(row=2, column=0, sticky="w")
         self.gJSON.grid(row=2, column=1, sticky="w")
 
         # CSV Path
         self.gCSVTitle = ttk.Label(self.right_gen, text="CSV Path: ")
         self.gCSV = ttk.Entry(self.right_gen, width=40)
-        self.gCSV.insert(0, config.csv_path)
+        self.gCSV.insert(0, config.vars["csv_path"])
         self.gCSVTitle.grid(row=3, column=0, sticky="w")
         self.gCSV.grid(row=3, column=1, sticky="w")
 
         # Email
         self.gEmailTitle = ttk.Label(self.right_gen, text="Email: ")
         self.gEmail = ttk.Entry(self.right_gen, width=40)
-        self.gEmail.insert(0, config.email)
+        self.gEmail.insert(0, config.vars["email"])
         self.gEmailTitle.grid(row=4, column=0, sticky="w")
         self.gEmail.grid(row=4, column=1, sticky="w")
 
         # PLC IP
         self.gIPTitle = ttk.Label(self.right_gen, text="PLC IP: ")
         self.gIP = ttk.Entry(self.right_gen, width=40)
-        self.gIP.insert(0, config.plc_ip)
+        self.gIP.insert(0, config.vars["plc_ip"])
         self.gIPTitle.grid(row=5, column=0, sticky="w")
         self.gIP.grid(row=5, column=1, sticky="w")
 
         # Dredge Name
         self.gDredgeTitle = ttk.Label(self.right_gen, text="Dredge Name: ")
         self.gDredge = ttk.Entry(self.right_gen, width=40)
-        self.gDredge.insert(0, config.dredge_name)
+        self.gDredge.insert(0, config.vars["dredge_name"])
         self.gDredgeTitle.grid(row=6, column=0, sticky="w")
         self.gDredge.grid(row=6, column=1, sticky="w")
 
         # Freeboard Name
         self.gFreeboardTitle = ttk.Label(self.right_gen, text="Freeboard Name: ")
         self.gFreeboard = ttk.Entry(self.right_gen, width=40)
-        self.gFreeboard.insert(0, config.freeboard_name)
+        self.gFreeboard.insert(0, config.vars["freeboard_name"])
         self.gFreeboardTitle.grid(row=7, column=0, sticky="w")
         self.gFreeboard.grid(row=7, column=1, sticky="w")
 
@@ -223,7 +223,7 @@ class Config(ttk.Frame):
         self.eNew = ttk.Entry(self.right_email, width=40)
         self.eEmail_box = tk.Listbox(self.right_email, height=-1, width=50)
 
-        for email in config.email_list:
+        for email in config.vars["email_list"]:
             self.eEmail_box.insert(tk.END, email)
 
         self.eEmailTitle.grid(row=0, column=0, columnspan=3)
@@ -237,22 +237,26 @@ class Config(ttk.Frame):
 
         def mSel():
             self.mAddress.delete(0, tk.END)
-            self.mAddress.insert(0, config.modbus[self.mModbusList.get()]["address"])
-            if config.modbus[self.mModbusList.get()]["float"]:
+            self.mAddress.insert(
+                0, config.vars["modbus"][self.mModbusList.get()]["address"]
+            )
+            if config.vars["modbus"][self.mModbusList.get()]["float"]:
                 self.mFloat.state(["selected"])
             else:
                 self.mFloat.state(["!selected"])
 
         def mSave():
-            config.modbus[self.mModbusList.get()]["address"] = self.mAddress.get()
-            config.modbus[self.mModbusList.get()]["float"] = (
+            config.vars["modbus"][self.mModbusList.get()][
+                "address"
+            ] = self.mAddress.get()
+            config.vars["modbus"][self.mModbusList.get()]["float"] = (
                 self.mFloat.state() == "selected"
             )
 
         def mRemove():
             name = self.mModbusList.get()
             self.mValues.remove(name)
-            del config.modbus[name]
+            del config.vars["modbus"][name]
             self.mModbusList["values"] = self.mValues
             self.mModbusList.current(0)
             mSel()
@@ -261,17 +265,17 @@ class Config(ttk.Frame):
             name = self.mNew.get()
             if name not in self.mValues:
                 self.mValues.append(name)
-            if name not in config.modbus:
-                config.modbus[name] = {}
-                config.modbus[name]["name"] = name
-                config.modbus[name]["address"] = "0"
-                config.modbus[name]["float"] = False
+            if name not in config.vars["modbus"]:
+                config.vars["modbus"][name] = {}
+                config.vars["modbus"][name]["name"] = name
+                config.vars["modbus"][name]["address"] = "0"
+                config.vars["modbus"][name]["float"] = False
             self.mModbusList["values"] = self.mValues
             self.mModbusList.set(name)
             mSel()
 
         self.mValues = []
-        for name in config.modbus:
+        for name in config.vars["modbus"]:
             self.mValues.append(name)
 
         self.mTitle = ttk.Label(self.right_mb, text="ModBus Addresses")
@@ -286,7 +290,7 @@ class Config(ttk.Frame):
         self.mNew = ttk.Entry(self.right_mb, width=20)
         self.mAdd = ttk.Button(self.right_mb, text="Add", command=mAdd)
 
-        if config.modbus:
+        if config.vars["modbus"]:
             self.mModbusList.current(0)
             mSel()
 
@@ -319,20 +323,20 @@ class Config(ttk.Frame):
 
     def save_config(self):
         """Save the config changes"""
-        config.header = config.genHeader()
+        config.vars["header"] = config.genHeader()
 
-        config.port = self.gPort.get()
-        config.json_path = self.gJSON.get()
-        config.csv_path = self.gCSV.get()
-        config.plc_ip = self.gIP.get()
-        config.email = self.gEmail.get()
-        config.dredge_name = self.gDredge.get()
-        config.freeboard_name = self.gFreeboard.get()
+        config.vars["port"] = self.gPort.get()
+        config.vars["json_path"] = self.gJSON.get()
+        config.vars["csv_path"] = self.gCSV.get()
+        config.vars["plc_ip"] = self.gIP.get()
+        config.vars["email"] = self.gEmail.get()
+        config.vars["dredge_name"] = self.gDredge.get()
+        config.vars["freeboard_name"] = self.gFreeboard.get()
 
-        config.email_list = []
+        config.vars["email_list"] = []
         email_box_ls = self.eEmail_box.get(0, self.eEmail_box.size())
         for item in email_box_ls:
-            config.email_list.append(item)
+            config.vars["email_list"].append(item)
 
         logging.info("Saving Config")
         config.save_config()

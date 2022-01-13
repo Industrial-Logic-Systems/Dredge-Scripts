@@ -1,4 +1,4 @@
-import config
+from dredge_logger.config import config
 
 from PIL import Image
 import datetime
@@ -23,7 +23,7 @@ def generateGraph(filename, defaultPath=True):
     """
 
     if defaultPath:
-        csv_file = config.csv_path + "/" + filename
+        csv_file = config.vars["csv_path"] + "/" + filename
     else:
         csv_file = filename
 
@@ -152,40 +152,44 @@ def generateGraph(filename, defaultPath=True):
     ax_De.xaxis.set_minor_locator(ticker.AutoMinorLocator())
     ax_De.yaxis.set_minor_locator(ticker.AutoMinorLocator())
 
-    if not os.path.exists(config.image_path):
-        os.makedirs(config.image_path)
-        logging.debug("Making directory " + config.image_path)
+    if not os.path.exists(config.vars["image_path"]):
+        os.makedirs(config.vars["image_path"])
+        logging.debug("Making directory " + config.vars["image_path"])
 
-    if not os.path.exists(f"{config.image_path}/subImages"):
-        os.makedirs(f"{config.image_path}/subImages")
-        logging.debug("Making directory " + f"{config.image_path}/subImages")
+    if not os.path.exists(f"{config.vars['image_path']}/subImages"):
+        os.makedirs(f"{config.vars['image_path']}/subImages")
+        logging.debug("Making directory " + f"{config.vars['image_path']}/subImages")
 
     fig_Ve.savefig(
-        f"{config.image_path}/subImages/Velocity_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png"
     )
-    fig_Va.savefig(f"{config.image_path}/subImages/Vacuum_{filename.strip('.csv')}.png")
+    fig_Va.savefig(
+        f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png"
+    )
     fig_Dp.savefig(
-        f"{config.image_path}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
     )
     fig_Ps.savefig(
-        f"{config.image_path}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
     )
-    fig_De.savefig(f"{config.image_path}/subImages/Depth_{filename.strip('.csv')}.png")
+    fig_De.savefig(
+        f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png"
+    )
 
     velocity = Image.open(
-        f"{config.image_path}/subImages/Velocity_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png"
     )
     vacuum = Image.open(
-        f"{config.image_path}/subImages/Vacuum_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png"
     )
     discharge = Image.open(
-        f"{config.image_path}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
     )
     pump_speed = Image.open(
-        f"{config.image_path}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
     )
     depth = Image.open(
-        f"{config.image_path}/subImages/Depth_{filename.strip('.csv')}.png"
+        f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png"
     )
 
     velocity_size = velocity.size
@@ -198,7 +202,7 @@ def generateGraph(filename, defaultPath=True):
     combined.paste(pump_speed, (0, 3 * velocity_size[1]))
     combined.paste(depth, (0, 4 * velocity_size[1]))
     combined.save(
-        f"{config.image_path}/Smoke_Chart_{filename.strip('.csv')}.png", "PNG"
+        f"{config.vars['image_path']}/Smoke_Chart_{filename.strip('.csv')}.png", "PNG"
     )
 
 

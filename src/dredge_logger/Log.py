@@ -1,22 +1,21 @@
-import config
+from dredge_logger.config import config
 
 import datetime
 import logging
 import threading
 
-import backup
-import dataHandler
-import dredgeStatus
-import dweetUpdater
-import fileHandler
+from dredge_logger import backup
+from dredge_logger import dataHandler
+from dredge_logger import dweetUpdater
+from dredge_logger import fileHandler
 
 
 def saveFiles(json_data, csv_data):
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
-    fileHandler.write_file(config.json_path, filename + ".json", str(json_data))
+    fileHandler.write_file(config.vars["json_path"], filename + ".json", str(json_data))
     if csv_data:
-        fileHandler.write_file(config.csv_path, filename + ".csv", csv_data)
-        if config.csv0600:
+        fileHandler.write_file(config.vars["csv_path"], filename + ".csv", csv_data)
+        if config.vars["csv0600"]:
             n = datetime.datetime.now().time()
             if n < datetime.time(6, 0):
                 filename = str(
@@ -24,37 +23,12 @@ def saveFiles(json_data, csv_data):
                         "%Y-%m-%d"
                     )
                 )
-            fileHandler.write_file(config.csv_path, filename + "_0600.csv", csv_data)
-
-
-def updateRunUntil():
-    try:
-        status = dredgeStatus.checkStatus()
-        if status == True:
-            config.last_run_update_date = datetime.date.today()
-            config.save_config()
-    except Exception as e:
-        logging.error("Failed to update run until date")
-        logging.error(f"Error Exception: {e}")
+            fileHandler.write_file(
+                config.vars["csv_path"], filename + "_0600.csv", csv_data
+            )
 
 
 def log():
-    # Update Run Until once a day
-    # old_date = config.last_run_update_date  # Date when last successful update happened
-    # cur_date = datetime.date.today()  # Current date
-    # if old_date < cur_date:
-    #    # If old date is different from the current date backup the files
-    #    logging.debug("Attempting to update run until date")
-    #    threading.Thread(target=updateRunUntil).start()
-
-    # if datetime.date.today() > config.run_until:
-    #    logging.warning("Runtime expired. Contact ILS Automation")
-    #    dataHandler.sendSerialBit(False)
-    #    threading.Thread(target=updateRunUntil).start()
-    #    return [False, None]
-
-    # dataHandler.sendSerialBit(True)
-
     # Get JSON Data
     logging.debug("Getting JSON Data")
     json_data = dataHandler.getJson()

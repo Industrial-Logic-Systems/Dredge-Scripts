@@ -5,7 +5,6 @@ import json
 import logging
 import logging.handlers
 import os
-import shutil
 from appdirs import AppDirs
 
 
