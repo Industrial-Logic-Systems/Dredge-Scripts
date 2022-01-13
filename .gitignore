@@ -51,6 +51,11 @@ MANIFEST
 # Per-project virtualenvs
 .venv*/
 .conda*/
+
+# Ignore dynaconf secret files
+.secrets.*
+
+# Misc
 logs/
 config.json
 .env

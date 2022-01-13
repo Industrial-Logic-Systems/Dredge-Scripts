@@ -8,3 +8,5 @@ python-dotenv
 requests
 ttkthemes
 yagmail[all]
+dotenv
+appdirs
