@@ -10,3 +10,11 @@ version_scheme = "no-guess-dev"
 
 [tool.black]
 line-length = 127
+
+[tool.mypy]
+mypy_path = "src"
+ignore_missing_imports = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true

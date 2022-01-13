@@ -1,11 +1,9 @@
 import logging
 import threading
 
-from dredge_logger import __version__
 from dredge_logger.config import config
-
 from dredge_logger.gui import LogGUI
-from dredge_logger.Log import log
+
 
 __author__ = "Luke Eltiste"
 __copyright__ = "Luke Eltiste"
