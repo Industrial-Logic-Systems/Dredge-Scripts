@@ -1,6 +1,6 @@
 # dredge_logger
 
-Add a short description here!
+A Data Collector for the Dredge Logging
 
 
 ## Note
