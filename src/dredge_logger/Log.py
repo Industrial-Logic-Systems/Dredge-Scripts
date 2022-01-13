@@ -18,14 +18,8 @@ def saveFiles(json_data, csv_data):
         if config.vars["csv0600"]:
             n = datetime.datetime.now().time()
             if n < datetime.time(6, 0):
-                filename = str(
-                    (datetime.datetime.today() - datetime.timedelta(days=1)).strftime(
-                        "%Y-%m-%d"
-                    )
-                )
-            fileHandler.write_file(
-                config.vars["csv_path"], filename + "_0600.csv", csv_data
-            )
+                filename = str((datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
+            fileHandler.write_file(config.vars["csv_path"], filename + "_0600.csv", csv_data)
 
 
 def log():
@@ -55,20 +49,11 @@ def log():
 
     # Check if the 0600 file needs to be emailed
     if config.csv0600:
-        if (
-            datetime.datetime.now().time() > datetime.time(6, 0)
-            and not config.csv0600_saved
-        ):
-            filename = str(
-                (datetime.datetime.today() - datetime.timedelta(days=1)).strftime(
-                    "%Y-%m-%d"
-                )
-            )
+        if datetime.datetime.now().time() > datetime.time(6, 0) and not config.csv0600_saved:
+            filename = str((datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
             logging.debug("Backing up csv_0600 for the day: {}".format(filename))
             filename += "_0600"
-            threading.Thread(
-                target=backup.backup_files, args=(str(filename), True)
-            ).start()
+            threading.Thread(target=backup.backup_files, args=(str(filename), True)).start()
             config.csv0600_saved = True
             config.save_config()
 

@@ -64,11 +64,7 @@ def generateGraph(filename, defaultPath=True):
         inplace=True,
     )
 
-    time = [
-        datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
-        for time in df["msg_time"]
-        if isinstance(time, str)
-    ]
+    time = [datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S") for time in df["msg_time"] if isinstance(time, str)]
 
     plt.rcParams["figure.figsize"] = [23, 5]
 
@@ -160,50 +156,26 @@ def generateGraph(filename, defaultPath=True):
         os.makedirs(f"{config.vars['image_path']}/subImages")
         logging.debug("Making directory " + f"{config.vars['image_path']}/subImages")
 
-    fig_Ve.savefig(
-        f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png"
-    )
-    fig_Va.savefig(
-        f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png"
-    )
-    fig_Dp.savefig(
-        f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
-    )
-    fig_Ps.savefig(
-        f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
-    )
-    fig_De.savefig(
-        f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png"
-    )
+    fig_Ve.savefig(f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png")
+    fig_Va.savefig(f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png")
+    fig_Dp.savefig(f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png")
+    fig_Ps.savefig(f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png")
+    fig_De.savefig(f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png")
 
-    velocity = Image.open(
-        f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png"
-    )
-    vacuum = Image.open(
-        f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png"
-    )
-    discharge = Image.open(
-        f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png"
-    )
-    pump_speed = Image.open(
-        f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png"
-    )
-    depth = Image.open(
-        f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png"
-    )
+    velocity = Image.open(f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png")
+    vacuum = Image.open(f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png")
+    discharge = Image.open(f"{config.vars['image_path']}/subImages/Discharge_Pressure_{filename.strip('.csv')}.png")
+    pump_speed = Image.open(f"{config.vars['image_path']}/subImages/Pump_Speed_{filename.strip('.csv')}.png")
+    depth = Image.open(f"{config.vars['image_path']}/subImages/Depth_{filename.strip('.csv')}.png")
 
     velocity_size = velocity.size
-    combined = Image.new(
-        "RGB", (velocity_size[0], 5 * velocity_size[1]), (250, 250, 250)
-    )
+    combined = Image.new("RGB", (velocity_size[0], 5 * velocity_size[1]), (250, 250, 250))
     combined.paste(velocity, (0, 0))
     combined.paste(vacuum, (0, velocity_size[1]))
     combined.paste(discharge, (0, 2 * velocity_size[1]))
     combined.paste(pump_speed, (0, 3 * velocity_size[1]))
     combined.paste(depth, (0, 4 * velocity_size[1]))
-    combined.save(
-        f"{config.vars['image_path']}/Smoke_Chart_{filename.strip('.csv')}.png", "PNG"
-    )
+    combined.save(f"{config.vars['image_path']}/Smoke_Chart_{filename.strip('.csv')}.png", "PNG")
 
 
 if __name__ == "__main__":

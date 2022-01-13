@@ -15,12 +15,8 @@ def backup_files(filename, extra_csv=False):
             files = [
                 config.vars["csv_path"] + "\\" + filename + ".csv",
             ]
-            logging.debug(
-                "Sending Email(s) to " + str(config.vars["email_list"]).strip("[]")
-            )
-            subject = (
-                f"{config.vars['dredge_name']} - {filename} - Log Files - CSV_0600"
-            )
+            logging.debug("Sending Email(s) to " + str(config.vars["email_list"]).strip("[]"))
+            subject = f"{config.vars['dredge_name']} - {filename} - Log Files - CSV_0600"
             body = f"The files with the logged information from {config.vars['dredge_name']} on {filename.strip('_0600')}"
             send_email(
                 config.vars["email_list"],
@@ -45,17 +41,9 @@ def backup_files(filename, extra_csv=False):
                     config.vars["csv_path"] + "\\" + filename + ".csv",
                 ]
                 if sendImage:
-                    files.append(
-                        config.vars["image_path"]
-                        + "\\"
-                        + "Smoke_Chart_"
-                        + filename
-                        + ".png"
-                    )
+                    files.append(config.vars["image_path"] + "\\" + "Smoke_Chart_" + filename + ".png")
 
-                logging.debug(
-                    "Sending Email(s) to " + str(config.vars["email_list"]).strip("[]")
-                )
+                logging.debug("Sending Email(s) to " + str(config.vars["email_list"]).strip("[]"))
 
                 subject = f"{config.vars['dredge_name']} - {filename} - Log Files"
                 body = f"The files with the logged information from {config.vars['dredge_name']} on {filename}"

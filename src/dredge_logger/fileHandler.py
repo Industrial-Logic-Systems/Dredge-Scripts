@@ -62,11 +62,7 @@ def verify_headers(file, header):
         i = 0
         j = 0
         while i < len(header) or j < len(csv_headers):
-            if (
-                i < len(header)
-                and j < len(csv_headers)
-                and (header[i] == csv_headers[j] or header[i] in csv_headers[j])
-            ):
+            if i < len(header) and j < len(csv_headers) and (header[i] == csv_headers[j] or header[i] in csv_headers[j]):
                 i += 1
                 j += 1
             elif i < len(header):

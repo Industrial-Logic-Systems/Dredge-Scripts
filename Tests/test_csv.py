@@ -43,9 +43,7 @@ def test_csv_header_change_1():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    result = is_equal(
-        Path("Tests/test_files/test_header_change_1_expected.csv"), filepath, True
-    )
+    result = is_equal(Path("Tests/test_files/test_header_change_1_expected.csv"), filepath, True)
     assert result[0], result[1]
 
     # Restore
@@ -68,9 +66,7 @@ def test_csv_header_change_2():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    result = is_equal(
-        Path("Tests/test_files/test_header_change_2_expected.csv"), filepath, True
-    )
+    result = is_equal(Path("Tests/test_files/test_header_change_2_expected.csv"), filepath, True)
     assert result[0], result[1]
 
     # Restore
@@ -215,9 +211,7 @@ def test_csv_header_change_3():
     fileHandler.write_file(filepath.parent, filepath.name, data)
 
     # Assert
-    result = is_equal(
-        Path("Tests/test_files/test_header_change_3_expected.csv"), filepath, True
-    )
+    result = is_equal(Path("Tests/test_files/test_header_change_3_expected.csv"), filepath, True)
     assert result[0], result[1]
 
     # Restore

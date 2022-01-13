@@ -58,9 +58,7 @@ class LogGUI(ThemedTk):
                 self.frames["StartPage"].log_status.config(text="Log Loop Running")
                 self.frames["StartPage"].json_preview.config(text=result[1])
             else:
-                self.frames["StartPage"].log_status.config(
-                    text="Loging Failed retrying in 2 seconds..."
-                )
+                self.frames["StartPage"].log_status.config(text="Loging Failed retrying in 2 seconds...")
                 time.sleep(2)
 
 
@@ -75,9 +73,7 @@ class StartPage(ttk.Frame):
         self.bottom = ttk.Frame(self)
 
         # Create widgets for frame
-        self.ils_logo = tk.PhotoImage(
-            file=config._proj_dir + "\\resources\\ILS-logo.png"
-        )
+        self.ils_logo = tk.PhotoImage(file=config._proj_dir + "\\resources\\ILS-logo.png")
         self.image1 = ttk.Label(self.top, image=self.ils_logo)
         self.label1 = ttk.Label(self.top, text="ILS Dredge Data Logger")
 
@@ -95,9 +91,7 @@ class StartPage(ttk.Frame):
             text="Manual Backup",
             command=lambda: controller.manual_backup(),
         )
-        self.button2 = ttk.Button(
-            self.bottom, text="Config", command=lambda: controller.show_frame("Config")
-        )
+        self.button2 = ttk.Button(self.bottom, text="Config", command=lambda: controller.show_frame("Config"))
 
         self.button1.pack(side="left", padx=5, pady=5)
         self.button2.pack(side="right", padx=5, pady=5)
@@ -124,20 +118,14 @@ class Config(ttk.Frame):
         self.frames["right_mb"] = self.right_mb
 
         # Create Widgets for frames
-        self.general_button = ttk.Button(
-            self.left_menu, text="General", command=lambda: self.show_frame("right_gen")
-        )
+        self.general_button = ttk.Button(self.left_menu, text="General", command=lambda: self.show_frame("right_gen"))
         self.email_button = ttk.Button(
             self.left_menu,
             text="Emails",
             command=lambda: self.show_frame("right_email"),
         )
-        self.modbus_button = ttk.Button(
-            self.left_menu, text="ModBus", command=lambda: self.show_frame("right_mb")
-        )
-        self.save_button = ttk.Button(
-            self.left_menu, text="Save Config", command=lambda: self.save_config()
-        )
+        self.modbus_button = ttk.Button(self.left_menu, text="ModBus", command=lambda: self.show_frame("right_mb"))
+        self.save_button = ttk.Button(self.left_menu, text="Save Config", command=lambda: self.save_config())
         self.back_button = ttk.Button(
             self.left_menu,
             text="Back",
@@ -216,9 +204,7 @@ class Config(ttk.Frame):
             self.eEmail_box.insert(tk.END, self.eNew.get())
 
         self.eEmailTitle = ttk.Label(self.right_email, text="Email List")
-        self.eRemove = ttk.Button(
-            self.right_email, text="Remove Selected", command=rm_sel
-        )
+        self.eRemove = ttk.Button(self.right_email, text="Remove Selected", command=rm_sel)
         self.eAdd = ttk.Button(self.right_email, text="Add Email", command=add)
         self.eNew = ttk.Entry(self.right_email, width=40)
         self.eEmail_box = tk.Listbox(self.right_email, height=-1, width=50)
@@ -237,21 +223,15 @@ class Config(ttk.Frame):
 
         def mSel():
             self.mAddress.delete(0, tk.END)
-            self.mAddress.insert(
-                0, config.vars["modbus"][self.mModbusList.get()]["address"]
-            )
+            self.mAddress.insert(0, config.vars["modbus"][self.mModbusList.get()]["address"])
             if config.vars["modbus"][self.mModbusList.get()]["float"]:
                 self.mFloat.state(["selected"])
             else:
                 self.mFloat.state(["!selected"])
 
         def mSave():
-            config.vars["modbus"][self.mModbusList.get()][
-                "address"
-            ] = self.mAddress.get()
-            config.vars["modbus"][self.mModbusList.get()]["float"] = (
-                self.mFloat.state() == "selected"
-            )
+            config.vars["modbus"][self.mModbusList.get()]["address"] = self.mAddress.get()
+            config.vars["modbus"][self.mModbusList.get()]["float"] = self.mFloat.state() == "selected"
 
         def mRemove():
             name = self.mModbusList.get()

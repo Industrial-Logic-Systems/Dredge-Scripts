@@ -85,9 +85,7 @@ def test_csv_parse_1():
     assert isinstance(csv_obj, tuple), type(csv_obj)
     assert isinstance(csv_obj[0], list), type(csv_obj[0])
     assert isinstance(csv_obj[1], dict), type(csv_obj[1])
-    assert not csv_obj[
-        1
-    ], f"Modbus values returned, when none were expected: {csv_obj[1]}"
+    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
     expected_csv = [
         "2021-11-28 07:46:07",
         1.8,
@@ -155,9 +153,7 @@ def test_csv_parse_2():
     assert isinstance(csv_obj, tuple), type(csv_obj)
     assert isinstance(csv_obj[0], list), type(csv_obj[0])
     assert isinstance(csv_obj[1], dict), type(csv_obj[1])
-    assert not csv_obj[
-        1
-    ], f"Modbus values returned, when none were expected: {csv_obj[1]}"
+    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
     expected_csv = [
         "2021-11-28 07:46:17",
         1.8,

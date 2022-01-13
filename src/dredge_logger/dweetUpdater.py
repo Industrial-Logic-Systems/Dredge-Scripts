@@ -63,18 +63,13 @@ def freeboard(name, data, modbus=None):
                 function_code = event["non_eff_event"]["function_code"].strip()
                 comment = event["non_eff_event"]["comment"].strip()
 
-                if (
-                    function_code in function_codes_depreciated
-                    and function_code not in function_codes
-                ):
+                if function_code in function_codes_depreciated and function_code not in function_codes:
                     logging.warning("Function code is Depreciated")
                     message = function_codes_depreciated[function_code]
                 else:
                     message = function_codes[function_code]
 
-                logging.debug(
-                    f'{name + "_non_eff"}, code: {function_code}, message, {message}'
-                )
+                logging.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
                 dweepy.dweet_for(
                     name + "_non_eff",
                     {
@@ -112,18 +107,13 @@ def send_dweet(name, data, extra=None):
                 function_code = event["non_eff_event"]["function_code"].strip()
                 comment = event["non_eff_event"]["comment"].strip()
 
-                if (
-                    function_code in function_codes_depreciated
-                    and function_code not in function_codes
-                ):
+                if function_code in function_codes_depreciated and function_code not in function_codes:
                     logging.warning("Function code is Depreciated")
                     message = function_codes_depreciated[function_code]
                 else:
                     message = function_codes[function_code]
 
-                logging.debug(
-                    f'{name + "_non_eff"}, code: {function_code}, message, {message}'
-                )
+                logging.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
                 non_eff_data = {
                     "name": config.vars["dredge_name"],
                     "type": "non_eff",
@@ -138,9 +128,7 @@ def send_dweet(name, data, extra=None):
                 dweet.send_dweet(name + "_non_eff", non_eff_data)
 
         if extra:
-            extra["timestamp"] = data["DQM_Data"]["messages"][0]["work_event"][
-                "msg_time"
-            ]
+            extra["timestamp"] = data["DQM_Data"]["messages"][0]["work_event"]["msg_time"]
             extra_data = {
                 "name": config.vars["dredge_name"],
                 "type": "extra",

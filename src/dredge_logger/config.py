@@ -68,28 +68,16 @@ class Config:
         # Set all the variables from the dictionary
         self.vars["env"] = self.load_env()
         self.vars["port"] = config_file.get("port", "COM1")
-        self.vars["json_path"] = config_file.get(
-            "json_path", "C:\\Users\\USERNAME\\Desktop\\json"
-        )
-        self.vars["csv_path"] = config_file.get(
-            "csv_path", "C:\\Users\\USERNAME\\Desktop\\csv"
-        )
-        self.vars["image_path"] = config_file.get(
-            "image_path", "C:\\Users\\USERNAME\\Desktop\\image"
-        )
+        self.vars["json_path"] = config_file.get("json_path", "C:\\Users\\USERNAME\\Desktop\\json")
+        self.vars["csv_path"] = config_file.get("csv_path", "C:\\Users\\USERNAME\\Desktop\\csv")
+        self.vars["image_path"] = config_file.get("image_path", "C:\\Users\\USERNAME\\Desktop\\image")
         self.vars["email_list"] = config_file.get("email_list", ["example@gmail.com"])
         self.vars["plc_ip"] = config_file.get("plc_ip", "192.168.1.10")
         self.vars["email"] = config_file.get("email", "ilsdqmsystem@gmail.com")
         self.vars["dredge_name"] = config_file.get("dredge_name", "Dredge Name")
-        self.vars["freeboard_name"] = config_file.get(
-            "freeboard_name", "Freeboard Name"
-        )
-        self.vars["modbus"] = config_file.get(
-            "modbus", {"offset": {"name": "offset", "address": "0", "float": True}}
-        )
-        self.vars["modbus_bits"] = config_file.get(
-            "modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}}
-        )
+        self.vars["freeboard_name"] = config_file.get("freeboard_name", "Freeboard Name")
+        self.vars["modbus"] = config_file.get("modbus", {"offset": {"name": "offset", "address": "0", "float": True}})
+        self.vars["modbus_bits"] = config_file.get("modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}})
         self.vars["csv0600"] = config_file.get("csv0600", False)
         self.vars["csv0600_saved"] = config_file.get("csv0600_saved", False)
         self.vars["header"] = self.genHeader()
@@ -161,9 +149,7 @@ class Config:
         if os.path.isdir(directory):
             return path
 
-        self._logger.error(
-            f'Directory "{directory}" does not exist for folder {foldername}, using default directory'
-        )
+        self._logger.error(f'Directory "{directory}" does not exist for folder {foldername}, using default directory')
         return f"{self._dirs.user_data_dir}\\{foldername}"
 
     def save_config(self):
@@ -186,9 +172,7 @@ class Config:
         config_file["modbus_bits"] = self.vars["modbus_bits"]
         config_file["csv0600"] = self.vars["csv0600"]
         config_file["csv0600_saved"] = self.vars["csv0600_saved"]
-        config_file["last_save_date"] = datetime.datetime.strftime(
-            self.vars["last_save_date"], "%Y-%m-%d"
-        )
+        config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
 
         self.save_env(self.vars["env"])
 

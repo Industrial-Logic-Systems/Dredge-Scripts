@@ -13,12 +13,8 @@ def getJson(data=None):
     """Listen on the serial port for data string and convert to JSON"""
     if data is None:
         try:
-            ser = serial.Serial(
-                config.vars["port"], 9600, timeout=20, parity=serial.PARITY_ODD
-            )
-            logging.debug(
-                "Serial port listening on port {}".format(config.vars["port"])
-            )
+            ser = serial.Serial(config.vars["port"], 9600, timeout=20, parity=serial.PARITY_ODD)
+            logging.debug("Serial port listening on port {}".format(config.vars["port"]))
             data = ser.read_until(b"\r").strip(b"\n\r")
 
             # Decode the serial data
@@ -39,9 +35,7 @@ def getJson(data=None):
         logging.error("Could not convert received serial data to JSON")
         try:
             if len(str(data)) != 0:
-                fileHandler.write_file(
-                    config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data)
-                )
+                fileHandler.write_file(config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
             logging.error("Save Exception")
             logging.debug(e, exc_info=True)
@@ -57,27 +51,17 @@ def getCSV(json_obj, modbus=True):
     # Work Event
     try:
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["msg_time"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_latitude"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_longitude"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_longitude"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_depth"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_heading"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_velocity"]
-        )
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_density"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_velocity"])
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_density"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["pump_rpm"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vacuum"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["outlet_psi"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip()
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip())
     except Exception as e:
         logging.error("CSV Exception Parsing Work Event")
         logging.debug(e, exc_info=True)
@@ -162,12 +146,8 @@ def getModbus():
 
     if not c.is_open():
         if not c.open():
-            logging.debug(
-                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
-            )
-            logging.error(
-                f"Could not connect to PLC over IP at {config.vars['plc_ip']}"
-            )
+            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
+            logging.error(f"Could not connect to PLC over IP at {config.vars['plc_ip']}")
             return dict()
 
     values = dict()
@@ -210,9 +190,7 @@ def sendSerialBit(send):
 
     if not c.is_open():
         if not c.open():
-            logging.debug(
-                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
-            )
+            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
             return
 
     status = c.write_single_coil(0, send)
