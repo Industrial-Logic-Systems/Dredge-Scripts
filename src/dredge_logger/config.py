@@ -58,14 +58,12 @@ class Config:
     def load_config(self):
         """Load the config file"""
 
-        config_files = {}
-
         try:
             # Open the config file and read the settings
             with open(self._dirs.user_config_dir + "/config.json") as json_data_file:
                 config_file = json.load(json_data_file)
         except (FileNotFoundError, json.JSONDecodeError):
-            self._logger.error(f"Config file not found, using default settings")
+            self._logger.error("Config file not found, using default settings")
             config_file = {}
 
         # Set all the variables from the dictionary
