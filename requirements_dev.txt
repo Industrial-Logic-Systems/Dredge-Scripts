@@ -1,0 +1,8 @@
+flake8
+mypy
+mypy-extensions
+pre-commit
+pytest
+pytest-cov
+tox
+types-requests

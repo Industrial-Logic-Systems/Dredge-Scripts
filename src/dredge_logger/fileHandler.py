@@ -1,4 +1,4 @@
-import config
+from dredge_logger.config import config
 
 from pathlib import Path
 import csv
@@ -32,8 +32,8 @@ def write_file(path, filename, data):
 
     if ".csv" in filename:
         if not fileExists:
-            csv_write(filepath, config.header)
-        verify_headers(filepath, config.header)
+            csv_write(filepath, config.vars["header"])
+        verify_headers(filepath, config.vars["header"])
         csv_write(filepath, data)
         logging.debug("Data written to " + filename)
 
@@ -62,11 +62,7 @@ def verify_headers(file, header):
         i = 0
         j = 0
         while i < len(header) or j < len(csv_headers):
-            if (
-                i < len(header)
-                and j < len(csv_headers)
-                and (header[i] == csv_headers[j] or header[i] in csv_headers[j])
-            ):
+            if i < len(header) and j < len(csv_headers) and (header[i] == csv_headers[j] or header[i] in csv_headers[j]):
                 i += 1
                 j += 1
             elif i < len(header):
@@ -81,5 +77,5 @@ def verify_headers(file, header):
 
 if __name__ == "__main__":
     filename = "2021-10-13.csv"
-    path = config.csv_path
-    verify_headers(Path(path, filename), config.header)
+    path = config.vars["csv_path"]
+    verify_headers(Path(path, filename), config.vars["header"])

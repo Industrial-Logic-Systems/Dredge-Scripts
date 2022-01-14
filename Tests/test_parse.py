@@ -1,18 +1,17 @@
 from pathlib import Path
-from testUtils import is_equal
+from Tests.testUtils import is_equal
 import os
-import sys
 
-p = os.path.abspath(".")
-sys.path.insert(1, p)
 
-import config
-import dataHandler
+from dredge_logger.config import config
+from dredge_logger import dataHandler
 
 
 def test_json_parse():
     # Arrange
-    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density": 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}]}}'
+    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude\
+": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density"\
+: 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}]}}'
     # Act
     json_obj = dataHandler.getJson(j_str)
     # Assert
@@ -21,7 +20,11 @@ def test_json_parse():
 
 def test_json_parse_ne():
     # Arrange
-    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:17","vert_correction": 1.8,"ch_latitude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 52.7,"ch_heading": 130,"slurry_velocity": 13.36,"slurry_density": 1.8,"pump_rpm": 546,"vacuum": -14.17,"outlet_psi": 70.5,"comment": "comment             "}},{"non_eff_event": {"msg_start_time": "2021-11-28 07:28:05","msg_end_time": "2021-11-28 07:46:09","function_code": "HSL ","comment": "comment             "}}]}}'
+    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:17","vert_correction": 1.8,"ch_latitude\
+": 29.614393,"ch_longitude": -94.963516,"ch_depth": 52.7,"ch_heading": 130,"slurry_velocity": 13.36,"slurry_density":\
+1.8,"pump_rpm": 546,"vacuum": -14.17,"outlet_psi": 70.5,"comment": "comment             "}},{"non_eff_event": {"m\
+sg_start_time": "2021-11-28 07:28:05","msg_end_time": "2021-11-28 07:46:09","function_code": "HSL ","comment"\
+: "comment             "}}]}}'
     # Act
     json_obj = dataHandler.getJson(j_str)
     # Assert
@@ -39,11 +42,13 @@ def test_json_empty():
 
 def test_json_incomplete_1():
     # Arrange
-    tmpJsonPath = config.json_path
-    config.json_path = "Tests\\json_files\\json"
+    tmpJsonPath = config.vars["json_path"]
+    config.vars["json_path"] = "Tests\\json_files\\json"
     if os.path.exists(Path("Tests/json_files/failed/failed.txt")):
         os.remove(Path("Tests/json_files/failed/failed.txt"))
-    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density": 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}'
+    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude\
+": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density"\
+: 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}'
     # Act
     json_obj = dataHandler.getJson(j_str)
     # Assert
@@ -55,7 +60,7 @@ def test_json_incomplete_1():
     )
     assert result[0], result[1]
     # Restore
-    config.json_path = tmpJsonPath
+    config.vars["json_path"] = tmpJsonPath
 
 
 def test_csv_parse_1():
@@ -88,9 +93,7 @@ def test_csv_parse_1():
     assert isinstance(csv_obj, tuple), type(csv_obj)
     assert isinstance(csv_obj[0], list), type(csv_obj[0])
     assert isinstance(csv_obj[1], dict), type(csv_obj[1])
-    assert not csv_obj[
-        1
-    ], f"Modbus values returned, when none were expected: {csv_obj[1]}"
+    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
     expected_csv = [
         "2021-11-28 07:46:07",
         1.8,
@@ -158,9 +161,7 @@ def test_csv_parse_2():
     assert isinstance(csv_obj, tuple), type(csv_obj)
     assert isinstance(csv_obj[0], list), type(csv_obj[0])
     assert isinstance(csv_obj[1], dict), type(csv_obj[1])
-    assert not csv_obj[
-        1
-    ], f"Modbus values returned, when none were expected: {csv_obj[1]}"
+    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
     expected_csv = [
         "2021-11-28 07:46:17",
         1.8,

@@ -1,4 +1,4 @@
-import config
+from dredge_logger.config import config
 
 from pyModbusTCP import utils
 from pyModbusTCP.client import ModbusClient
@@ -6,15 +6,15 @@ import json
 import logging
 import serial
 
-import fileHandler
+from dredge_logger import fileHandler
 
 
 def getJson(data=None):
     """Listen on the serial port for data string and convert to JSON"""
     if data is None:
         try:
-            ser = serial.Serial(config.port, 9600, timeout=20, parity=serial.PARITY_ODD)
-            logging.debug("Serial port listening on port {}".format(config.port))
+            ser = serial.Serial(config.vars["port"], 9600, timeout=20, parity=serial.PARITY_ODD)
+            logging.debug("Serial port listening on port {}".format(config.vars["port"]))
             data = ser.read_until(b"\r").strip(b"\n\r")
 
             # Decode the serial data
@@ -35,9 +35,7 @@ def getJson(data=None):
         logging.error("Could not convert received serial data to JSON")
         try:
             if len(str(data)) != 0:
-                fileHandler.write_file(
-                    config.json_path + "\\..\\failed", "failed.txt", str(data)
-                )
+                fileHandler.write_file(config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
             logging.error("Save Exception")
             logging.debug(e, exc_info=True)
@@ -53,27 +51,17 @@ def getCSV(json_obj, modbus=True):
     # Work Event
     try:
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["msg_time"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_latitude"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_longitude"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_longitude"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_depth"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_heading"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_velocity"]
-        )
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_density"]
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_velocity"])
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_density"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["pump_rpm"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vacuum"])
         csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["outlet_psi"])
-        csv_obj.append(
-            json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip()
-        )
+        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip())
     except Exception as e:
         logging.error("CSV Exception Parsing Work Event")
         logging.debug(e, exc_info=True)
@@ -142,7 +130,7 @@ def getCSV(json_obj, modbus=True):
 
 
 def getModbus():
-    SERVER_HOST = config.plc_ip
+    SERVER_HOST = config.vars["plc_ip"]
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
@@ -158,17 +146,15 @@ def getModbus():
 
     if not c.is_open():
         if not c.open():
-            logging.debug(
-                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
-            )
-            logging.error(f"Could not connect to PLC over IP at {config.plc_ip}")
+            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
+            logging.error(f"Could not connect to PLC over IP at {config.vars['plc_ip']}")
             return dict()
 
     values = dict()
 
-    for name in config.modbus:
-        address = config.modbus[name]["address"]
-        isFloat = config.modbus[name]["float"]
+    for name in config.vars["modbus"]:
+        address = config.vars["modbus"][name]["address"]
+        isFloat = config.vars["modbus"][name]["float"]
         value = c.read_holding_registers(int(address), 2)
         value = value[1] << 16 | value[0]
         if isFloat:
@@ -178,8 +164,8 @@ def getModbus():
         values[name] = value
         logging.debug(f"{name.title()}: {str(value)}")
 
-    for name in config.modbus_bits:
-        address = config.modbus_bits[name]["address"]
+    for name in config.vars["modbus_bits"]:
+        address = config.vars["modbus_bits"][name]["address"]
         value = c.read_coils(int(address), 1)
         values[name] = value[0]
         logging.debug(f"{name.title()}: {str(value)}")
@@ -188,7 +174,7 @@ def getModbus():
 
 
 def sendSerialBit(send):
-    SERVER_HOST = config.plc_ip
+    SERVER_HOST = config.vars["plc_ip"]
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
@@ -204,9 +190,7 @@ def sendSerialBit(send):
 
     if not c.is_open():
         if not c.open():
-            logging.debug(
-                "unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT)
-            )
+            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
             return
 
     status = c.write_single_coil(0, send)
