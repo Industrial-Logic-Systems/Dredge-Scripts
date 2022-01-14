@@ -86,6 +86,8 @@ class Config:
         )
 
     def save_env(self, env):
+        if not os.path.exists(self._dirs.user_data_dir):
+            os.makedirs(self._dirs.user_data_dir)
         with open(self._dirs.user_data_dir + "/.env", "w") as f:
             if env["user"] is not None:
                 f.write("DWEET_USER=" + env["user"] + "\n")
@@ -175,6 +177,9 @@ class Config:
         config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
 
         self.save_env(self.vars["env"])
+
+        if not os.path.exists(self._dirs.user_config_dir):
+            os.makedirs(self._dirs.user_config_dir)
 
         # Open the config file and save the variables
         with open(self._dirs.user_config_dir + "/config.json", "w") as f:
