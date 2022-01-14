@@ -1,8 +1,8 @@
 # Release drafter configuration https://github.com/release-drafter/release-drafter#configuration
 # Emojis were chosen to match the https://gitmoji.carloscuesta.me/
 
-name-template: "v$NEXT_PATCH_VERSION"
-tag-template: "v$NEXT_PATCH_VERSION"
+name-template: "v$RESOLVED_VERSION 🌈"
+tag-template: "v$RESOLVED_VERSION"
 
 categories:
   - title: ":rocket: Features"
@@ -17,6 +17,23 @@ categories:
     labels: [documentation]
   - title: ":arrow_up: Dependencies updates"
     labels: [dependencies]
+  - title: "🧰 Maintenance"
+    label: "chore"
+
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
 
 template: |
   ## What's Changed
