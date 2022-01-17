@@ -2,14 +2,14 @@ from dredge_logger.config import config
 
 from pyModbusTCP import utils
 from pyModbusTCP.client import ModbusClient
-import json
 import logging
 import serial
+import xml.etree.ElementTree as ET
 
 from dredge_logger import fileHandler
 
 
-def getJson(data=None):
+def getXML(data=None):
     """Listen on the serial port for data string and convert to JSON"""
     if data is None:
         try:
@@ -28,42 +28,63 @@ def getJson(data=None):
             return None
 
     try:
-        json_obj = json.loads(data)
+        xml_obj = ET.fromstring(data)
     except Exception as e:
-        logging.error("JSON Exception")
+        logging.error("XML Exception")
         logging.debug(e, exc_info=True)
-        logging.error("Could not convert received serial data to JSON")
+        logging.error("Could not convert received serial data to XML")
         try:
             if len(str(data)) != 0:
-                fileHandler.write_file(config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data))
+                fileHandler.write_file(config.vars["xml_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
             logging.error("Save Exception")
             logging.debug(e, exc_info=True)
             logging.error("Couldn't save failed string!")
         return None
 
-    return json_obj
+    return xml_obj
 
 
-def getCSV(json_obj, modbus=True):
+def getCSV(xml_obj, modbus=True):
     # Uses the json object to make a list that is used for the csv
     csv_obj = []
-    # Work Event
+    # XML Object
     try:
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["msg_time"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vert_correction"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_latitude"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_longitude"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_depth"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["ch_heading"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_velocity"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["slurry_density"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["pump_rpm"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["vacuum"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["outlet_psi"])
-        csv_obj.append(json_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip())
+        csv_obj.append(xml_obj.find("DREDGE_NAME").text)
+
+        hopper_data = xml_obj.find("HOPPER_DATA_RECORD")
+        csv_obj.append(hopper_data.find("DATE_TIME").text)
+        csv_obj.append(hopper_data.find("CONTRACT_NUMBER").text)
+        csv_obj.append(hopper_data.find("LOAD_NUMBER").text)
+        csv_obj.append(hopper_data.find("VESSEL_X").text)
+        csv_obj.append(hopper_data.find("VESSEL_Y").text)
+        csv_obj.append(hopper_data.find("PORT_DRAG_X").text)
+        csv_obj.append(hopper_data.find("PORT_DRAG_Y").text)
+        csv_obj.append(hopper_data.find("STBD_DRAG_X").text)
+        csv_obj.append(hopper_data.find("STBD_DRAG_Y").text)
+        csv_obj.append(hopper_data.find("HULL_STATUS").text)
+        csv_obj.append(hopper_data.find("VESSEL_COURSE").text)
+        csv_obj.append(hopper_data.find("VESSEL_SPEED").text)
+        csv_obj.append(hopper_data.find("VESSEL_HEADING").text)
+        csv_obj.append(hopper_data.find("TIDE").text)
+        csv_obj.append(hopper_data.find("DRAFT_FORE").text)
+        csv_obj.append(hopper_data.find("DRAFT_AFT").text)
+        csv_obj.append(hopper_data.find("ULLAGE_FORE").text)
+        csv_obj.append(hopper_data.find("ULLAGE_AFT").text)
+        csv_obj.append(hopper_data.find("HOPPER_VOLUME").text)
+        csv_obj.append(hopper_data.find("DISPLACEMENT").text)
+        csv_obj.append(hopper_data.find("EMPTY_DISPLACEMENT").text)
+        csv_obj.append(hopper_data.find("DRAGHEAD_DEPTH_PORT").text)
+        csv_obj.append(hopper_data.find("DRAGHEAD_DEPTH_STBD").text)
+        csv_obj.append(hopper_data.find("PORT_DENSITY").text)
+        csv_obj.append(hopper_data.find("STBD_DENSITY").text)
+        csv_obj.append(hopper_data.find("PORT_VELOCITY").text)
+        csv_obj.append(hopper_data.find("STBD_VELOCITY").text)
+        csv_obj.append(hopper_data.find("PUMP_RPM_PORT").text)
+        csv_obj.append(hopper_data.find("PUMP_RPM_STBD").text)
+
     except Exception as e:
-        logging.error("CSV Exception Parsing Work Event")
+        logging.error("CSV Exception Parsing XML")
         logging.debug(e, exc_info=True)
         return None, None
 
@@ -75,54 +96,8 @@ def getCSV(json_obj, modbus=True):
             # add them to csv
             for val in modbusValues:
                 csv_obj.append(modbusValues[val])
-
-        events = json_obj["DQM_Data"]["messages"]
     except Exception as e:
         logging.error("CSV Exception Parsing Modbus Values")
-        logging.debug(e, exc_info=True)
-        return None, None
-
-    try:
-        # Non Effective Event
-        non_eff = False
-        for event in events:
-            if "non_eff_event" in event:
-                csv_obj.append(event["non_eff_event"]["msg_start_time"])
-                csv_obj.append(event["non_eff_event"]["msg_end_time"])
-                csv_obj.append(event["non_eff_event"]["function_code"].strip())
-                csv_obj.append(event["non_eff_event"]["comment"].strip())
-                non_eff = True
-                break
-        if not non_eff:
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-
-        # Outfall Event
-        outfall = False
-        for event in events:
-            if "outfall_position" in event:
-                csv_obj.append(event["outfall_position"]["msg_time"])
-                csv_obj.append(event["outfall_position"]["outfall_location"].strip())
-                csv_obj.append(event["outfall_position"]["outfall_latitude"])
-                csv_obj.append(event["outfall_position"]["outfall_longitude"])
-                csv_obj.append(event["outfall_position"]["outfall_heading"])
-                csv_obj.append(event["outfall_position"]["outfall_elevation"])
-                csv_obj.append(event["outfall_position"]["comment"].strip())
-                outfall = True
-                break
-        if not outfall:
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-            csv_obj.append("")
-
-    except Exception as e:
-        logging.error("CSV Exception parsing NE and OF Events")
         logging.debug(e, exc_info=True)
         return None, None
 

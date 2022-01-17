@@ -157,6 +157,13 @@ class Config(ttk.Frame):
         self.gJSONTitle.grid(row=2, column=0, sticky="w")
         self.gJSON.grid(row=2, column=1, sticky="w")
 
+        # XML Path
+        self.gXMLTitle = ttk.Label(self.right_gen, text="XML Path: ")
+        self.gXML = ttk.Entry(self.right_gen, width=40)
+        self.gXML.insert(0, config.vars["xml_path"])
+        self.gXMLTitle.grid(row=2, column=0, sticky="w")
+        self.gXML.grid(row=2, column=1, sticky="w")
+
         # CSV Path
         self.gCSVTitle = ttk.Label(self.right_gen, text="CSV Path: ")
         self.gCSV = ttk.Entry(self.right_gen, width=40)
@@ -307,6 +314,7 @@ class Config(ttk.Frame):
 
         config.vars["port"] = self.gPort.get()
         config.vars["json_path"] = self.gJSON.get()
+        config.vars["xml_path"] = self.gXML.get()
         config.vars["csv_path"] = self.gCSV.get()
         config.vars["plc_ip"] = self.gIP.get()
         config.vars["email"] = self.gEmail.get()

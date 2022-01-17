@@ -22,6 +22,7 @@ class Config:
 
         # Make sure the JSON and CSV paths are valid
         self.vars["json_path"] = self.checkPath(self.vars["json_path"])
+        self.vars["xml_path"] = self.checkPath(self.vars["xml_path"])
         self.vars["csv_path"] = self.checkPath(self.vars["csv_path"])
         self.vars["image_path"] = self.checkPath(self.vars["image_path"])
         self.save_config()
@@ -69,6 +70,7 @@ class Config:
         self.vars["env"] = self.load_env()
         self.vars["port"] = config_file.get("port", "COM1")
         self.vars["json_path"] = config_file.get("json_path", "C:\\Users\\USERNAME\\Desktop\\json")
+        self.vars["xml_path"] = config_file.get("xml_path", "C:\\Users\\USERNAME\\Desktop\\xml")
         self.vars["csv_path"] = config_file.get("csv_path", "C:\\Users\\USERNAME\\Desktop\\csv")
         self.vars["image_path"] = config_file.get("image_path", "C:\\Users\\USERNAME\\Desktop\\image")
         self.vars["email_list"] = config_file.get("email_list", ["example@gmail.com"])
@@ -108,36 +110,41 @@ class Config:
 
     def genHeader(self):
         csv_header = [
-            "msg_time",
-            "vert_correction",
-            "ch_latitude",
-            "ch_longitude",
-            "ch_depth",
-            "ch_heading",
-            "slurry_velocity",
-            "slurry_density",
-            "pump_rpm",
-            "vacuum",
-            "outlet_psi",
-            "comment",
+            "DREDGE_NAME",
+            "DATE_TIME",
+            "CONTRACT_NUMBER",
+            "LOAD_NUMBER",
+            "VESSEL_X",
+            "VESSEL_Y",
+            "PORT_DRAG_X",
+            "PORT_DRAG_Y",
+            "STBD_DRAG_X",
+            "STBD_DRAG_Y",
+            "HULL_STATUS",
+            "VESSEL_COURSE",
+            "VESSEL_SPEED",
+            "VESSEL_HEADING",
+            "TIDE",
+            "DRAFT_FORE",
+            "DRAFT_AFT",
+            "ULLAGE_FORE",
+            "ULLAGE_AFT",
+            "HOPPER_VOLUME",
+            "DISPLACEMENT",
+            "EMPTY_DISPLACEMENT",
+            "DRAGHEAD_DEPTH_PORT",
+            "DRAGHEAD_DEPTH_STBD",
+            "PORT_DENSITY",
+            "STBD_DENSITY",
+            "PORT_VELOCITY",
+            "STBD_VELOCITY",
+            "PUMP_RPM_PORT",
+            "PUMP_RPM_STBD",
         ]
         for name in self.vars["modbus"]:
             csv_header.append(name)
         for name in self.vars["modbus_bits"]:
             csv_header.append(name)
-        csv_header += [
-            "msg_start_time",
-            "msg_end_time",
-            "function_code",
-            "comment_ne",
-            "msg_time_of",
-            "outfall_location",
-            "outfall_latitude",
-            "outfall_longitude",
-            "outfall_heading",
-            "outfall_elevation",
-            "comment_of",
-        ]
         return csv_header
 
     def checkPath(self, path):
@@ -163,6 +170,7 @@ class Config:
         # Set all the values in the dictionary to match the current variables
         config_file["port"] = self.vars["port"]
         config_file["json_path"] = self.vars["json_path"]
+        config_file["xml_path"] = self.vars["xml_path"]
         config_file["csv_path"] = self.vars["csv_path"]
         config_file["image_path"] = self.vars["image_path"]
         config_file["email_list"] = self.vars["email_list"]

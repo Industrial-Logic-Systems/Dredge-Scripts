@@ -27,7 +27,7 @@ def backup_files(filename, extra_csv=False):
         except Exception as e:
             logging.error(f"Error sending email: {e}")
     else:
-        sendImage = True
+        sendImage = False
         try:
             generateImages.generateGraph(filename + ".csv")
         except Exception as e:
@@ -37,7 +37,7 @@ def backup_files(filename, extra_csv=False):
             try:
                 # Email the files to list of receivers
                 files = [
-                    config.vars["json_path"] + "\\" + filename + ".json",
+                    config.vars["xml_path"] + "\\" + filename + ".xml",
                     config.vars["csv_path"] + "\\" + filename + ".csv",
                 ]
                 if sendImage:
