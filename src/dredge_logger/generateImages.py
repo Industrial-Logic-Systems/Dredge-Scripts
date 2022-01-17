@@ -12,6 +12,8 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+_logger = logging.getLogger(__name__)
+
 
 def generateGraph(filename, defaultPath=True):
     """
@@ -150,11 +152,11 @@ def generateGraph(filename, defaultPath=True):
 
     if not os.path.exists(config.vars["image_path"]):
         os.makedirs(config.vars["image_path"])
-        logging.debug("Making directory " + config.vars["image_path"])
+        _logger.debug("Making directory " + config.vars["image_path"])
 
     if not os.path.exists(f"{config.vars['image_path']}/subImages"):
         os.makedirs(f"{config.vars['image_path']}/subImages")
-        logging.debug("Making directory " + f"{config.vars['image_path']}/subImages")
+        _logger.debug("Making directory " + f"{config.vars['image_path']}/subImages")
 
     fig_Ve.savefig(f"{config.vars['image_path']}/subImages/Velocity_{filename.strip('.csv')}.png")
     fig_Va.savefig(f"{config.vars['image_path']}/subImages/Vacuum_{filename.strip('.csv')}.png")

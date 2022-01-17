@@ -5,6 +5,8 @@ import logging
 
 from dredge_logger import dweet
 
+_logger = logging.getLogger(__name__)
+
 function_codes = {
     "CCSH": "Clearing Cutter/Suction Head",
     "CESS": "Cessation",
@@ -95,8 +97,8 @@ def freeboard(name, xml_data, modbus=None):
         send_dweet(name, data, modbus)
 
     except Exception as e:
-        logging.error("Freeboard failed to update")
-        logging.debug(e, exc_info=True)
+        _logger.error("Freeboard failed to update")
+        _logger.debug(e, exc_info=True)
 
 
 def send_dweet(name, data, extra=None):
@@ -115,5 +117,5 @@ def send_dweet(name, data, extra=None):
             dweet.send_dweet(name + "_Extra", extra_data)
 
     except Exception as e:
-        logging.error("Dweet Fail to Send")
-        logging.debug(e, exc_info=True)
+        _logger.error("Dweet Fail to Send")
+        _logger.debug(e, exc_info=True)

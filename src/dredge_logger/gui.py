@@ -11,6 +11,8 @@ import tkinter.ttk as ttk
 from dredge_logger import backup
 from dredge_logger import Log
 
+_logger = logging.getLogger(__name__)
+
 
 class LogGUI(ThemedTk):
     def __init__(self, *args, **kwargs):
@@ -44,13 +46,13 @@ class LogGUI(ThemedTk):
 
     def manual_backup(self):
         """Manually Run a Backup"""
-        logging.debug("Manual Backup Started")
+        _logger.debug("Manual Backup Started")
         filename = datetime.datetime.today().strftime("%Y-%m-%d")
         threading.Thread(target=backup.backup_files, args=(filename,)).start()
 
     def log_loop(self):
         """Will start a while loop that calls the log function"""
-        logging.info("Starting Log")
+        _logger.info("Starting Log")
         self.frames["StartPage"].log_status.config(text="Log Loop Running")
         while True:
             result = Log.log()
@@ -326,17 +328,17 @@ class Config(ttk.Frame):
         for item in email_box_ls:
             config.vars["email_list"].append(item)
 
-        logging.info("Saving Config")
+        _logger.info("Saving Config")
         config.save_config()
-        logging.info("Config Saved")
+        _logger.info("Config Saved")
 
 
 if __name__ == "__main__":
-    logging.debug("Creating GUI")
+    _logger.debug("Creating GUI")
     app = LogGUI()
 
-    logging.debug("Starting Thread")
+    _logger.debug("Starting Thread")
     threading.Thread(target=app.log_loop, daemon=True).start()
 
-    logging.debug("Launching GUI")
+    _logger.debug("Launching GUI")
     app.mainloop()

@@ -6,11 +6,13 @@ import logging
 import os
 import pandas as pd
 
+_logger = logging.getLogger(__name__)
+
 
 def check_path_exists(path):
     if not os.path.exists(path):
         os.makedirs(path)
-        logging.debug(f"Making directory {str(path)}")
+        _logger.debug(f"Making directory {str(path)}")
 
 
 def csv_write(filepath, data):
@@ -35,29 +37,34 @@ def write_file(path, filename, data):
             csv_write(filepath, config.vars["header"])
         verify_headers(filepath, config.vars["header"])
         csv_write(filepath, data)
-        logging.debug("Data written to " + filename)
+        _logger.debug("Data written to " + filename)
 
     elif ".json" in filename:
         with open(Path(path, filename), "a") as f:
             f.write(str(data).replace("'", '"') + "\n")
-        logging.debug("Data written to " + filename)
+        _logger.debug("Data written to " + filename)
 
     elif ".txt" in filename:
         with open(Path(path, filename), "a") as f:
             f.write(str(data))
-        logging.debug("Data written to " + filename)
+        _logger.debug("Data written to " + filename)
+
+    elif ".xml" in filename:
+        with open(Path(path, filename), "a") as f:
+            f.write(str(data))
+        _logger.debug("Data written to " + filename)
 
     else:
-        logging.error(f"Unknown File Type trying to save {filename}")
+        _logger.error(f"Unknown File Type trying to save {filename}")
 
 
 def verify_headers(file, header):
     """Checked given file and adds header if one does not exist"""
-    logging.debug("Checking " + str(file))
+    _logger.debug("Checking " + str(file))
     csv_file = pd.read_csv(file, sep=",", skipinitialspace=True)
     csv_headers = list(csv_file.columns)
     if csv_headers != header:
-        logging.debug("Adding headers to " + str(file))
+        _logger.debug("Adding headers to " + str(file))
         new_cols = []
         i = 0
         j = 0
