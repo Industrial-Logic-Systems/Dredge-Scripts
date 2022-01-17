@@ -13,7 +13,7 @@ def test_json_parse():
 ": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density"\
 : 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}]}}'
     # Act
-    json_obj = dataHandler.getJson(j_str)
+    json_obj = dataHandler.getJSON(j_str)
     # Assert
     assert isinstance(json_obj, dict), type(json_obj)
 
@@ -26,7 +26,7 @@ def test_json_parse_ne():
 sg_start_time": "2021-11-28 07:28:05","msg_end_time": "2021-11-28 07:46:09","function_code": "HSL ","comment"\
 : "comment             "}}]}}'
     # Act
-    json_obj = dataHandler.getJson(j_str)
+    json_obj = dataHandler.getJSON(j_str)
     # Assert
     assert isinstance(json_obj, dict), type(json_obj)
 
@@ -35,7 +35,7 @@ def test_json_empty():
     # Arrange
     j_str = ""
     # Act
-    json_obj = dataHandler.getJson(j_str)
+    json_obj = dataHandler.getJSON(j_str)
     # Assert
     assert json_obj is None, type(json_obj)
 
@@ -50,7 +50,7 @@ def test_json_incomplete_1():
 ": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density"\
 : 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}}'
     # Act
-    json_obj = dataHandler.getJson(j_str)
+    json_obj = dataHandler.getJSON(j_str)
     # Assert
     assert json_obj is None, type(json_obj)
     result = is_equal(
