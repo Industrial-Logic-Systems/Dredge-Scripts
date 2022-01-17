@@ -9,22 +9,24 @@ import xml.etree.ElementTree as ET
 
 from dredge_logger import fileHandler
 
+_logger = logging.getLogger(__name__)
+
 
 def getSerial():
     """Listen on the serial port for data string"""
     try:
         ser = serial.Serial(config.vars["port"], 9600, timeout=20, parity=serial.PARITY_ODD)
-        logging.debug("Serial port listening on port {}".format(config.vars["port"]))
+        _logger.debug("Serial port listening on port {}".format(config.vars["port"]))
         data = ser.read_until(b"\r").strip(b"\n\r")
 
         # Decode the serial data
         data = data.decode("ASCII")
-        logging.debug(data)
-        logging.debug("Data Received")
+        _logger.debug(data)
+        _logger.debug("Data Received")
     except Exception as e:
-        logging.error("Serial Exception")
-        logging.debug(e, exc_info=True)
-        # logging.error("Failed to Receive JSON Serial Data")
+        _logger.error("Serial Exception")
+        _logger.debug(e, exc_info=True)
+        # _logger.error("Failed to Receive JSON Serial Data")
         return None
 
     return data
@@ -35,16 +37,16 @@ def getJSON(data):
     try:
         json_obj = json.loads(data)
     except Exception as e:
-        logging.error("JSON Exception")
-        logging.debug(e, exc_info=True)
-        logging.error("Could not convert received serial data to JSON")
+        _logger.error("JSON Exception")
+        _logger.debug(e, exc_info=True)
+        _logger.error("Could not convert received serial data to JSON")
         try:
             if len(str(data)) != 0:
                 fileHandler.write_file(config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
-            logging.error("Save Exception")
-            logging.debug(e, exc_info=True)
-            logging.error("Couldn't save failed string!")
+            _logger.error("Save Exception")
+            _logger.debug(e, exc_info=True)
+            _logger.error("Couldn't save failed string!")
         return None
 
     return json_obj
@@ -55,16 +57,16 @@ def getXML(data):
     try:
         xml_obj = ET.fromstring(data)
     except Exception as e:
-        logging.error("XML Exception")
-        logging.debug(e, exc_info=True)
-        logging.error("Could not convert received serial data to XML")
+        _logger.error("XML Exception")
+        _logger.debug(e, exc_info=True)
+        _logger.error("Could not convert received serial data to XML")
         try:
             if len(str(data)) != 0:
                 fileHandler.write_file(config.vars["xml_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
-            logging.error("Save Exception")
-            logging.debug(e, exc_info=True)
-            logging.error("Couldn't save failed string!")
+            _logger.error("Save Exception")
+            _logger.debug(e, exc_info=True)
+            _logger.error("Couldn't save failed string!")
         return None
 
     return xml_obj
@@ -90,8 +92,8 @@ def getCSV(data_obj, modbus=True):
             csv_obj.append(data_obj["DQM_Data"]["messages"][0]["work_event"]["outlet_psi"])
             csv_obj.append(data_obj["DQM_Data"]["messages"][0]["work_event"]["comment"].strip())
         except Exception as e:
-            logging.error("CSV Exception Parsing Work Event")
-            logging.debug(e, exc_info=True)
+            _logger.error("CSV Exception Parsing Work Event")
+            _logger.debug(e, exc_info=True)
             return None, None
 
     elif config.vars["dredge_type"] == "hopper":
@@ -130,8 +132,8 @@ def getCSV(data_obj, modbus=True):
             csv_obj.append(hopper_data.find("PUMP_RPM_STBD").text)
 
         except Exception as e:
-            logging.error("CSV Exception Parsing XML")
-            logging.debug(e, exc_info=True)
+            _logger.error("CSV Exception Parsing XML")
+            _logger.debug(e, exc_info=True)
             return None, None
 
     try:
@@ -144,8 +146,8 @@ def getCSV(data_obj, modbus=True):
                 csv_obj.append(modbusValues[val])
 
     except Exception as e:
-        logging.error("CSV Exception Parsing Modbus Values")
-        logging.debug(e, exc_info=True)
+        _logger.error("CSV Exception Parsing Modbus Values")
+        _logger.debug(e, exc_info=True)
         return None, None
 
     if config.vars["dredge_type"] == "pipeline":
@@ -191,8 +193,8 @@ def getCSV(data_obj, modbus=True):
                 csv_obj.append("")
 
         except Exception as e:
-            logging.error("CSV Exception parsing NE and OF Events")
-            logging.debug(e, exc_info=True)
+            _logger.error("CSV Exception parsing NE and OF Events")
+            _logger.debug(e, exc_info=True)
             return None, None
 
     return csv_obj, modbusValues
@@ -215,8 +217,8 @@ def getModbus():
 
     if not c.is_open():
         if not c.open():
-            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
-            logging.error(f"Could not connect to PLC over IP at {config.vars['plc_ip']}")
+            _logger.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
+            _logger.error(f"Could not connect to PLC over IP at {config.vars['plc_ip']}")
             return dict()
 
     values = dict()
@@ -231,13 +233,13 @@ def getModbus():
         else:
             value = utils.get_2comp(value, 32)
         values[name] = value
-        logging.debug(f"{name.title()}: {str(value)}")
+        _logger.debug(f"{name.title()}: {str(value)}")
 
     for name in config.vars["modbus_bits"]:
         address = config.vars["modbus_bits"][name]["address"]
         value = c.read_coils(int(address), 1)
         values[name] = value[0]
-        logging.debug(f"{name.title()}: {str(value)}")
+        _logger.debug(f"{name.title()}: {str(value)}")
 
     return values
 
@@ -259,15 +261,15 @@ def sendSerialBit(send):
 
     if not c.is_open():
         if not c.open():
-            logging.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
+            _logger.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
             return
 
     status = c.write_single_coil(0, send)
 
     if status:
-        logging.debug(f"Send Serial bit successfully set to {send}")
+        _logger.debug(f"Send Serial bit successfully set to {send}")
     else:
-        logging.debug(f"Failed to set Send Serial bit to {send}")
+        _logger.debug(f"Failed to set Send Serial bit to {send}")
 
 
 if __name__ == "__main__":
