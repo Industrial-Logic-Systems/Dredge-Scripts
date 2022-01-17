@@ -16,14 +16,32 @@ class Config:
         self._proj_dir = os.path.dirname(__file__)
         self.setup_logging()
 
+        self.var_types = [
+            ["dredge_type", "pipeline"],
+            ["dredge_name", "Dredge Name"],
+            ["port", "COM1"],
+            ["json_path", "C:\\Users\\USERNAME\\Desktop\\json"],
+            ["xml_path", "C:\\Users\\USERNAME\\Desktop\\xml"],
+            ["csv_path", "C:\\Users\\USERNAME\\Desktop\\csv"],
+            ["image_path", "C:\\Users\\USERNAME\\Desktop\\image"],
+            ["email_list", ["example@gmail.com"]],
+            ["plc_ip", "192.168.1.10"],
+            ["email", "ilsdqmsystem@gmail.com"],
+            ["freeboard_name", "Freeboard Name"],
+            ["modbus", {"offset": {"name": "offset", "address": "0", "float": True}}],
+            ["modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}}],
+            ["csv0600", False],
+            ["csv0600_saved", False],
+        ]
+
         self.vars = {}
 
         self.load_config()
 
-        # Make sure the JSON and CSV paths are valid
-        self.vars["json_path"] = self.checkPath(self.vars["json_path"])
-        self.vars["csv_path"] = self.checkPath(self.vars["csv_path"])
-        self.vars["image_path"] = self.checkPath(self.vars["image_path"])
+        # Make sure paths are valid
+        for var in self.var_types:
+            if "path" in var[0]:
+                self.vars[var[0]] = self.checkPath(self.vars[var[0]])
         self.save_config()
 
     def setup_logging(self):
@@ -67,19 +85,10 @@ class Config:
 
         # Set all the variables from the dictionary
         self.vars["env"] = self.load_env()
-        self.vars["port"] = config_file.get("port", "COM1")
-        self.vars["json_path"] = config_file.get("json_path", "C:\\Users\\USERNAME\\Desktop\\json")
-        self.vars["csv_path"] = config_file.get("csv_path", "C:\\Users\\USERNAME\\Desktop\\csv")
-        self.vars["image_path"] = config_file.get("image_path", "C:\\Users\\USERNAME\\Desktop\\image")
-        self.vars["email_list"] = config_file.get("email_list", ["example@gmail.com"])
-        self.vars["plc_ip"] = config_file.get("plc_ip", "192.168.1.10")
-        self.vars["email"] = config_file.get("email", "ilsdqmsystem@gmail.com")
-        self.vars["dredge_name"] = config_file.get("dredge_name", "Dredge Name")
-        self.vars["freeboard_name"] = config_file.get("freeboard_name", "Freeboard Name")
-        self.vars["modbus"] = config_file.get("modbus", {"offset": {"name": "offset", "address": "0", "float": True}})
-        self.vars["modbus_bits"] = config_file.get("modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}})
-        self.vars["csv0600"] = config_file.get("csv0600", False)
-        self.vars["csv0600_saved"] = config_file.get("csv0600_saved", False)
+
+        for var_name, default_value in self.var_types:
+            self.vars[var_name] = config_file.get(var_name, default_value)
+
         self.vars["header"] = self.genHeader()
         self.vars["last_save_date"] = datetime.date.fromisoformat(
             config_file.get("last_save_date", datetime.date.today().isoformat())
@@ -107,37 +116,77 @@ class Config:
         return env
 
     def genHeader(self):
-        csv_header = [
-            "msg_time",
-            "vert_correction",
-            "ch_latitude",
-            "ch_longitude",
-            "ch_depth",
-            "ch_heading",
-            "slurry_velocity",
-            "slurry_density",
-            "pump_rpm",
-            "vacuum",
-            "outlet_psi",
-            "comment",
-        ]
-        for name in self.vars["modbus"]:
-            csv_header.append(name)
-        for name in self.vars["modbus_bits"]:
-            csv_header.append(name)
-        csv_header += [
-            "msg_start_time",
-            "msg_end_time",
-            "function_code",
-            "comment_ne",
-            "msg_time_of",
-            "outfall_location",
-            "outfall_latitude",
-            "outfall_longitude",
-            "outfall_heading",
-            "outfall_elevation",
-            "comment_of",
-        ]
+        if self.vars["dredge_type"] == "pipeline":
+            csv_header = [
+                "msg_time",
+                "vert_correction",
+                "ch_latitude",
+                "ch_longitude",
+                "ch_depth",
+                "ch_heading",
+                "slurry_velocity",
+                "slurry_density",
+                "pump_rpm",
+                "vacuum",
+                "outlet_psi",
+                "comment",
+            ]
+            for name in self.vars["modbus"]:
+                csv_header.append(name)
+            for name in self.vars["modbus_bits"]:
+                csv_header.append(name)
+            csv_header += [
+                "msg_start_time",
+                "msg_end_time",
+                "function_code",
+                "comment_ne",
+                "msg_time_of",
+                "outfall_location",
+                "outfall_latitude",
+                "outfall_longitude",
+                "outfall_heading",
+                "outfall_elevation",
+                "comment_of",
+            ]
+        elif self.vars["dredge_type"] == "hopper":
+            csv_header = [
+                "DREDGE_NAME",
+                "DATE_TIME",
+                "CONTRACT_NUMBER",
+                "LOAD_NUMBER",
+                "VESSEL_X",
+                "VESSEL_Y",
+                "PORT_DRAG_X",
+                "PORT_DRAG_Y",
+                "STBD_DRAG_X",
+                "STBD_DRAG_Y",
+                "HULL_STATUS",
+                "VESSEL_COURSE",
+                "VESSEL_SPEED",
+                "VESSEL_HEADING",
+                "TIDE",
+                "DRAFT_FORE",
+                "DRAFT_AFT",
+                "ULLAGE_FORE",
+                "ULLAGE_AFT",
+                "HOPPER_VOLUME",
+                "DISPLACEMENT",
+                "EMPTY_DISPLACEMENT",
+                "DRAGHEAD_DEPTH_PORT",
+                "DRAGHEAD_DEPTH_STBD",
+                "PORT_DENSITY",
+                "STBD_DENSITY",
+                "PORT_VELOCITY",
+                "STBD_VELOCITY",
+                "PUMP_RPM_PORT",
+                "PUMP_RPM_STBD",
+            ]
+            for name in self.vars["modbus"]:
+                csv_header.append(name)
+            for name in self.vars["modbus_bits"]:
+                csv_header.append(name)
+        else:
+            self._logger.error("Unknown dredge type", self.vars["dredge_type"])
         return csv_header
 
     def checkPath(self, path):
@@ -161,19 +210,9 @@ class Config:
         config_file = {}
 
         # Set all the values in the dictionary to match the current variables
-        config_file["port"] = self.vars["port"]
-        config_file["json_path"] = self.vars["json_path"]
-        config_file["csv_path"] = self.vars["csv_path"]
-        config_file["image_path"] = self.vars["image_path"]
-        config_file["email_list"] = self.vars["email_list"]
-        config_file["plc_ip"] = self.vars["plc_ip"]
-        config_file["email"] = self.vars["email"]
-        config_file["dredge_name"] = self.vars["dredge_name"]
-        config_file["freeboard_name"] = self.vars["freeboard_name"]
-        config_file["modbus"] = self.vars["modbus"]
-        config_file["modbus_bits"] = self.vars["modbus_bits"]
-        config_file["csv0600"] = self.vars["csv0600"]
-        config_file["csv0600_saved"] = self.vars["csv0600_saved"]
+        for var in self.var_types:
+            config_file[var[0]] = self.vars[var[0]]
+
         config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
 
         self.save_env(self.vars["env"])
