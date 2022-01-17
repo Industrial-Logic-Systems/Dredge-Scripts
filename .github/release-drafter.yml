@@ -8,7 +8,7 @@ categories:
   - title: ":rocket: Features"
     labels: [enhancement, feature]
   - title: ":wrench: Fixes & Refactoring"
-    labels: [bug, refactoring, bugfix, fix]
+    labels: [bug, refactoring, bugfix, fix, refactor]
   - title: ":package: Build System & CI/CD"
     labels: [build, ci, testing]
   - title: ":boom: Breaking Changes"
