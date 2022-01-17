@@ -5,6 +5,8 @@ import logging
 
 from dredge_logger import dweet
 
+_logger = logging.getLogger(__name__)
+
 function_codes = {
     "CCSH": "Clearing Cutter/Suction Head",
     "CESS": "Cessation",
@@ -99,8 +101,8 @@ def freeboard(name, data, modbus=None):
             send_dweet(name, data, modbus)
 
         except Exception as e:
-            logging.error("Freeboard failed to update")
-            logging.debug(e, exc_info=True)
+            _logger.error("Freeboard failed to update")
+            _logger.debug(e, exc_info=True)
     else:
         try:
             dweepy.dweet_for(name, data)
@@ -108,7 +110,7 @@ def freeboard(name, data, modbus=None):
             events = data["DQM_Data"]["messages"]
             for event in events:
                 if "non_eff_event" in event:
-                    logging.debug("Non-Eff Freeboard")
+                    _logger.debug("Non-Eff Freeboard")
 
                     msgStart = event["non_eff_event"]["msg_start_time"]
                     msgEnd = event["non_eff_event"]["msg_end_time"]
@@ -116,12 +118,12 @@ def freeboard(name, data, modbus=None):
                     comment = event["non_eff_event"]["comment"].strip()
 
                     if function_code in function_codes_depreciated and function_code not in function_codes:
-                        logging.warning("Function code is Depreciated")
+                        _logger.warning("Function code is Depreciated")
                         message = function_codes_depreciated[function_code]
                     else:
                         message = function_codes[function_code]
 
-                    logging.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
+                    _logger.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
                     dweepy.dweet_for(
                         name + "_non_eff",
                         {
@@ -139,8 +141,8 @@ def freeboard(name, data, modbus=None):
             send_dweet(name, data, modbus)
 
         except Exception as e:
-            logging.error("Freeboard failed to update")
-            logging.debug(e, exc_info=True)
+            _logger.error("Freeboard failed to update")
+            _logger.debug(e, exc_info=True)
 
 
 def send_dweet(name, data, extra=None):
@@ -160,8 +162,8 @@ def send_dweet(name, data, extra=None):
                 dweet.send_dweet(name + "_Extra", extra_data)
 
         except Exception as e:
-            logging.error("Dweet Fail to Send")
-            logging.debug(e, exc_info=True)
+            _logger.error("Dweet Fail to Send")
+            _logger.debug(e, exc_info=True)
     else:
         try:
             dqm_data = {"name": config.vars["dredge_name"], "type": "dqm", "data": data}
@@ -170,7 +172,7 @@ def send_dweet(name, data, extra=None):
             events = data["DQM_Data"]["messages"]
             for event in events:
                 if "non_eff_event" in event:
-                    logging.debug("Non-Eff Freeboard")
+                    _logger.debug("Non-Eff Freeboard")
 
                     msgStart = event["non_eff_event"]["msg_start_time"]
                     msgEnd = event["non_eff_event"]["msg_end_time"]
@@ -178,12 +180,12 @@ def send_dweet(name, data, extra=None):
                     comment = event["non_eff_event"]["comment"].strip()
 
                     if function_code in function_codes_depreciated and function_code not in function_codes:
-                        logging.warning("Function code is Depreciated")
+                        _logger.warning("Function code is Depreciated")
                         message = function_codes_depreciated[function_code]
                     else:
                         message = function_codes[function_code]
 
-                    logging.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
+                    _logger.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
                     non_eff_data = {
                         "name": config.vars["dredge_name"],
                         "type": "non_eff",
@@ -207,5 +209,5 @@ def send_dweet(name, data, extra=None):
                 dweet.send_dweet(name + "_Extra", extra_data)
 
         except Exception as e:
-            logging.error("Dweet Fail to Send")
-            logging.debug(e, exc_info=True)
+            _logger.error("Dweet Fail to Send")
+            _logger.debug(e, exc_info=True)
