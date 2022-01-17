@@ -6,33 +6,65 @@ tag-template: "v$RESOLVED_VERSION"
 
 categories:
   - title: ":rocket: Features"
-    labels: [enhancement, feature]
+    labels:
+      - "enhancement"
+      - "feature"
   - title: ":wrench: Fixes & Refactoring"
-    labels: [bug, refactoring, bugfix, fix, refactor]
+    labels:
+      - "bug"
+      - "refactoring"
+      - "bugfix"
+      - "fix"
+      - "refactor"
   - title: ":package: Build System & CI/CD"
-    labels: [build, ci, testing]
+    labels:
+      - "build"
+      - "ci"
+      - "testing"
   - title: ":boom: Breaking Changes"
-    labels: [breaking]
+    labels:
+      - "breaking"
   - title: ":pencil: Documentation"
-    labels: [documentation]
+    labels:
+      - "documentation"
   - title: ":arrow_up: Dependencies updates"
-    labels: [dependencies]
+    labels:
+      - "dependencies"
   - title: "🧰 Maintenance"
-    label: "chore"
+    label: -"chore"
 
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+
+autolabeler:
+  - label: "chore"
+    files:
+      - "*.md"
+      - "*.yml"
+  - label: "bug"
+    branch:
+      - '/fix\/.+/'
+    title:
+      - "/fix/i"
+  - label: "enhancement"
+    branch:
+      - '/feature\/.+/'
+    title:
+      - "/feature/i"
+  - label: "refactor"
+    title:
+      - "/refactor/i"
 
 version-resolver:
   major:
     labels:
-      - 'major'
+      - "major"
   minor:
     labels:
-      - 'minor'
+      - "minor"
   patch:
     labels:
-      - 'patch'
+      - "patch"
   default: patch
 
 template: |
