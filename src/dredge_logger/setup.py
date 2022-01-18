@@ -27,5 +27,6 @@ def main():
 
 
 if __name__ == "__main__":
+    _logger.info("Logger Ran manually")
     main()
-    _logger.info(config._dirs.user_log_dir)
+    _logger.info("Manual End")
