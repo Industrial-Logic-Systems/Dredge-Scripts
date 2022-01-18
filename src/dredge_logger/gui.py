@@ -1,6 +1,3 @@
-from dredge_logger.config import config
-
-from ttkthemes import ThemedTk
 import datetime
 import logging
 import threading
@@ -10,6 +7,8 @@ import tkinter.ttk as ttk
 
 from dredge_logger import backup
 from dredge_logger import Log
+from dredge_logger.config import config
+from ttkthemes import ThemedTk
 
 _logger = logging.getLogger(__name__)
 
@@ -22,6 +21,7 @@ class LogGUI(ThemedTk):
         self.winfo_toplevel().title("ILS Logger")
         self.iconbitmap(config._proj_dir + "/resources/ILS-logo.ico")
         self.set_theme("black", toplevel=True, themebg=True)
+        self.geometry("800x600")
 
         # Create Container that holds all frames
         container = tk.Frame(self)
@@ -29,12 +29,12 @@ class LogGUI(ThemedTk):
 
         # Create all the frames
         self.frames = {}
-        for F in (StartPage, Config):
+        for F in [StartPage]:
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
 
-            frame.grid(row=0, column=0, sticky="nsew")
+            frame.pack(fill="both", expand=True)
 
         self.show_frame("StartPage")
         # self.show_frame("Config")
@@ -43,12 +43,6 @@ class LogGUI(ThemedTk):
         """Set the current frame"""
         frame = self.frames[page_name]
         frame.tkraise()
-
-    def manual_backup(self):
-        """Manually Run a Backup"""
-        _logger.debug("Manual Backup Started")
-        filename = datetime.datetime.today().strftime("%Y-%m-%d")
-        threading.Thread(target=backup.backup_files, args=(filename,)).start()
 
     def log_loop(self):
         """Will start a while loop that calls the log function"""
@@ -69,38 +63,43 @@ class StartPage(ttk.Frame):
         ttk.Frame.__init__(self, parent)
         self.controller = controller
 
-        # Create Frames
-        self.top = ttk.Frame(self)
-        self.middle = ttk.Frame(self)
-        self.bottom = ttk.Frame(self)
+        self.style = ttk.Style()
+        self.style.configure("my.TButton", font=("Helvetica", 15))
 
-        # Create widgets for frame
-        self.ils_logo = tk.PhotoImage(file=config._proj_dir + "\\resources\\ILS-logo.png")
-        self.image1 = ttk.Label(self.top, image=self.ils_logo)
-        self.label1 = ttk.Label(self.top, text="ILS Dredge Data Logger")
+        self.ils_logo = tk.PhotoImage(file=config._proj_dir + "\\resources\\ILS-logo_100x100.png")
+        self.logo_image = ttk.Label(self, image=self.ils_logo)
+        self.logo_image.place(x=20, y=5)
 
-        self.image1.pack(side="left", padx=5, pady=5)
-        self.label1.pack(side="right", padx=5, pady=5)
+        self.greeting = ttk.Label(self, text="ILS Dredge Data Logger", font=("Helvetica", 20))
+        self.greeting.place(x=140, y=35)
 
-        self.log_status = ttk.Label(self.middle, text="Logger Status")
-        self.json_preview = ttk.Label(self.middle, text="JSON String Preview", width=70)
+        left_x1 = 20
+        left_x2 = 160
 
-        self.log_status.pack(side="top", padx=5, pady=5, anchor="w")
-        self.json_preview.pack(side="bottom", padx=5, pady=5, anchor="w")
+        self.status = ttk.Label(self, text="Logger Status:", font=("Helvetica", 15))
+        self.status.place(x=left_x1, y=110)
+        self.status_label = ttk.Label(self, text="Not Started", font=("Helvetica", 15))
+        self.status_label.place(x=left_x2, y=110)
 
-        self.button1 = ttk.Button(
-            self.bottom,
-            text="Manual Backup",
-            command=lambda: controller.manual_backup(),
+        self.msg_time = ttk.Label(self, text="MSG Time:", font=("Helvetica", 15))
+        self.msg_time.place(x=left_x1, y=140)
+        self.msg_time_label = ttk.Label(self, text="Not Received Yet", font=("Helvetica", 15))
+        self.msg_time_label.place(x=left_x2, y=140)
+
+        self.latitude = ttk.Label(self, text="Latitude:", font=("Helvetica", 15))
+        self.latitude.place(x=left_x1, y=170)
+        self.latitude_label = ttk.Label(self, text="Not Received Yet", font=("Helvetica", 15))
+        self.latitude_label.place(x=left_x2, y=170)
+
+        self.longitude = ttk.Label(self, text="Longitude:", font=("Helvetica", 15))
+        self.longitude.place(x=left_x1, y=200)
+        self.longitude_label = ttk.Label(self, text="Not Received Yet", font=("Helvetica", 15))
+        self.longitude_label.place(x=left_x2, y=200)
+
+        self.config_button = ttk.Button(
+            self, text="Config", style="my.TButton", command=lambda: controller.show_frame("Config")
         )
-        self.button2 = ttk.Button(self.bottom, text="Config", command=lambda: controller.show_frame("Config"))
-
-        self.button1.pack(side="left", padx=5, pady=5)
-        self.button2.pack(side="right", padx=5, pady=5)
-
-        self.top.pack(side="top", anchor="w")
-        self.middle.pack(anchor="w", fill="both")
-        self.bottom.pack(side="bottom", anchor="w", fill="both")
+        self.config_button.place(x=690, y=560)
 
 
 class Config(ttk.Frame):
@@ -329,8 +328,8 @@ if __name__ == "__main__":
     _logger.debug("Creating GUI")
     app = LogGUI()
 
-    _logger.debug("Starting Thread")
-    threading.Thread(target=app.log_loop, daemon=True).start()
+    # _logger.debug("Starting Thread")
+    # threading.Thread(target=app.log_loop, daemon=True).start()
 
     _logger.debug("Launching GUI")
     app.mainloop()
