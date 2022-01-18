@@ -32,6 +32,16 @@ class Config:
             ["modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}}],
             ["csv0600", False],
             ["csv0600_saved", False],
+            [
+                "images",
+                {
+                    "save": True,
+                    "time": "msg_time",
+                    "graphs": [
+                        {"name": "Velocity", "unit": "FPS", "variable": "slurry_velocity"},
+                    ],
+                },
+            ],
         ]
 
         self.vars = {}
