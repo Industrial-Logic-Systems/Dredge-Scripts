@@ -59,6 +59,9 @@ autolabeler:
   - label: "refactor"
     title:
       - "/refactor/i"
+  - label: "tests"
+    file:
+      - "*tests/*"
 
 version-resolver:
   major:
