@@ -1,10 +1,10 @@
-from pathlib import Path
-from Tests.testUtils import is_equal
 import os
+from pathlib import Path
 
-
-from dredge_logger.config import config
 from dredge_logger import dataHandler
+from dredge_logger.config import config
+
+from tests.testUtils import is_equal
 
 
 def test_json_parse():
@@ -65,6 +65,8 @@ def test_json_incomplete_1():
 
 def test_csv_parse_1():
     # Arrange
+    tmpDredgeType = config.vars["dredge_type"]
+    config.vars["dredge_type"] = "pipeline"
     j_obj = {
         "DQM_Data": {
             "messages": [
@@ -122,9 +124,14 @@ def test_csv_parse_1():
     result = is_equal(str(expected_csv), str(csv_obj[0]))
     assert result[0], result[1]
 
+    # Restore
+    config.vars["dredge_type"] = tmpDredgeType
+
 
 def test_csv_parse_2():
     # Arrange
+    tmpDredgeType = config.vars["dredge_type"]
+    config.vars["dredge_type"] = "pipeline"
     j_obj = {
         "DQM_Data": {
             "messages": [
@@ -190,9 +197,14 @@ def test_csv_parse_2():
     result = is_equal(str(expected_csv), str(csv_obj[0]))
     assert result[0], result[1]
 
+    # Restore
+    config.vars["dredge_type"] = tmpDredgeType
+
 
 def test_csv_parse_missing_data():
     # Arrange
+    tmpDredgeType = config.vars["dredge_type"]
+    config.vars["dredge_type"] = "pipeline"
     j_obj = {}
     # Act
     csv_obj = dataHandler.getCSV(j_obj, False)
@@ -200,3 +212,6 @@ def test_csv_parse_missing_data():
     assert isinstance(csv_obj, tuple), type(csv_obj)
     assert csv_obj[0] is None, type(csv_obj[0])
     assert csv_obj[1] is None, type(csv_obj[1])
+
+    # Restore
+    config.vars["dredge_type"] = tmpDredgeType
