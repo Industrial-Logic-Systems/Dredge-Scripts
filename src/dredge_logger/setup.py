@@ -1,7 +1,6 @@
 import logging
 import threading
 
-from dredge_logger.config import config
 from dredge_logger.gui import LogGUI
 
 
