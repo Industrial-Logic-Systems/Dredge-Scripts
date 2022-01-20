@@ -32,7 +32,7 @@ def backup_files(filename, extra_csv=False):
         try:
             filenames = generateImages.generateGraph(filename + ".csv")
         except Exception as e:
-            _logger.error("Error generating graph: " + str(e))
+            _logger.error("Error generating graph: " + str(e), exc_info=True)
             sendImage = False
         finally:
             try:
@@ -42,8 +42,8 @@ def backup_files(filename, extra_csv=False):
                     config.vars["csv_path"] + "\\" + filename + ".csv",
                 ]
                 if sendImage:
-                    for filename in filenames:
-                        files.append(filename)
+                    for fn in filenames:
+                        files.append(fn)
 
                 _logger.debug("Sending Email(s) to " + str(config.vars["email_list"]).strip("[]"))
 

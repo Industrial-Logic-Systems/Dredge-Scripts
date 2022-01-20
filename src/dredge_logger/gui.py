@@ -51,22 +51,21 @@ class LogGUI(ThemedTk):
         if not filename:
             filename = datetime.datetime.today().strftime("%Y-%m-%d")
 
-        threading.Thread(target=backup.backup_files, args=(filename)).start()
+        threading.Thread(target=backup.backup_files, args=(filename,)).start()
 
     def log_loop(self):
         """Will start a while loop that calls the log function"""
         _logger.info("Starting Log")
-        self.frames["StartPage"].log_status.config(text="Log Loop Running")
+        self.frames["StartPage"].status_label.config(text="Log Loop Running")
         while True:
             result = Log.log()
             if result[0]:
-                self.frames["StartPage"].log_status.config(text="Log Loop Running")
-                self.frames["StartPage"].msg_time.config(text=result[1]["msg_time"])
-                self.frames["StartPage"].latitude.config(text=result[1]["latitude"])
-                self.frames["StartPage"].longitude.config(text=result[1]["longitude"])
-
+                self.frames["StartPage"].status_label.config(text="Log Loop Running")
+                self.frames["StartPage"].msg_time_label.config(text=result[1]["msg_time"])
+                self.frames["StartPage"].latitude_label.config(text=result[1]["latitude"])
+                self.frames["StartPage"].longitude_label.config(text=result[1]["longitude"])
             else:
-                self.frames["StartPage"].log_status.config(text="Loging Failed retrying in 2 seconds...")
+                self.frames["StartPage"].status_label.config(text="Loging Failed retrying in 2 seconds...")
                 time.sleep(2)
 
 
