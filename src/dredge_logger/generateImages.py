@@ -28,7 +28,7 @@ def generateGraph(filename, defaultPath=True):
 
     graph_vars = []
     for graph in config.vars["images"]["graphs"]:
-        graph_vars.append(graph["variable"])
+        graph_vars.append(config.vars["images"]["graphs"][graph]["variable"])
 
     for col in graph_vars:
         df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -54,7 +54,8 @@ def generateGraph(filename, defaultPath=True):
 
     plt.rcParams["figure.figsize"] = [23, 5]
 
-    for graph in config.vars["images"]["graphs"]:
+    for g in config.vars["images"]["graphs"]:
+        graph = config.vars["images"]["graphs"][g]
         fig, ax = plt.subplots()
         ax.plot(time, df[graph["variable"]])
         ax.set(
@@ -74,7 +75,8 @@ def generateGraph(filename, defaultPath=True):
 
     images = []
 
-    for graph in config.vars["images"]["graphs"]:
+    for g in config.vars["images"]["graphs"]:
+        graph = config.vars["images"]["graphs"][g]
         images.append(Image.open(f"{config.vars['image_path']}/subImages/{graph['name']}_{filename.strip('.csv')}.png"))
 
     images = [images[i : i + 5] for i in range(0, len(images), 5)]
@@ -98,6 +100,6 @@ def generateGraph(filename, defaultPath=True):
 
 
 if __name__ == "__main__":
-    filename = "2022-01-11.csv"
+    filename = "2022-01-14.csv"
     filenames = generateGraph(filename, True)
     print(filenames)

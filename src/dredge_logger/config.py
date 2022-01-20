@@ -60,7 +60,7 @@ class Config:
         if not os.path.isdir(self._dirs.user_log_dir):
             os.makedirs(self._dirs.user_log_dir)
 
-        logformat = "[%(asctime)s] %(levelname)s:%(name)s - %(message)s"
+        logformat = "[%(asctime)s] %(levelname)8s:%(name)-30s %(message)s"
 
         stream = logging.StreamHandler()
         stream.setLevel(logging.INFO)
@@ -218,6 +218,13 @@ class Config:
         self._logger.debug("Writing config.json")
 
         config_file = {}
+
+        try:
+            # Open the config file and read the settings
+            with open(self._dirs.user_config_dir + "/config.json") as json_data_file:
+                config_file = json.load(json_data_file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            config_file = {}
 
         # Set all the values in the dictionary to match the current variables
         for var in self.var_types:

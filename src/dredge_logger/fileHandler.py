@@ -39,14 +39,9 @@ def write_file(path, filename, data):
         csv_write(filepath, data)
         _logger.debug("Data written to " + filename)
 
-    elif ".json" in filename:
+    elif any(ext in filename for ext in [".json", ".txt", ".xml"]):
         with open(Path(path, filename), "a") as f:
             f.write(str(data).replace("'", '"') + "\n")
-        _logger.debug("Data written to " + filename)
-
-    elif ".txt" in filename:
-        with open(Path(path, filename), "a") as f:
-            f.write(str(data))
         _logger.debug("Data written to " + filename)
 
     else:
