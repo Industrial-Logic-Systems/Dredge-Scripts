@@ -1,11 +1,11 @@
-from dotenv import load_dotenv
-from pathlib import Path
 import datetime
 import json
-import logging
 import logging.handlers
 import os
+from pathlib import Path
+
 from appdirs import AppDirs
+from dotenv import load_dotenv
 
 
 class Config:
@@ -37,9 +37,9 @@ class Config:
                 {
                     "save": True,
                     "time": "msg_time",
-                    "graphs": [
-                        {"name": "Velocity", "unit": "FPS", "variable": "slurry_velocity"},
-                    ],
+                    "graphs": {
+                        "Velocity": {"name": "Velocity", "unit": "FPS", "variable": "slurry_velocity"},
+                    },
                 },
             ],
         ]
