@@ -44,6 +44,15 @@ class LogGUI(ThemedTk):
         frame = self.frames[page_name]
         frame.tkraise()
 
+    def manual_backup(self):
+        """Manually Run a Backup"""
+        _logger.debug("Manual Backup Started")
+        filename = self.frames["StartPage"].backup_date.get()
+        if not filename:
+            filename = datetime.datetime.today().strftime("%Y-%m-%d")
+
+        threading.Thread(target=backup.backup_files, args=(filename)).start()
+
     def log_loop(self):
         """Will start a while loop that calls the log function"""
         _logger.info("Starting Log")
@@ -52,7 +61,10 @@ class LogGUI(ThemedTk):
             result = Log.log()
             if result[0]:
                 self.frames["StartPage"].log_status.config(text="Log Loop Running")
-                self.frames["StartPage"].json_preview.config(text=result[1])
+                self.frames["StartPage"].msg_time.config(text=result[1]["msg_time"])
+                self.frames["StartPage"].latitude.config(text=result[1]["latitude"])
+                self.frames["StartPage"].longitude.config(text=result[1]["longitude"])
+
             else:
                 self.frames["StartPage"].log_status.config(text="Loging Failed retrying in 2 seconds...")
                 time.sleep(2)
@@ -111,6 +123,18 @@ class StartPage(ttk.Frame):
         for i, button in enumerate(buttons):
             buttons[i] = ttk.Button(self, text=button[0], style="my.TButton", width=button_width, command=button[1])
             buttons[i].place(x=button_x, y=button_y_start + (i * button_padding))
+
+        self.backup_label = ttk.Label(
+            self, text="Enter Date to backup, leave BLANK for Today, (YYYY-MM-DD)", font=("Helvetica")
+        )
+        self.backup = ttk.Button(
+            self, text="Manual Backup", style="my.TButton", width=button_width, command=self.controller.manual_backup
+        )
+        self.backup_date = ttk.Entry(self, width=20, font=("Helvetica", 15))
+
+        self.backup_label.place(x=10, y=530)
+        self.backup.place(x=10, y=560)
+        self.backup_date.place(x=200, y=562)
 
 
 class Config(ttk.Frame):
