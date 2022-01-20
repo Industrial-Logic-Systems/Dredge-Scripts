@@ -4,7 +4,7 @@ from pathlib import Path
 from dredge_logger import fileHandler
 from dredge_logger.config import config
 
-from tests.testUtils import is_equal
+from Tests.testUtils import is_equal
 
 
 def test_csv_write():
