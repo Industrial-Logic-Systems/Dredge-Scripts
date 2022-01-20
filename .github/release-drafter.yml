@@ -46,6 +46,8 @@ autolabeler:
     files:
       - "*.md"
       - "*.yml"
+    title:
+      - "/imgbot/i"
   - label: "bug"
     branch:
       - '/fix\/.+/'
