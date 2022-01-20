@@ -1,13 +1,12 @@
-from dredge_logger.config import config
-
-from pyModbusTCP import utils
-from pyModbusTCP.client import ModbusClient
 import json
 import logging
-import serial
 import xml.etree.ElementTree as ET
 
+import serial
 from dredge_logger import fileHandler
+from dredge_logger.config import config
+from pyModbusTCP import utils
+from pyModbusTCP.client import ModbusClient
 
 _logger = logging.getLogger(__name__)
 

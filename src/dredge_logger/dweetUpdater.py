@@ -1,9 +1,8 @@
-from dredge_logger.config import config
-
-import dweepy
 import logging
 
+import dweepy
 from dredge_logger import dweet
+from dredge_logger.config import config
 
 _logger = logging.getLogger(__name__)
 
