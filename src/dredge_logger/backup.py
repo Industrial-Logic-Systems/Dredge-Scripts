@@ -1,9 +1,8 @@
-from dredge_logger.config import config
-
 import logging
-import yagmail
 
+import yagmail
 from dredge_logger import generateImages
+from dredge_logger.config import config
 
 _logger = logging.getLogger(__name__)
 

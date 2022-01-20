@@ -1,10 +1,10 @@
-from dredge_logger.config import config
-
-from pathlib import Path
 import csv
 import logging
 import os
+from pathlib import Path
+
 import pandas as pd
+from dredge_logger.config import config
 
 _logger = logging.getLogger(__name__)
 

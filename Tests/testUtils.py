@@ -3,9 +3,9 @@ import difflib
 
 def is_equal(expected, actual, isFile=False):
     if isFile:
-        with open(expected, "r") as f:
+        with open(expected) as f:
             expected = f.read()
-        with open(actual, "r") as f:
+        with open(actual) as f:
             actual = f.read()
     if expected == actual:
         return (True, "")
