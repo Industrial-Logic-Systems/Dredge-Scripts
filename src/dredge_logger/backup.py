@@ -26,13 +26,14 @@ def backup_files(filename, extra_csv=False):
                 files,
             )
         except Exception as e:
-            _logger.error(f"Error sending email: {e}")
+            _logger.debug("Error sending email")
+            _logger.debug(e, exc_info=True)
     else:
         sendImage = True
         try:
             filenames = generateImages.generateGraph(filename + ".csv")
         except Exception as e:
-            _logger.error("Error generating graph: " + str(e), exc_info=True)
+            _logger.debug("Error generating graph: " + str(e), exc_info=True)
             sendImage = False
         finally:
             try:
@@ -57,7 +58,8 @@ def backup_files(filename, extra_csv=False):
                     files,
                 )
             except Exception as e:
-                _logger.error(f"Error sending email: {e}")
+                _logger.debug("Error sending email")
+                _logger.debug(e, exc_info=True)
 
 
 def send_email(receivers, subject, body, files):
