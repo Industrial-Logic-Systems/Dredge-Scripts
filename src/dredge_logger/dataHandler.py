@@ -23,9 +23,8 @@ def getSerial():
         _logger.debug(data)
         _logger.debug("Data Received")
     except Exception as e:
-        _logger.error("Serial Exception")
+        _logger.error("Serial string not received. Retrying...")
         _logger.debug(e, exc_info=True)
-        # _logger.error("Failed to Receive JSON Serial Data")
         return None
 
     return data
@@ -37,15 +36,15 @@ def getJSON(data):
         json_obj = json.loads(data)
     except Exception as e:
         _logger.error("JSON Exception")
-        _logger.debug(e, exc_info=True)
         _logger.error("Could not convert received serial data to JSON")
+        _logger.debug(e, exc_info=True)
         try:
             if len(str(data)) != 0:
                 fileHandler.write_file(config.vars["json_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
-            _logger.error("Save Exception")
+            _logger.debug("Save Exception")
+            _logger.debug("Couldn't save failed string!")
             _logger.debug(e, exc_info=True)
-            _logger.error("Couldn't save failed string!")
         return None
 
     return json_obj
@@ -57,15 +56,15 @@ def getXML(data):
         xml_obj = ET.fromstring(data)
     except Exception as e:
         _logger.error("XML Exception")
-        _logger.debug(e, exc_info=True)
         _logger.error("Could not convert received serial data to XML")
+        _logger.debug(e, exc_info=True)
         try:
             if len(str(data)) != 0:
                 fileHandler.write_file(config.vars["xml_path"] + "\\..\\failed", "failed.txt", str(data))
         except Exception as e:
-            _logger.error("Save Exception")
+            _logger.debug("Save Exception")
+            _logger.debug("Couldn't save failed string!")
             _logger.debug(e, exc_info=True)
-            _logger.error("Couldn't save failed string!")
         return None
 
     return xml_obj

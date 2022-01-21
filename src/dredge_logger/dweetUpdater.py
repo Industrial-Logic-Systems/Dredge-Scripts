@@ -100,7 +100,7 @@ def freeboard(name, data, modbus=None):
                 dweepy.dweet_for(name + "_Extra", modbus)
 
         except Exception as e:
-            _logger.error("Freeboard failed to update")
+            _logger.debug("Freeboard failed to update")
             _logger.debug(e, exc_info=True)
     else:
         try:
@@ -140,7 +140,7 @@ def freeboard(name, data, modbus=None):
                 dweepy.dweet_for(name + "_Extra", modbus)
 
         except Exception as e:
-            _logger.error("Freeboard failed to update")
+            _logger.debug("Freeboard failed to update")
             _logger.debug(e, exc_info=True)
 
 
@@ -161,7 +161,7 @@ def send_dweet(name, data, extra=None):
                 dweet.send_dweet(name + "_Extra", extra_data)
 
         except Exception as e:
-            _logger.error("Dweet Fail to Send")
+            _logger.debug("Dweet Fail to Send")
             _logger.debug(e, exc_info=True)
     else:
         try:
@@ -208,7 +208,7 @@ def send_dweet(name, data, extra=None):
                 dweet.send_dweet(name + "_Extra", extra_data)
 
         except Exception as e:
-            _logger.error("Dweet Fail to Send")
+            _logger.debug("Dweet Fail to Send")
             _logger.debug(e, exc_info=True)
 
 

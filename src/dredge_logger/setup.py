@@ -15,11 +15,11 @@ def main():
     app = LogGUI()
 
     # Start the log loop
-    logging.info("Starting Log Loop")
+    _logger.info("Starting Log Loop")
     threading.Thread(target=app.log_loop, daemon=True).start()
 
     # Start the GUI
-    logging.info("Starting GUI")
+    _logger.info("Starting GUI")
     app.mainloop()
 
     _logger.info("Script ends here")

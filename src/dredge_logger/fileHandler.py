@@ -45,7 +45,7 @@ def write_file(path, filename, data):
         _logger.debug("Data written to " + filename)
 
     else:
-        _logger.error(f"Unknown File Type trying to save {filename}")
+        _logger.error(f"Unknown file type found when trying to save {filename}")
 
 
 def verify_headers(file, header):
