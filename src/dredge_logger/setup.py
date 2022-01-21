@@ -1,4 +1,6 @@
 import logging
+import os
+import shutil
 import threading
 
 from dredge_logger.gui import LogGUI
@@ -9,6 +11,19 @@ __copyright__ = "Luke Eltiste"
 __license__ = "MIT"
 
 _logger = logging.getLogger(__name__)
+
+
+def initialize():
+    from dredge_logger.config import config
+
+    _logger.info("Initializing")
+    desktop = os.environ["USERPROFILE"] + "\\Desktop"
+    startup = os.environ["APPDATA"] + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"
+
+    os.startfile(desktop)
+    os.startfile(startup)
+    shutil.copyfile(config._proj_dir + "\\resources\\StartLogger.bat", desktop + "\\StartLogger.bat")
+    shutil.copyfile(config._proj_dir + "\\resources\\StartLogger.bat", startup + "\\StartLogger.bat")
 
 
 def main():
