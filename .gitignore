@@ -58,7 +58,8 @@ MANIFEST
 
 # Misc
 logs/
-json_files/
 csv_files/
+json_files/
+xml_files/
 config.json
 .env

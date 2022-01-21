@@ -54,7 +54,7 @@ def test_json_incomplete_1():
     # Assert
     assert json_obj is None, type(json_obj)
     result = is_equal(
-        Path("Tests/test_files/failed_expected.txt"),
+        Path("Tests/test_files/failed_json_expected.txt"),
         Path("Tests/json_files/failed/failed.txt"),
         True,
     )
@@ -63,7 +63,7 @@ def test_json_incomplete_1():
     config.vars["json_path"] = tmpJsonPath
 
 
-def test_csv_parse_1():
+def test_json_csv_parse_1():
     # Arrange
     tmpDredgeType = config.vars["dredge_type"]
     config.vars["dredge_type"] = "pipeline"
@@ -128,7 +128,7 @@ def test_csv_parse_1():
     config.vars["dredge_type"] = tmpDredgeType
 
 
-def test_csv_parse_2():
+def test_json_csv_parse_2():
     # Arrange
     tmpDredgeType = config.vars["dredge_type"]
     config.vars["dredge_type"] = "pipeline"
@@ -201,7 +201,7 @@ def test_csv_parse_2():
     config.vars["dredge_type"] = tmpDredgeType
 
 
-def test_csv_parse_missing_data():
+def test_json_csv_parse_missing_data():
     # Arrange
     tmpDredgeType = config.vars["dredge_type"]
     config.vars["dredge_type"] = "pipeline"
