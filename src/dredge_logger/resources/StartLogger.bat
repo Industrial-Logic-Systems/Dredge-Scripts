@@ -4,8 +4,7 @@ echo off
 
 :start
 
-:: Put the path to the main Python File
-python Path/To/gui.py
+dredge_logger
 
 echo Logger Closed, Restarting
 
