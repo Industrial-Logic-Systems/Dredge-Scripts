@@ -92,18 +92,20 @@ def freeboard(name, data, modbus=None):
     if config.vars["dredge_type"] == "hopper":
         data = xml_to_json(data)
         try:
+            send_dweet(name, data, modbus)
+
             dweepy.dweet_for(name, data)
 
             if modbus:
                 dweepy.dweet_for(name + "_Extra", modbus)
-
-            send_dweet(name, data, modbus)
 
         except Exception as e:
             _logger.error("Freeboard failed to update")
             _logger.debug(e, exc_info=True)
     else:
         try:
+            send_dweet(name, data, modbus)
+
             dweepy.dweet_for(name, data)
 
             events = data["DQM_Data"]["messages"]
@@ -136,8 +138,6 @@ def freeboard(name, data, modbus=None):
 
             if modbus:
                 dweepy.dweet_for(name + "_Extra", modbus)
-
-            send_dweet(name, data, modbus)
 
         except Exception as e:
             _logger.error("Freeboard failed to update")
@@ -210,3 +210,32 @@ def send_dweet(name, data, extra=None):
         except Exception as e:
             _logger.error("Dweet Fail to Send")
             _logger.debug(e, exc_info=True)
+
+
+if __name__ == "__main__":
+    send_dweet(
+        "ILS-Dredge",
+        {
+            "DQM_Data": {
+                "messages": [
+                    {
+                        "work_event": {
+                            "msg_time": "2022-01-21 09:28:12",
+                            "vert_correction": 3.82,
+                            "ch_latitude": 33.860394,
+                            "ch_longitude": -117.819382,
+                            "ch_depth": -94.15,
+                            "ch_heading": 252,
+                            "slurry_velocity": 10.36,
+                            "slurry_density": 1.21,
+                            "pump_rpm": 0,
+                            "vacuum": -0.37,
+                            "outlet_psi": 0.0,
+                            "comment": "comment             ",
+                        }
+                    }
+                ]
+            }
+        },
+        {"offset": 0.0, "rot": 0.0, "heading": 0, "non_eff": True, "vacuum_break": False},
+    )
