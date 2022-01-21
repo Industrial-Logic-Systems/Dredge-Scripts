@@ -1,7 +1,10 @@
 import json
+import logging
 
 import requests
 from dredge_logger.config import config
+
+_logger = logging.getLogger(__name__)
 
 
 def dweet_login():
@@ -35,7 +38,13 @@ def send_dweet(name, data, attempts=3):
         "X-DWEET-AUTH": config.vars["env"]["key"],
     }
     content = json.dumps(content)
-    response = requests.post(url, data=content, headers=headers)
+    try:
+        response = requests.post(url, data=content, headers=headers)
+    except requests.ConnectionError:
+        _logger.error("Dweet Failed, Saving to File")
+        failed_dweet(url, content, headers)
+        return False
+
     if "Session has expired, please re-login" in response.text and attempts > 0:
         dweet_login()
         return send_dweet(name, data, attempts - 1)
@@ -55,5 +64,15 @@ def get_dweets(name, attempts=3):
     return response.text
 
 
-if __name__ == "__main__":
-    pass
+def failed_dweet(url, content, headers):
+    _logger.debug("Saving Failed Dweet")
+    failed_dweets = {}
+    try:
+        with open(config._dirs.user_data_dir + "/failed_dweets.json") as f:
+            failed_dweets = json.load(f)
+    except FileNotFoundError:
+        failed_dweets = {"failed": []}
+    failed_dweets["failed"].append({"url": url, "content": content, "headers": headers})
+
+    with open(config._dirs.user_data_dir + "/failed_dweets.json", "w") as f:
+        json.dump(failed_dweets, f, indent=4)
