@@ -33,6 +33,7 @@ def write_file(path, filename, data):
     filepath = Path(path, filename)
 
     if ".csv" in filename:
+        config.vars["header"] = config.genHeader()
         if not fileExists:
             csv_write(filepath, config.vars["header"])
         verify_headers(filepath, config.vars["header"])
