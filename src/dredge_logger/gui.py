@@ -254,6 +254,7 @@ class Config(ttk.Frame):
         def mSave():
             config.vars["modbus"][self.mModbusList.get()]["address"] = self.mAddress.get()
             config.vars["modbus"][self.mModbusList.get()]["float"] = self.mFloat.state() == "selected"
+            self.save_config()
 
         def mRemove():
             name = self.mModbusList.get()
@@ -282,6 +283,7 @@ class Config(ttk.Frame):
 
         def mbSave():
             config.vars["modbus_bits"][self.mbModbusList.get()]["address"] = self.mbAddress.get()
+            self.save_config()
 
         def mbRemove():
             name = self.mbModbusList.get()
