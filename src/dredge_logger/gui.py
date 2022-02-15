@@ -5,6 +5,7 @@ import threading
 import time
 import tkinter as tk
 import tkinter.ttk as ttk
+from importlib.metadata import version
 
 from dredge_logger import backup
 from dredge_logger import Log
@@ -73,6 +74,7 @@ class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
         self.controller = controller
+        self.__version__ = version("dredge_logger").split(".post")[0]
 
         self.style = ttk.Style()
         self.style.configure("my.TButton", font=("Helvetica", 15), anchor=tk.CENTER)
@@ -83,6 +85,9 @@ class StartPage(ttk.Frame):
 
         self.greeting = ttk.Label(self, text="ILS Dredge Data Logger", font=("Helvetica", 20))
         self.greeting.place(x=140, y=35)
+
+        self.version = ttk.Label(self, text=f"v{self.__version__}", font=("Helvetica", 15))
+        self.version.place(x=735, y=5)
 
         left_x1 = 20
         left_x2 = 160
