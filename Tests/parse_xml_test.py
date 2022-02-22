@@ -10,6 +10,8 @@ from Tests.testUtils import is_equal
 
 def test_xml_parse():
     # Arrange
+    tmpDredgeType = config.vars["dredge_type"]
+    config.vars["dredge_type"] = "hopper"
     xml_str = '<?xml version="1.0"?><HOPPER_DREDGING_DATA version="2.0"><DREDGE_NAME>EJE</DREDGE_NAME><HOPPER_DATA_RECORD><DA\
 TE_TIME>0                  </DATE_TIME><CONTRACT_NUMBER>0                   </CONTRACT_NUMBER><LOAD_NUMBER>0    </LOAD_NUMBER\
 ><VESSEL_X coord_type="LL">0.000000   </VESSEL_X><VESSEL_Y coord_type="LL">0.000000   </VESSEL_Y><PORT_DRAG_X coord_type="LL"\
@@ -21,10 +23,50 @@ UME><DISPLACEMENT>0    </DISPLACEMENT><EMPTY_DISPLACEMENT>0    </EMPTY_DISPLACEM
 H_PORT><DRAGHEAD_DEPTH_STBD>0.0  </DRAGHEAD_DEPTH_STBD><PORT_DENSITY>0.000  </PORT_DENSITY><STBD_DENSITY>0.000  </STBD_DENSIT\
 Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUMP_RPM_PORT>0   </PUMP_RPM_PORT><PUMP_RPM_STBD\
 >0   </PUMP_RPM_STBD></HOPPER_DATA_RECORD></HOPPER_DREDGING_DATA>'
+    c_obj = [
+        "EJE",
+        "0                  ",
+        "0                   ",
+        "0    ",
+        "0.000000   ",
+        "0.000000   ",
+        "0.000000   ",
+        "0.000000   ",
+        "0.000000   ",
+        "0.000000   ",
+        "0     ",
+        "0  ",
+        "0.0  ",
+        "0  ",
+        "0     ",
+        "0.00  ",
+        "0.00  ",
+        "0.00  ",
+        "0.00  ",
+        "0    ",
+        "0    ",
+        "0    ",
+        "0.0  ",
+        "0.0  ",
+        "0.000  ",
+        "0.000  ",
+        "0.00  ",
+        "0.00  ",
+        "0   ",
+        "0   ",
+    ]
     # Act
     xml_obj = dataHandler.getXML(xml_str)
+    csv_obj = dataHandler.getCSV(xml_obj, False)
     # Assert
     assert isinstance(xml_obj, ET.Element), type(xml_obj)
+    assert isinstance(csv_obj, tuple), type(csv_obj)
+    assert isinstance(csv_obj[0], list), type(csv_obj[0])
+    assert isinstance(csv_obj[1], dict), type(csv_obj[1])
+    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
+    assert csv_obj[0] == c_obj, "CSV object is not equal"
+    # Restore
+    config.vars["dredge_type"] = tmpDredgeType
 
 
 def test_xml_empty():
@@ -96,68 +138,6 @@ Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUM
     assert result[0], result[1]
     # Restore
     config.vars["xml_path"] = tmpXMLPath
-
-
-def test_xml_csv_parse_1():
-    # Arrange
-    tmpDredgeType = config.vars["dredge_type"]
-    config.vars["dredge_type"] = "hopper"
-    xml_str = '<?xml version="1.0"?><HOPPER_DREDGING_DATA version="2.0"><DREDGE_NAME>EJE</DREDGE_NAME><HOPPER_DATA_RECORD><DA\
-TE_TIME>0                  </DATE_TIME><CONTRACT_NUMBER>0                   </CONTRACT_NUMBER><LOAD_NUMBER>0    </LOAD_NUMBER\
-><VESSEL_X coord_type="LL">0.000000   </VESSEL_X><VESSEL_Y coord_type="LL">0.000000   </VESSEL_Y><PORT_DRAG_X coord_type="LL"\
->0.000000   </PORT_DRAG_X><PORT_DRAG_Y coord_type="LL">0.000000   </PORT_DRAG_Y><STBD_DRAG_X coord_type="LL">0.000000   </STB\
-D_DRAG_X><STBD_DRAG_Y coord_type="LL">0.000000   </STBD_DRAG_Y><HULL_STATUS>0     </HULL_STATUS><VESSEL_COURSE>0  </VESSEL_CO\
-URSE><VESSEL_SPEED>0.0  </VESSEL_SPEED><VESSEL_HEADING>0  </VESSEL_HEADING><TIDE>0     </TIDE><DRAFT_FORE>0.00  </DRAFT_FORE>\
-<DRAFT_AFT>0.00  </DRAFT_AFT><ULLAGE_FORE>0.00  </ULLAGE_FORE><ULLAGE_AFT>0.00  </ULLAGE_AFT><HOPPER_VOLUME>0    </HOPPER_VOL\
-UME><DISPLACEMENT>0    </DISPLACEMENT><EMPTY_DISPLACEMENT>0    </EMPTY_DISPLACEMENT><DRAGHEAD_DEPTH_PORT>0.0  </DRAGHEAD_DEPT\
-H_PORT><DRAGHEAD_DEPTH_STBD>0.0  </DRAGHEAD_DEPTH_STBD><PORT_DENSITY>0.000  </PORT_DENSITY><STBD_DENSITY>0.000  </STBD_DENSIT\
-Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUMP_RPM_PORT>0   </PUMP_RPM_PORT><PUMP_RPM_STBD\
->0   </PUMP_RPM_STBD></HOPPER_DATA_RECORD></HOPPER_DREDGING_DATA>'
-    xml_obj = dataHandler.getXML(xml_str)
-    # Act
-    csv_obj = dataHandler.getCSV(xml_obj, False)
-    # Assert
-    assert isinstance(csv_obj, tuple), type(csv_obj)
-    assert isinstance(csv_obj[0], list), type(csv_obj[0])
-    assert isinstance(csv_obj[1], dict), type(csv_obj[1])
-    assert not csv_obj[1], f"Modbus values returned, when none were expected: {csv_obj[1]}"
-    expected_csv = [
-        "EJE",
-        "0                  ",
-        "0                   ",
-        "0    ",
-        "0.000000   ",
-        "0.000000   ",
-        "0.000000   ",
-        "0.000000   ",
-        "0.000000   ",
-        "0.000000   ",
-        "0     ",
-        "0  ",
-        "0.0  ",
-        "0  ",
-        "0     ",
-        "0.00  ",
-        "0.00  ",
-        "0.00  ",
-        "0.00  ",
-        "0    ",
-        "0    ",
-        "0    ",
-        "0.0  ",
-        "0.0  ",
-        "0.000  ",
-        "0.000  ",
-        "0.00  ",
-        "0.00  ",
-        "0   ",
-        "0   ",
-    ]
-    result = is_equal(str(expected_csv), str(csv_obj[0]))
-    assert result[0], result[1]
-
-    # Restore
-    config.vars["dredge_type"] = tmpDredgeType
 
 
 def test_xml_csv_parse_missing_data():

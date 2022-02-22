@@ -63,7 +63,7 @@ autolabeler:
       - "/refactor/i"
   - label: "tests"
     file:
-      - "*tests/*"
+      - "*Tests/*"
 
 version-resolver:
   major:
