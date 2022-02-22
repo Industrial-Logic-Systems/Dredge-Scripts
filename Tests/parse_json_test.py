@@ -31,6 +31,19 @@ sg_start_time": "2021-11-28 07:28:05","msg_end_time": "2021-11-28 07:46:09","fun
     assert isinstance(json_obj, dict), type(json_obj)
 
 
+def test_json_parse_of():
+    # Arrange
+    j_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latitude\
+": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density": 1.8,"p\
+ump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}},{"outfall_position": {"msg_time": "202\
+1-11-28 07:46:07","outfall_location": "Shore","outfall_latitude": 29.614393,"outfall_longitude": -94.963516,"outfall_heading"\
+: 142,"outfall_elevation": 10.1,"comment": "comment             "}}]}}'
+    # Act
+    json_obj = dataHandler.getJSON(j_str)
+    # Assert
+    assert isinstance(json_obj, dict), type(json_obj)
+
+
 def test_json_empty():
     # Arrange
     j_str = ""
