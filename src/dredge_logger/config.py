@@ -24,7 +24,7 @@ class Config:
             ["xml_path", "C:\\Users\\USERNAME\\Desktop\\xml"],
             ["csv_path", "C:\\Users\\USERNAME\\Desktop\\csv"],
             ["image_path", "C:\\Users\\USERNAME\\Desktop\\image"],
-            ["email_list", ["example@gmail.com"]],
+            ["email_list", ["example@example.com"]],
             ["plc_ip", "192.168.1.10"],
             ["email", "ilsdqmsystem@gmail.com"],
             ["freeboard_name", "ILS-Dredge"],
@@ -46,6 +46,7 @@ class Config:
                     },
                 },
             ],
+            ["program_key", ""],
         ]
 
         self.vars = {}

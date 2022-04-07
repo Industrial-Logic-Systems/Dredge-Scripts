@@ -1,3 +1,5 @@
+import base64
+import binascii
 import datetime
 import logging
 import threading
@@ -26,7 +28,24 @@ def saveFiles(raw_data, csv_obj):
             fileHandler.write_file(config.vars["csv_path"], filename + "_0600.csv", csv_obj)
 
 
+def verify_key():
+    try:
+        decoded = base64.b64decode(config.vars["program_key"]).decode("utf-8")
+    except (binascii.Error, UnicodeDecodeError):
+        return False
+    try:
+        date = datetime.datetime.strptime(decoded, "%m/%d/%Y")
+        if date >= datetime.datetime.today():
+            return True
+    except ValueError:
+        pass
+    return False
+
+
 def log():
+    if not verify_key():
+        logging.error("Invalid or Expired Product key. Contact Industrial Logic Systems")
+        return [False, None]
     # Get Serial String
     _logger.debug("Getting Serial String")
     raw_str = dataHandler.getSerial()
