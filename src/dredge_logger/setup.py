@@ -36,7 +36,6 @@ def main():
     # Start the GUI
     _logger.info("Starting GUI")
     app.mainloop()
-
     _logger.info("Script ends here")
 
 

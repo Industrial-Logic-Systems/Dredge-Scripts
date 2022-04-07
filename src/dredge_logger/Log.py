@@ -31,21 +31,32 @@ def saveFiles(raw_data, csv_obj):
 def verify_key():
     try:
         decoded = base64.b64decode(config.vars["program_key"]).decode("utf-8")
-    except (binascii.Error, UnicodeDecodeError):
-        return False
-    try:
         date = datetime.datetime.strptime(decoded, "%m/%d/%Y")
-        if date >= datetime.datetime.today():
-            return True
-    except ValueError:
+        date = date.date()
+        if date >= datetime.date.today():
+            config.vars["last_check_for_update"] = datetime.date.today()
+            config.save_config()
+            return [True, False]
+        else:
+            config.vars["last_check_for_update"] = date
+            config.save_config()
+    except (binascii.Error, UnicodeDecodeError, ValueError):
         pass
-    return False
+    diff = datetime.date.today() - config.vars["last_check_for_update"]
+    if diff >= datetime.timedelta(days=30):
+        return [False, True]
+    return [False, False]
 
 
 def log():
-    if not verify_key():
+    key_result = verify_key()
+    if not key_result[0]:
         logging.error("Invalid or Expired Product key. Contact Industrial Logic Systems")
+        if key_result[1]:
+            dataHandler.sendSerialBit(False)
         return [False, None]
+    dataHandler.sendSerialBit(True)
+
     # Get Serial String
     _logger.debug("Getting Serial String")
     raw_str = dataHandler.getSerial()

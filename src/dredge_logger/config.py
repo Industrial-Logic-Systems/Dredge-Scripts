@@ -108,6 +108,9 @@ class Config:
         self.vars["last_save_date"] = datetime.date.fromisoformat(
             config_file.get("last_save_date", datetime.date.today().isoformat())
         )
+        self.vars["last_check_for_update"] = datetime.date.fromisoformat(
+            config_file.get("last_check_for_update", datetime.date.today().isoformat())
+        )
 
     def save_env(self, env):
         if not os.path.exists(self._dirs.user_data_dir):
@@ -236,6 +239,7 @@ class Config:
             config_file[var[0]] = self.vars[var[0]]
 
         config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
+        config_file["last_check_for_update"] = datetime.datetime.strftime(self.vars["last_check_for_update"], "%Y-%m-%d")
 
         self.save_env(self.vars["env"])
 
