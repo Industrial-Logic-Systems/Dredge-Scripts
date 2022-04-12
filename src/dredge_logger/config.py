@@ -24,7 +24,7 @@ class Config:
             ["xml_path", "C:\\Users\\USERNAME\\Desktop\\xml"],
             ["csv_path", "C:\\Users\\USERNAME\\Desktop\\csv"],
             ["image_path", "C:\\Users\\USERNAME\\Desktop\\image"],
-            ["email_list", ["example@gmail.com"]],
+            ["email_list", ["example@example.com"]],
             ["plc_ip", "192.168.1.10"],
             ["email", "ilsdqmsystem@gmail.com"],
             ["freeboard_name", "ILS-Dredge"],
@@ -46,6 +46,7 @@ class Config:
                     },
                 },
             ],
+            ["program_key", ""],
         ]
 
         self.vars = {}
@@ -106,6 +107,9 @@ class Config:
         self.vars["header"] = self.genHeader()
         self.vars["last_save_date"] = datetime.date.fromisoformat(
             config_file.get("last_save_date", datetime.date.today().isoformat())
+        )
+        self.vars["last_check_for_update"] = datetime.date.fromisoformat(
+            config_file.get("last_check_for_update", datetime.date.today().isoformat())
         )
 
     def save_env(self, env):
@@ -235,6 +239,7 @@ class Config:
             config_file[var[0]] = self.vars[var[0]]
 
         config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
+        config_file["last_check_for_update"] = datetime.datetime.strftime(self.vars["last_check_for_update"], "%Y-%m-%d")
 
         self.save_env(self.vars["env"])
 
