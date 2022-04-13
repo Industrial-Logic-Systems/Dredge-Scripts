@@ -14,9 +14,12 @@ def test_save_hopper():
     tmpDredgeType = config.vars["dredge_type"]
     tmpXML_Path = config.vars["xml_path"]
     tmpCSV_path = config.vars["csv_path"]
+    tmp_csv0600 = config.vars["csv0600"]
+
     config.vars["dredge_type"] = "hopper"
     config.vars["xml_path"] = Path("Tests/xml_files")
     config.vars["csv_path"] = Path("Tests/csv_files")
+    config.vars["csv0600"] = False
 
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
 
@@ -57,6 +60,7 @@ Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUM
     config.vars["dredge_type"] = tmpDredgeType
     config.vars["xml_path"] = tmpXML_Path
     config.vars["csv_path"] = tmpCSV_path
+    config.vars["csv0600"] = tmp_csv0600
 
 
 def test_save_pipeline():
@@ -64,9 +68,14 @@ def test_save_pipeline():
     tmpDredgeType = config.vars["dredge_type"]
     tmpJSON_Path = config.vars["json_path"]
     tmpCSV_path = config.vars["csv_path"]
+    tmp_csv0600 = config.vars["csv0600"]
+    tmp_csv0600_saved = config.vars["csv0600_saved"]
+
     config.vars["dredge_type"] = "pipeline"
     config.vars["json_path"] = Path("Tests/json_files")
     config.vars["csv_path"] = Path("Tests/csv_files")
+    config.vars["csv0600"] = True
+    config.vars["csv0600_saved"] = False
 
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
 
@@ -74,13 +83,14 @@ def test_save_pipeline():
         os.remove(config.vars["json_path"] / (filename + ".json"))
     if os.path.isfile(config.vars["csv_path"] / (filename + ".csv")):
         os.remove(config.vars["csv_path"] / (filename + ".csv"))
+    if os.path.isfile(config.vars["csv_path"] / (filename + "_0600.csv")):
+        os.remove(config.vars["csv_path"] / (filename + "_0600.csv"))
 
     json_str = '{"DQM_Data": {"messages": [{"work_event": {"msg_time": "2021-11-28 07:46:07","vert_correction": 1.8,"ch_latit\
-ude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_densi\
-ty": 1.8,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}},{"outfall_posit\
-ion": {"msg_time": "2021-11-28 07:46:07","outfall_location": "Shore","outfall_latitude": 29.614393,"outfall_l\
-ongitude": -94.963516,"outfall_heading": 142,"outfall_elevation": 10.1,"comment": "comment             "}\
-}]}}'
+ude": 29.614393,"ch_longitude": -94.963516,"ch_depth": 53.42,"ch_heading": 130,"slurry_velocity": 13.44,"slurry_density": 1.8\
+,"pump_rpm": 546,"vacuum": -14.72,"outlet_psi": 69.62,"comment": "comment             "}},{"outfall_position": {"msg_time": "\
+2021-11-28 07:46:07","outfall_location": "Shore","outfall_latitude": 29.614393,"outfall_longitude": -94.963516,"outfall_headi\
+ng": 142,"outfall_elevation": 10.1,"comment": "comment             "}}]}}'
     json_obj = dataHandler.getJSON(json_str)
     csv_obj = dataHandler.getCSV(json_obj, False)
 
@@ -91,19 +101,27 @@ ongitude": -94.963516,"outfall_heading": 142,"outfall_elevation": 10.1,"comment"
         Path("Tests/test_files/test_save_pipeline.json"), config.vars["json_path"] / (filename + ".json"), True
     )
     result_2 = is_equal(Path("Tests/test_files/test_save_pipeline.csv"), config.vars["csv_path"] / (filename + ".csv"), True)
+    result_3 = is_equal(
+        Path("Tests/test_files/test_save_pipeline_0600.csv"), config.vars["csv_path"] / (filename + "_0600.csv"), True
+    )
 
     # Assert
     assert result_1[0], result_1[1]
     assert result_2[0], result_2[1]
+    assert result_3[0], result_3[1]
 
     # Restore
     if os.path.isfile(config.vars["json_path"] / (filename + ".json")):
         os.remove(config.vars["json_path"] / (filename + ".json"))
     if os.path.isfile(config.vars["csv_path"] / (filename + ".csv")):
         os.remove(config.vars["csv_path"] / (filename + ".csv"))
+    if os.path.isfile(config.vars["csv_path"] / (filename + "_0600.csv")):
+        os.remove(config.vars["csv_path"] / (filename + "_0600.csv"))
     config.vars["dredge_type"] = tmpDredgeType
     config.vars["json_path"] = tmpJSON_Path
     config.vars["csv_path"] = tmpCSV_path
+    config.vars["csv0600"] = tmp_csv0600
+    config.vars["csv0600_saved"] = tmp_csv0600_saved
 
 
 if __name__ == "__main__":

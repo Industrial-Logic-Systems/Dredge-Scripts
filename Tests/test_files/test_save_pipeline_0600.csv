@@ -1,0 +1,2 @@
+msg_time,vert_correction,ch_latitude,ch_longitude,ch_depth,ch_heading,slurry_velocity,slurry_density,pump_rpm,vacuum,outlet_psi,comment,offset,vacuum.1,msg_start_time,msg_end_time,function_code,comment_ne,msg_time_of,outfall_location,outfall_latitude,outfall_longitude,outfall_heading,outfall_elevation,comment_of
+"['2021-11-28 07:46:07', 1.8, 29.614393, -94.963516, 53.42, 130, 13.44, 1.8, 546, -14.72, 69.62, 'comment', '', '', '', '', '2021-11-28 07:46:07', 'Shore', 29.614393, -94.963516, 142, 10.1, 'comment']",{}
