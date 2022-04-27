@@ -228,6 +228,7 @@ class Config(ttk.Frame):
             ["PLC IP", "plc_ip"],
             ["Email", "email"],
             ["Freeboard Name", "freeboard_name"],
+            ["Program Key", "program_key"],
         ]
 
         self.gEntries = {}
@@ -510,6 +511,7 @@ class Config(ttk.Frame):
         config.vars["plc_ip"] = self.gEntries["plc_ip"][1].get()
         config.vars["email"] = self.gEntries["email"][1].get()
         config.vars["freeboard_name"] = self.gEntries["freeboard_name"][1].get()
+        config.vars["program_key"] = self.gEntries["program_key"][1].get()
         config.vars["csv0600"] = self.gCSV0600.instate(["selected"])
 
         config.vars["email_list"] = []
