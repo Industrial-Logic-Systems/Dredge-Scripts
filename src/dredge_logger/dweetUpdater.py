@@ -1,7 +1,6 @@
 import logging
 
 import dweepy
-from dredge_logger import dweet
 from dredge_logger.config import config
 
 _logger = logging.getLogger(__name__)
@@ -92,8 +91,6 @@ def freeboard(name, data, modbus=None):
     if config.vars["dredge_type"] == "hopper":
         data = xml_to_json(data)
         try:
-            send_dweet(name, data, modbus)
-
             dweepy.dweet_for(name, data)
 
             if modbus:
@@ -104,8 +101,6 @@ def freeboard(name, data, modbus=None):
             _logger.debug(e, exc_info=True)
     else:
         try:
-            send_dweet(name, data, modbus)
-
             dweepy.dweet_for(name, data)
 
             events = data["DQM_Data"]["messages"]
@@ -144,83 +139,15 @@ def freeboard(name, data, modbus=None):
             _logger.debug(e, exc_info=True)
 
 
-def send_dweet(name, data, extra=None):
-    # Sends out a dweet with the given name and data
-    if config.vars["dredge_type"] == "hopper":
-        try:
-            dqm_data = {"name": config.vars["dredge_name"], "type": "dqm", "data": data}
-            dweet.send_dweet(name, dqm_data)
-
-            if extra:
-                extra["timestamp"] = data["DATE_TIME"]
-                extra_data = {
-                    "name": config.vars["dredge_name"],
-                    "type": "extra",
-                    "data": extra,
-                }
-                dweet.send_dweet(name + "_Extra", extra_data)
-
-        except Exception as e:
-            _logger.debug("Dweet Fail to Send")
-            _logger.debug(e, exc_info=True)
-    else:
-        try:
-            dqm_data = {"name": config.vars["dredge_name"], "type": "dqm", "data": data}
-            dweet.send_dweet(name, dqm_data)
-
-            events = data["DQM_Data"]["messages"]
-            for event in events:
-                if "non_eff_event" in event:
-                    _logger.debug("Non-Eff Freeboard")
-
-                    msgStart = event["non_eff_event"]["msg_start_time"]
-                    msgEnd = event["non_eff_event"]["msg_end_time"]
-                    function_code = event["non_eff_event"]["function_code"].strip()
-                    comment = event["non_eff_event"]["comment"].strip()
-
-                    if function_code in function_codes_depreciated and function_code not in function_codes:
-                        _logger.warning("Function code is Depreciated")
-                        message = function_codes_depreciated[function_code]
-                    else:
-                        message = function_codes[function_code]
-
-                    _logger.debug(f'{name + "_non_eff"}, code: {function_code}, message, {message}')
-                    non_eff_data = {
-                        "name": config.vars["dredge_name"],
-                        "type": "non_eff",
-                        "data": {
-                            "msgStart": msgStart,
-                            "msgEnd": msgEnd,
-                            "function_code": function_code,
-                            "comment": comment,
-                            "message": message,
-                        },
-                    }
-                    dweet.send_dweet(name + "_non_eff", non_eff_data)
-
-            if extra:
-                extra["timestamp"] = data["DQM_Data"]["messages"][0]["work_event"]["msg_time"]
-                extra_data = {
-                    "name": config.vars["dredge_name"],
-                    "type": "extra",
-                    "data": extra,
-                }
-                dweet.send_dweet(name + "_Extra", extra_data)
-
-        except Exception as e:
-            _logger.debug("Dweet Fail to Send")
-            _logger.debug(e, exc_info=True)
-
-
 if __name__ == "__main__":
-    send_dweet(
+    freeboard(
         "ILS-Dredge",
         {
             "DQM_Data": {
                 "messages": [
                     {
                         "work_event": {
-                            "msg_time": "2022-01-21 09:28:12",
+                            "msg_time": "2022-06-22 10:17:45",
                             "vert_correction": 3.82,
                             "ch_latitude": 33.860394,
                             "ch_longitude": -117.819382,

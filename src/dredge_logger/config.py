@@ -2,10 +2,8 @@ import datetime
 import json
 import logging.handlers
 import os
-from pathlib import Path
 
 from appdirs import AppDirs
-from dotenv import load_dotenv
 
 
 class Config:
@@ -98,9 +96,6 @@ class Config:
             self._logger.error("Config file not found, using default settings")
             config_file = {}
 
-        # Set all the variables from the dictionary
-        self.vars["env"] = self.load_env()
-
         for var_name, default_value in self.var_types:
             self.vars[var_name] = config_file.get(var_name, default_value)
 
@@ -111,27 +106,6 @@ class Config:
         self.vars["last_check_for_update"] = datetime.date.fromisoformat(
             config_file.get("last_check_for_update", datetime.date.today().isoformat())
         )
-
-    def save_env(self, env):
-        if not os.path.exists(self._dirs.user_data_dir):
-            os.makedirs(self._dirs.user_data_dir)
-        with open(self._dirs.user_data_dir + "/.env", "w") as f:
-            if env["user"] is not None:
-                f.write("DWEET_USER=" + env["user"] + "\n")
-            if env["pass"] is not None:
-                f.write("DWEET_PASS=" + env["pass"] + "\n")
-            if env["key"] is not None:
-                f.write("MASTER_KEY=" + env["key"] + "\n")
-
-    def load_env(self):
-        if os.path.exists(self._dirs.user_data_dir + "/.env"):
-            dotenv_path = Path(self._dirs.user_data_dir + "/.env")
-            load_dotenv(dotenv_path=dotenv_path)
-        env = {}
-        env["user"] = os.getenv("DWEET_USER", None)
-        env["pass"] = os.getenv("DWEET_PASS", None)
-        env["key"] = os.getenv("MASTER_KEY", None)
-        return env
 
     def genHeader(self):
         if self.vars["dredge_type"] == "pipeline":
@@ -240,8 +214,6 @@ class Config:
 
         config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
         config_file["last_check_for_update"] = datetime.datetime.strftime(self.vars["last_check_for_update"], "%Y-%m-%d")
-
-        self.save_env(self.vars["env"])
 
         if not os.path.exists(self._dirs.user_config_dir):
             os.makedirs(self._dirs.user_config_dir)
