@@ -92,9 +92,14 @@ class Config:
             # Open the config file and read the settings
             with open(self._dirs.user_config_dir + "/config.json") as json_data_file:
                 config_file = json.load(json_data_file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            self._logger.error("Config file not found, using default settings")
-            config_file = {}
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            if isinstance(e, FileNotFoundError):
+                self._logger.error("Config file not found, using default settings")
+                config_file = {}
+            elif isinstance(e, json.JSONDecodeError):
+                self._logger.error("Failed to decode config.json. Please check it for errors")
+                self._logger.error(e)
+                exit(1)
 
         for var_name, default_value in self.var_types:
             self.vars[var_name] = config_file.get(var_name, default_value)
