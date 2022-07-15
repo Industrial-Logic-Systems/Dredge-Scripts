@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 def saveFiles(raw_data, csv_obj):
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
     if config.vars["dredge_type"] == "hopper":
-        fileHandler.write_file(config.vars["xml_path"], filename + ".xml", str(raw_data))
+        fileHandler.write_file(config.vars["xml_path"], filename + ".xml_bak", str(raw_data))
     else:
         fileHandler.write_file(config.vars["json_path"], filename + ".json", str(raw_data))
     if csv_obj:
@@ -60,6 +60,8 @@ def log():
     # Get Serial String
     _logger.debug("Getting Serial String")
     raw_str = dataHandler.getSerial()
+    if raw_str is None:
+        return [False, None]
 
     # Convert to XML or JSON Depending on Dredge Type
     if config.vars["dredge_type"] == "pipeline":

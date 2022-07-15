@@ -38,10 +38,12 @@ def backup_files(filename, extra_csv=False):
         finally:
             try:
                 # Email the files to list of receivers
-                files = [
-                    config.vars["json_path"] + "\\" + filename + ".json",
-                    config.vars["csv_path"] + "\\" + filename + ".csv",
-                ]
+                files = [config.vars["csv_path"] + "\\" + filename + ".csv"]
+                if config.vars["dredge_type"] == "pipeline":
+                    files.append(config.vars["json_path"] + "\\" + filename + ".json")
+                elif config.vars["dredge_type"] == "hopper":
+                    files.append(config.vars["xml_path"] + "\\" + filename + ".xml_bak")
+
                 if sendImage:
                     for fn in filenames:
                         files.append(fn)
