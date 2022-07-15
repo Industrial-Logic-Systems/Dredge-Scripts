@@ -6,7 +6,7 @@ from dredge_logger import dataHandler
 from dredge_logger import Log
 from dredge_logger.config import config
 
-from Tests.testUtils import is_equal
+from tests.testUtils import is_equal
 
 
 def test_save_hopper():
@@ -17,14 +17,14 @@ def test_save_hopper():
     tmp_csv0600 = config.vars["csv0600"]
 
     config.vars["dredge_type"] = "hopper"
-    config.vars["xml_path"] = Path("Tests/xml_files")
-    config.vars["csv_path"] = Path("Tests/csv_files")
+    config.vars["xml_path"] = Path("tests/xml_files")
+    config.vars["csv_path"] = Path("tests/csv_files")
     config.vars["csv0600"] = False
 
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
 
-    if os.path.isfile(config.vars["xml_path"] / (filename + ".xml")):
-        os.remove(config.vars["xml_path"] / (filename + ".xml"))
+    if os.path.isfile(config.vars["xml_path"] / (filename + ".xml_bak")):
+        os.remove(config.vars["xml_path"] / (filename + ".xml_bak"))
     if os.path.isfile(config.vars["csv_path"] / (filename + ".csv")):
         os.remove(config.vars["csv_path"] / (filename + ".csv"))
 
@@ -45,16 +45,16 @@ Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUM
     # Act
     Log.saveFiles(xml_str, csv_obj)
 
-    result_1 = is_equal(Path("Tests/test_files/test_save_hopper.xml"), config.vars["xml_path"] / (filename + ".xml"), True)
-    result_2 = is_equal(Path("Tests/test_files/test_save_hopper.csv"), config.vars["csv_path"] / (filename + ".csv"), True)
+    result_1 = is_equal(Path("tests/test_files/test_save_hopper.xml"), config.vars["xml_path"] / (filename + ".xml_bak"), True)
+    result_2 = is_equal(Path("tests/test_files/test_save_hopper.csv"), config.vars["csv_path"] / (filename + ".csv"), True)
 
     # Assert
     assert result_1[0], result_1[1]
     assert result_2[0], result_2[1]
 
     # Restore
-    if os.path.isfile(config.vars["xml_path"] / (filename + ".xml")):
-        os.remove(config.vars["xml_path"] / (filename + ".xml"))
+    if os.path.isfile(config.vars["xml_path"] / (filename + ".xml_bak")):
+        os.remove(config.vars["xml_path"] / (filename + ".xml_bak"))
     if os.path.isfile(config.vars["csv_path"] / (filename + ".csv")):
         os.remove(config.vars["csv_path"] / (filename + ".csv"))
     config.vars["dredge_type"] = tmpDredgeType
@@ -72,8 +72,8 @@ def test_save_pipeline():
     tmp_csv0600_saved = config.vars["csv0600_saved"]
 
     config.vars["dredge_type"] = "pipeline"
-    config.vars["json_path"] = Path("Tests/json_files")
-    config.vars["csv_path"] = Path("Tests/csv_files")
+    config.vars["json_path"] = Path("tests/json_files")
+    config.vars["csv_path"] = Path("tests/csv_files")
     config.vars["csv0600"] = True
     config.vars["csv0600_saved"] = False
 
@@ -98,11 +98,11 @@ ng": 142,"outfall_elevation": 10.1,"comment": "comment             "}}]}}'
     Log.saveFiles(json_str, csv_obj)
 
     result_1 = is_equal(
-        Path("Tests/test_files/test_save_pipeline.json"), config.vars["json_path"] / (filename + ".json"), True
+        Path("tests/test_files/test_save_pipeline.json"), config.vars["json_path"] / (filename + ".json"), True
     )
-    result_2 = is_equal(Path("Tests/test_files/test_save_pipeline.csv"), config.vars["csv_path"] / (filename + ".csv"), True)
+    result_2 = is_equal(Path("tests/test_files/test_save_pipeline.csv"), config.vars["csv_path"] / (filename + ".csv"), True)
     result_3 = is_equal(
-        Path("Tests/test_files/test_save_pipeline_0600.csv"), config.vars["csv_path"] / (filename + "_0600.csv"), True
+        Path("tests/test_files/test_save_pipeline_0600.csv"), config.vars["csv_path"] / (filename + "_0600.csv"), True
     )
 
     # Assert

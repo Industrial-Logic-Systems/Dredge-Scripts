@@ -5,7 +5,7 @@ from pathlib import Path
 from dredge_logger import dataHandler
 from dredge_logger.config import config
 
-from Tests.testUtils import is_equal
+from tests.testUtils import is_equal
 
 
 def test_xml_parse():
