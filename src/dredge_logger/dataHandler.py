@@ -20,7 +20,7 @@ def getSerial():
 
         # Decode the serial data
         data = data.decode("ASCII")
-        _logger.debug("Data Received: {}".format(data))
+        _logger.debug(f"Data Received: {data}")
     except Exception as e:
         _logger.error("Serial string not received. Retrying...")
         _logger.debug(e, exc_info=True)
@@ -56,7 +56,7 @@ def getXML(data):
     except Exception as e:
         _logger.error("XML Exception")
         _logger.error("Could not convert received serial data to XML")
-        _logger.debug("Data: {}".format(data))
+        _logger.debug(f"Data: {data}")
         _logger.debug(e, exc_info=True)
         try:
             if len(str(data)) != 0:
