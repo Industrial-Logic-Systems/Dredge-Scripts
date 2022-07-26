@@ -116,8 +116,8 @@ def log():
         hopper_data = data_obj.find("HOPPER_DATA_RECORD")
         return_data = {
             "msg_time": hopper_data.find("DATE_TIME").text,
-            "latitude": hopper_data.find("VESSEL_X").text,
-            "longitude": hopper_data.find("VESSEL_Y").text,
+            "latitude": hopper_data.find("VESSEL_Y").text,
+            "longitude": hopper_data.find("VESSEL_X").text,
         }
     else:
         return_data = {
