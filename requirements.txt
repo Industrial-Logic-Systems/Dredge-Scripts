@@ -9,4 +9,4 @@ pyserial==3.5
 python-dotenv==0.19.2
 requests==2.27.1
 ttkthemes==3.2.2
-yagmail[all]==0.15.277
+yagmail[all]==0.15.280
