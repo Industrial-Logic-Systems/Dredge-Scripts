@@ -177,6 +177,7 @@ class Config:
                 "STBD_VELOCITY",
                 "PUMP_RPM_PORT",
                 "PUMP_RPM_STBD",
+                "PUMP_OUT_ON",
             ]
             for name in self.vars["modbus"]:
                 csv_header.append(name)
