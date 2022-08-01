@@ -15,11 +15,13 @@ def test_save_hopper():
     tmpXML_Path = config.vars["xml_path"]
     tmpCSV_path = config.vars["csv_path"]
     tmp_csv0600 = config.vars["csv0600"]
+    tmp_headers = config.vars["header"]
 
     config.vars["dredge_type"] = "hopper"
     config.vars["xml_path"] = Path("tests/xml_files")
     config.vars["csv_path"] = Path("tests/csv_files")
     config.vars["csv0600"] = False
+    config.vars["header"] = config.genHeader()
 
     filename = str(datetime.datetime.today().strftime("%Y-%m-%d"))
 
@@ -38,9 +40,9 @@ URSE><VESSEL_SPEED>0.0  </VESSEL_SPEED><VESSEL_HEADING>0  </VESSEL_HEADING><TIDE
 UME><DISPLACEMENT>0    </DISPLACEMENT><EMPTY_DISPLACEMENT>0    </EMPTY_DISPLACEMENT><DRAGHEAD_DEPTH_PORT>0.0  </DRAGHEAD_DEPT\
 H_PORT><DRAGHEAD_DEPTH_STBD>0.0  </DRAGHEAD_DEPTH_STBD><PORT_DENSITY>0.000  </PORT_DENSITY><STBD_DENSITY>0.000  </STBD_DENSIT\
 Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUMP_RPM_PORT>0   </PUMP_RPM_PORT><PUMP_RPM_STBD\
->0   </PUMP_RPM_STBD></HOPPER_DATA_RECORD></HOPPER_DREDGING_DATA>'
+>0   </PUMP_RPM_STBD><PUMP_OUT_ON>false</PUMP_OUT_ON></HOPPER_DATA_RECORD></HOPPER_DREDGING_DATA>'
     xml_obj = dataHandler.getXML(xml_str)
-    csv_obj = dataHandler.getCSV(xml_obj, False)
+    csv_obj, _ = dataHandler.getCSV(xml_obj, False)
 
     # Act
     Log.saveFiles(xml_str, csv_obj)
@@ -61,6 +63,7 @@ Y><PORT_VELOCITY>0.00  </PORT_VELOCITY><STBD_VELOCITY>0.00  </STBD_VELOCITY><PUM
     config.vars["xml_path"] = tmpXML_Path
     config.vars["csv_path"] = tmpCSV_path
     config.vars["csv0600"] = tmp_csv0600
+    config.vars["header"] = tmp_headers
 
 
 def test_save_pipeline():

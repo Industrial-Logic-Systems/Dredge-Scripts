@@ -128,6 +128,7 @@ def getCSV(data_obj, modbus=True):
             csv_obj.append(hopper_data.find("STBD_VELOCITY").text)
             csv_obj.append(hopper_data.find("PUMP_RPM_PORT").text)
             csv_obj.append(hopper_data.find("PUMP_RPM_STBD").text)
+            csv_obj.append(hopper_data.find("PUMP_OUT_ON").text)
 
         except Exception as e:
             _logger.error("CSV Exception Parsing XML")
