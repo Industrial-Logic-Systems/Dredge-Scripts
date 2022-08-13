@@ -204,12 +204,9 @@ def getModbus():
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
-    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID)
+    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID, auto_open=True)
 
-    # uncomment this line to see debug message
-    # c.debug(True)
-
-    if not c.is_open():
+    if not c.is_open:
         if not c.open():
             _logger.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
             _logger.error(f"Could not connect to PLC over IP at {config.vars['plc_ip']}")
@@ -243,12 +240,9 @@ def sendSerialBit(send):
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
-    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID)
+    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID, auto_open=True)
 
-    # uncomment this line to see debug message
-    # c.debug(True)
-
-    if not c.is_open():
+    if not c.is_open:
         if not c.open():
             _logger.debug("unable to connect to " + SERVER_HOST + ":" + str(SERVER_PORT))
             return
