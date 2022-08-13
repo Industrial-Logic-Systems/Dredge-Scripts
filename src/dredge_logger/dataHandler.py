@@ -204,15 +204,10 @@ def getModbus():
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
-    c = ModbusClient()
+    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID)
 
     # uncomment this line to see debug message
     # c.debug(True)
-
-    # define modbus server host, port and unit_id
-    c.host(SERVER_HOST)
-    c.port(SERVER_PORT)
-    c.unit_id(SERVER_U_ID)
 
     if not c.is_open():
         if not c.open():
@@ -248,15 +243,10 @@ def sendSerialBit(send):
     SERVER_PORT = 502
     SERVER_U_ID = 1
 
-    c = ModbusClient()
+    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT, unit_id=SERVER_U_ID)
 
     # uncomment this line to see debug message
     # c.debug(True)
-
-    # define modbus server host, port and unit_id
-    c.host(SERVER_HOST)
-    c.port(SERVER_PORT)
-    c.unit_id(SERVER_U_ID)
 
     if not c.is_open():
         if not c.open():
