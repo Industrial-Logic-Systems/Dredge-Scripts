@@ -1,12 +1,12 @@
 appdirs==1.4.4
 dweepy==0.3.0
 matplotlib==3.5.1
-numpy==1.22.1
-pandas==1.3.5
-Pillow==9.0.1
-pyModbusTCP==0.1.10
+numpy==1.23.1
+pandas==1.4.3
+Pillow==9.2.0
+pyModbusTCP==0.2.0
 pyserial==3.5
 python-dotenv==0.19.2
 requests==2.27.1
 ttkthemes==3.2.2
-yagmail[all]==0.15.277
+yagmail[all]==0.15.280
