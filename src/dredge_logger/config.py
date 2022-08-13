@@ -29,7 +29,6 @@ class Config:
             ["modbus", {"offset": {"name": "offset", "address": "0", "float": True}}],
             ["modbus_bits", {"vacuum": {"name": "vacuum", "address": "1"}}],
             ["csv0600", False],
-            ["csv0600_saved", False],
             [
                 "images",
                 {
@@ -55,7 +54,9 @@ class Config:
         for var in self.var_types:
             if "path" in var[0]:
                 self.vars[var[0]] = self.checkPath(self.vars[var[0]])
+
         self.save_config()
+        self.save_vars()
 
     def setup_logging(self):
         """Setup basic logging"""
@@ -105,11 +106,26 @@ class Config:
             self.vars[var_name] = config_file.get(var_name, default_value)
 
         self.vars["header"] = self.genHeader()
+
+        try:
+            # Open the config file and read the settings
+            with open(self._dirs.user_config_dir + "/vars.json") as json_data_file:
+                vars_file = json.load(json_data_file)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            if isinstance(e, FileNotFoundError):
+                self._logger.error("Config file not found, using default settings")
+                vars_file = {}
+            elif isinstance(e, json.JSONDecodeError):
+                self._logger.error("Failed to decode vars.json")
+                self._logger.error(e)
+                vars_file = {}
+
+        self.vars["csv0600_saved"] = config_file.get("csv0600_saved", False)
         self.vars["last_save_date"] = datetime.date.fromisoformat(
-            config_file.get("last_save_date", datetime.date.today().isoformat())
+            vars_file.get("last_save_date", datetime.date.today().isoformat())
         )
         self.vars["last_check_for_update"] = datetime.date.fromisoformat(
-            config_file.get("last_check_for_update", datetime.date.today().isoformat())
+            vars_file.get("last_check_for_update", datetime.date.today().isoformat())
         )
 
     def genHeader(self):
@@ -218,15 +234,36 @@ class Config:
         for var in self.var_types:
             config_file[var[0]] = self.vars[var[0]]
 
-        config_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
-        config_file["last_check_for_update"] = datetime.datetime.strftime(self.vars["last_check_for_update"], "%Y-%m-%d")
-
         if not os.path.exists(self._dirs.user_config_dir):
             os.makedirs(self._dirs.user_config_dir)
 
         # Open the config file and save the variables
         with open(self._dirs.user_config_dir + "/config.json", "w") as f:
             json.dump(config_file, f, indent=4)
+
+    def save_vars(self):
+        """Takes any changes to the config variables and writes them to the vars file"""
+        self._logger.debug("Writing vars.json")
+
+        vars_file = {}
+
+        try:
+            # Open the config file and read the settings
+            with open(self._dirs.user_config_dir + "/vars.json") as json_data_file:
+                vars_file = json.load(json_data_file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            vars_file = {}
+
+        vars_file["csv0600_saved"] = self.vars["csv0600_saved"]
+        vars_file["last_save_date"] = datetime.datetime.strftime(self.vars["last_save_date"], "%Y-%m-%d")
+        vars_file["last_check_for_update"] = datetime.datetime.strftime(self.vars["last_check_for_update"], "%Y-%m-%d")
+
+        if not os.path.exists(self._dirs.user_config_dir):
+            os.makedirs(self._dirs.user_config_dir)
+
+        # Open the config file and save the variables
+        with open(self._dirs.user_config_dir + "/vars.json", "w") as f:
+            json.dump(vars_file, f, indent=4)
 
 
 config = Config()

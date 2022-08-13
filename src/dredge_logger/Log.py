@@ -35,11 +35,11 @@ def verify_key():
         date = date.date()
         if date >= datetime.date.today():
             config.vars["last_check_for_update"] = datetime.date.today()
-            config.save_config()
+            config.save_vars()
             return [True, False]
         else:
             config.vars["last_check_for_update"] = date
-            config.save_config()
+            config.save_vars()
     except (binascii.Error, UnicodeDecodeError, ValueError):
         pass
     diff = datetime.date.today() - config.vars["last_check_for_update"]
@@ -98,7 +98,7 @@ def log():
             filename += "_0600"
             threading.Thread(target=backup.backup_files, args=(str(filename), True)).start()
             config.vars["csv0600_saved"] = True
-            config.save_config()
+            config.save_vars()
 
     # Backup Files Once a Day
     old_time = config.vars["last_save_date"]  # Date when the loop last ran
@@ -109,7 +109,7 @@ def log():
         threading.Thread(target=backup.backup_files, args=(str(old_time),)).start()
         config.vars["last_save_date"] = cur_time
         config.vars["csv0600_saved"] = False
-        config.save_config()
+        config.save_vars()
 
     return_data = {}
     if config.vars["dredge_type"] == "hopper":
