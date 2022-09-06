@@ -9,8 +9,6 @@ updates:
       - dependency-type: "direct"
     commit-message:
       prefix: "chore:"
-    assignees:
-      - "frazzer951"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -20,5 +18,3 @@ updates:
       - dependency-type: "direct"
     commit-message:
       prefix: "chore:"
-    assignees:
-      - "frazzer951"
