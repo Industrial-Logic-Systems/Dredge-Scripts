@@ -3,7 +3,7 @@ dweepy==0.3.0
 matplotlib==3.5.1
 numpy==1.23.1
 pandas==1.4.3
-Pillow==9.2.0
+Pillow==9.3.0
 pyModbusTCP==0.2.0
 pyserial==3.5
 python-dotenv==0.19.2
