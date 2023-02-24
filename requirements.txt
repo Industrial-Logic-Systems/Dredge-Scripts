@@ -6,7 +6,7 @@ pandas==1.5.3
 Pillow==9.2.0
 pyModbusTCP==0.2.0
 pyserial==3.5
-python-dotenv==0.19.2
+python-dotenv==1.0.0
 requests==2.27.1
 ttkthemes==3.2.2
 yagmail[all]==0.15.280
